@@ -14,6 +14,7 @@ namespace GMTK.PlatformerToolkit {
         characterGround ground;
 
         [Header("Movement Stats")]
+        [SerializeField, Range(0f, 1f)][Tooltip("walk speed = walkMultiplier * runningSpeed")] public float walkMultiplier = 0.1f;
         [SerializeField, Range(0f, 20f)][Tooltip("Maximum movement speed")] public float maxSpeed = 10f;
         [SerializeField, Range(0f, 100f)][Tooltip("How fast to reach max speed")] public float maxAcceleration = 52f;
         [SerializeField, Range(0f, 100f)][Tooltip("How fast to stop after letting go")] public float maxDecceleration = 52f;
@@ -34,6 +35,7 @@ namespace GMTK.PlatformerToolkit {
         private float acceleration;
         private float deceleration;
         private float turnSpeed;
+        private bool isWalking;
 
         [Header("Current State")]
         public bool onGround;
@@ -42,9 +44,13 @@ namespace GMTK.PlatformerToolkit {
         private void Awake() {
             playerInputActions = new PlayerInputActions();
             playerInputActions.Player.Enable();
-            playerInputActions.Player.Move.started += OnMovement;
-            playerInputActions.Player.Move.performed += OnMovement;
-            playerInputActions.Player.Move.canceled += OnMovement;
+            playerInputActions.Player.Run.started += OnMovement;
+            playerInputActions.Player.Run.performed += OnMovement;
+            playerInputActions.Player.Run.canceled += OnMovement;
+
+            playerInputActions.Player.Walk.started += OnWalk;
+            playerInputActions.Player.Walk.canceled += OnWalk;
+
 
             //Find the character's Rigidbody and ground detection script
             body = GetComponent<Rigidbody2D>();
@@ -55,8 +61,26 @@ namespace GMTK.PlatformerToolkit {
             //This is called when you input a direction on a valid input type, such as arrow keys or analogue stick
             //The value will read -1 when pressing left, 0 when idle, and 1 when pressing right.
 
+            float speedMultiplier = 1f;
+
+            if (isWalking) {
+                speedMultiplier = walkMultiplier;
+            }
             if (movementLimiter.instance.CharacterCanMove) {
-                directionX = context.ReadValue<float>();
+                directionX = context.ReadValue<float>() * speedMultiplier;
+            }
+        }
+
+        public void OnWalk(InputAction.CallbackContext context) {
+            if (context.phase == InputActionPhase.Started) {
+                isWalking = true;
+                playerInputActions.Player.Run.Disable();
+                playerInputActions.Player.Run.Enable();
+            } else if (context.phase == InputActionPhase.Canceled) {
+                isWalking = false;
+                playerInputActions.Player.Run.Disable();
+                playerInputActions.Player.Run.Enable();
+
             }
         }
 
