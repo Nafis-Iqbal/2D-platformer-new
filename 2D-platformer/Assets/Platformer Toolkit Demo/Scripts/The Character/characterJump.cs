@@ -6,6 +6,8 @@ namespace GMTK.PlatformerToolkit {
     //This script handles moving the character on the Y axis, for jumping and gravity
 
     public class characterJump : MonoBehaviour {
+        private PlayerInputActions playerInputActions;
+
         [Header("Components")]
         [HideInInspector] public Rigidbody2D body;
         private characterGround ground;
@@ -42,8 +44,13 @@ namespace GMTK.PlatformerToolkit {
         private bool currentlyJumping;
 
         void Awake() {
-            //Find the character's Rigidbody and ground detection and juice scripts
+            playerInputActions = new PlayerInputActions();
+            playerInputActions.Player.Enable();
+            playerInputActions.Player.Jump.started += OnJump;
+            playerInputActions.Player.Jump.performed += OnJump;
+            playerInputActions.Player.Jump.canceled += OnJump;
 
+            //Find the character's Rigidbody and ground detection and juice scripts
             body = GetComponent<Rigidbody2D>();
             ground = GetComponent<characterGround>();
             juice = GetComponentInChildren<characterJuice>();

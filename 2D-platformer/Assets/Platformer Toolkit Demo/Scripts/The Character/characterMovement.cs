@@ -6,6 +6,7 @@ namespace GMTK.PlatformerToolkit {
     //This script handles moving the character on the X axis, both on the ground and in the air.
 
     public class characterMovement : MonoBehaviour {
+        private PlayerInputActions playerInputActions;
 
         [Header("Components")]
 
@@ -39,6 +40,12 @@ namespace GMTK.PlatformerToolkit {
         public bool pressingKey;
 
         private void Awake() {
+            playerInputActions = new PlayerInputActions();
+            playerInputActions.Player.Enable();
+            playerInputActions.Player.Move.started += OnMovement;
+            playerInputActions.Player.Move.performed += OnMovement;
+            playerInputActions.Player.Move.canceled += OnMovement;
+
             //Find the character's Rigidbody and ground detection script
             body = GetComponent<Rigidbody2D>();
             ground = GetComponent<characterGround>();
