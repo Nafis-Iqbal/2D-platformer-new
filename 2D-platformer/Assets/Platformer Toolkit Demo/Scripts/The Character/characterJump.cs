@@ -13,6 +13,7 @@ namespace GMTK.PlatformerToolkit {
         private characterGround ground;
         [HideInInspector] public Vector2 velocity;
         private characterJuice juice;
+        private characterMovement _characterMovement;
 
 
         [Header("Jumping Stats")]
@@ -44,6 +45,7 @@ namespace GMTK.PlatformerToolkit {
         private bool currentlyJumping;
 
         void Awake() {
+            _characterMovement = GetComponent<characterMovement>();
             playerInputActions = new PlayerInputActions();
             playerInputActions.Player.Enable();
             playerInputActions.Player.Jump.started += OnJump;
@@ -75,6 +77,9 @@ namespace GMTK.PlatformerToolkit {
         }
 
         void Update() {
+            if (_characterMovement.isDashing) {
+                return;
+            }
             setPhysics();
 
             //Check if we're on ground, using Kit's Ground script
@@ -112,6 +117,9 @@ namespace GMTK.PlatformerToolkit {
         }
 
         private void FixedUpdate() {
+            if (_characterMovement.isDashing) {
+                return;
+            }
             //Get velocity from Kit's Rigidbody 
             velocity = body.velocity;
 

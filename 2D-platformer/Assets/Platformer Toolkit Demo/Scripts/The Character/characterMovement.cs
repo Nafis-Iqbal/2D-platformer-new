@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 
@@ -6,14 +7,28 @@ namespace GMTK.PlatformerToolkit {
     //This script handles moving the character on the X axis, both on the ground and in the air.
 
     public class characterMovement : MonoBehaviour {
+        private enum State {
+            Normal,
+            Rolling,
+            Dashing,
+        }
+        private State playerState;
+
         private PlayerInputActions playerInputActions;
+        private bool canDash = true;
+        public bool isDashing;
+        public float dashingPower = 24f;
+        public float dashingTime = 0.2f;
+        public float dashingCooldown = 1f;
 
         [Header("Components")]
 
         private Rigidbody2D body;
+        [SerializeField] private Animator playerAnimator;
         characterGround ground;
 
         [Header("Movement Stats")]
+        [SerializeField] private float rollForce = 2f;
         [SerializeField, Range(0f, 1f)][Tooltip("walk speed = walkMultiplier * runningSpeed")] public float walkMultiplier = 0.1f;
         [SerializeField, Range(0f, 20f)][Tooltip("Maximum movement speed")] public float maxSpeed = 10f;
         [SerializeField, Range(0f, 100f)][Tooltip("How fast to reach max speed")] public float maxAcceleration = 52f;
@@ -41,7 +56,9 @@ namespace GMTK.PlatformerToolkit {
         public bool onGround;
         public bool pressingKey;
 
+
         private void Awake() {
+            playerState = State.Normal;
             playerInputActions = new PlayerInputActions();
             playerInputActions.Player.Enable();
             playerInputActions.Player.Run.started += OnMovement;
@@ -51,13 +68,16 @@ namespace GMTK.PlatformerToolkit {
             playerInputActions.Player.Walk.started += OnWalk;
             playerInputActions.Player.Walk.canceled += OnWalk;
 
+            playerInputActions.Player.Roll.performed += OnRoll;
+
+            playerInputActions.Player.Dash.performed += OnDash;
 
             //Find the character's Rigidbody and ground detection script
             body = GetComponent<Rigidbody2D>();
             ground = GetComponent<characterGround>();
         }
 
-        public void OnMovement(InputAction.CallbackContext context) {
+        private void OnMovement(InputAction.CallbackContext context) {
             //This is called when you input a direction on a valid input type, such as arrow keys or analogue stick
             //The value will read -1 when pressing left, 0 when idle, and 1 when pressing right.
 
@@ -71,20 +91,49 @@ namespace GMTK.PlatformerToolkit {
             }
         }
 
-        public void OnWalk(InputAction.CallbackContext context) {
+        private void OnWalk(InputAction.CallbackContext context) {
+            playerInputActions.Player.Run.Disable();
+            playerInputActions.Player.Run.Enable();
+
             if (context.phase == InputActionPhase.Started) {
                 isWalking = true;
-                playerInputActions.Player.Run.Disable();
-                playerInputActions.Player.Run.Enable();
             } else if (context.phase == InputActionPhase.Canceled) {
                 isWalking = false;
-                playerInputActions.Player.Run.Disable();
-                playerInputActions.Player.Run.Enable();
 
             }
         }
 
+        private IEnumerator Dash() {
+            canDash = false;
+            isDashing = true;
+            float originalGravity = body.gravityScale;
+            body.gravityScale = 0f;
+            body.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
+            yield return new WaitForSeconds(dashingTime);
+            body.gravityScale = originalGravity;
+            isDashing = false;
+            yield return new WaitForSeconds(dashingCooldown);
+            canDash = true;
+        }
+
+        public void OnRoll(InputAction.CallbackContext context) {
+            if (onGround) {
+                body.velocity = new Vector2(transform.localScale.x, 0) * rollForce;
+                playerAnimator.SetTrigger("Roll");
+            }
+        }
+
+        public void OnDash(InputAction.CallbackContext context) {
+            if (canDash) {
+                playerAnimator.SetTrigger("Dash");
+                StartCoroutine(Dash());
+            }
+        }
+
         private void Update() {
+            if (isDashing) {
+                return;
+            }
             //Used to stop movement when the character is playing her death animation
             if (!movementLimiter.instance.CharacterCanMove) {
                 directionX = 0;
@@ -106,6 +155,9 @@ namespace GMTK.PlatformerToolkit {
         }
 
         private void FixedUpdate() {
+            if (isDashing) {
+                return;
+            }
             //Fixed update runs in sync with Unity's physics engine
 
             //Get Kit's current ground status from her ground script
