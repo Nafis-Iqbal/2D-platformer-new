@@ -5602,9 +5602,8 @@ MonoBehaviour:
   dashingPower: 20
   dashingTime: 0.2
   dashingCooldown: 0.1
+  canDash: 1
   playerAnimator: {fileID: 517184369}
-  rollForce: 25
-  walkMultiplier: 0.2
   maxSpeed: 9
   maxAcceleration: 79
   maxDecceleration: 76
@@ -5612,10 +5611,11 @@ MonoBehaviour:
   maxAirAcceleration: 80
   maxAirDeceleration: 80
   maxAirTurnSpeed: 80
+  rollForce: 25
+  walkMultiplier: 0.2
   friction: 0
-  useAcceleration: 1
-  directionX: 0
   velocity: {x: 0, y: 0}
+  directionX: 0
   onGround: 1
   pressingKey: 0
 --- !u!114 &640968024
@@ -5745,7 +5745,6 @@ MonoBehaviour:
   jumpSqueezing: 0
   landSqueezing: 0
   playerGrounded: 1
-  jumpLine: {fileID: 1023269679}
   cameraFalling: 0
 --- !u!114 &640968029
 MonoBehaviour:
@@ -131322,9 +131321,7 @@ MonoBehaviour:
   jumpParticles: {fileID: 839255880}
   landParticles: {fileID: 1633084077}
   characterTrail: {fileID: 407786561}
-  settingsHome: {fileID: 1023269679}
-  juiceSettingsReferences: {fileID: 0}
-  runParticlesValue: 2.11
+  runParticlesValue: 2.05
   jumpParticlesValue: 9.5
   landParticlesValue: 23.2
   jumpSquashValue: 0.89
