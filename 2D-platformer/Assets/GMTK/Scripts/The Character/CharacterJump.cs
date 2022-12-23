@@ -80,6 +80,9 @@ namespace GMTK.PlatformerToolkit {
             if (characterMovement.isDashing) {
                 return;
             }
+            if (characterMovement.hasGrabbedColumn) {
+                return;
+            }
             setPhysics();
 
             //Check if we're on ground, using Kit's Ground script

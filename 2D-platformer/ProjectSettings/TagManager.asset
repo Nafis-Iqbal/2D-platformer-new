@@ -13,8 +13,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Ground
+  - Column
   - 
   - 
   - 
@@ -40,4 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Normal Tiles
+    uniqueID: 3588698189
+    locked: 0
+  - name: Column Tiles
+    uniqueID: 1060420883
     locked: 0

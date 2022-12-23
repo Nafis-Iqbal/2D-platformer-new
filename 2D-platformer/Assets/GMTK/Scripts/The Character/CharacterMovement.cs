@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
@@ -16,6 +17,17 @@ namespace GMTK.PlatformerToolkit {
         private float deceleration;
         private float turnSpeed;
         private bool isWalking;
+        private bool hasResetVelocity = false;
+        private float originalGravity;
+        private float delta;
+
+        [Header("Column Grab")]
+        [SerializeField] private Vector3 columnColliderOffset;
+        [SerializeField] private float columnLength = 2f;
+        [SerializeField] public bool canGrabColumn = false;
+        [SerializeField] public bool hasGrabbedColumn = false;
+        [SerializeField] private LayerMask columnLayerMask;
+        [SerializeField] private float columnMoveSpeed = 20f;
 
         [Header("Dash")]
         [SerializeField] public bool isDashing;
@@ -50,7 +62,7 @@ namespace GMTK.PlatformerToolkit {
         [Header("Current State")]
         [SerializeField] private bool onGround;
         [SerializeField] private bool pressingKey;
-
+        [SerializeField] private float columnMoveDirection;
 
         private void Awake() {
             playerInputActions = new PlayerInputActions();
@@ -65,6 +77,8 @@ namespace GMTK.PlatformerToolkit {
             playerInputActions.Player.Roll.performed += OnRoll;
 
             playerInputActions.Player.Dash.performed += OnDash;
+
+            playerInputActions.Player.ColumnLedgeGrab.performed += OnColumnGrab;
 
             //Find the character's Rigidbody and ground detection script
             body = GetComponent<Rigidbody2D>();
@@ -124,10 +138,86 @@ namespace GMTK.PlatformerToolkit {
             }
         }
 
+        public void OnColumnGrab(InputAction.CallbackContext context) {
+            if (canGrabColumn) {
+                playerInputActions.Player.Run.Disable();
+                playerInputActions.Player.Walk.Disable();
+                hasGrabbedColumn = true;
+            }
+        }
+
+        public void OnColumnMove(InputAction.CallbackContext context) {
+            Debug.Log("move");
+            if (context.phase == InputActionPhase.Performed) {
+                columnMoveDirection = context.ReadValue<float>();
+            } else {
+                columnMoveDirection = context.ReadValue<float>();
+            }
+
+        }
+
+        private void OnDrawGizmos() {
+            if (canGrabColumn) {
+                Gizmos.color = Color.green;
+            } else {
+                Gizmos.color = Color.red;
+            }
+
+            Gizmos.DrawLine(transform.position + columnColliderOffset * transform.localScale.x, transform.position + columnColliderOffset * transform.localScale.x + new Vector3(columnLength, 0, 0) * transform.localScale.x);
+
+            // Debug.Log(transform.position + columnColliderOffset * transform.localScale.x);
+        }
+
+        private void resetVelocityGravity() {
+            if (!hasResetVelocity) {
+                body.velocity = Vector2.zero;
+                hasResetVelocity = true;
+                originalGravity = body.gravityScale;
+                body.gravityScale = 0f;
+            }
+        }
+
         private void Update() {
             if (isDashing) {
                 return;
             }
+
+            if (!canGrabColumn) {
+                playerInputActions.Player.Run.Enable();
+                playerInputActions.Player.Walk.Enable();
+                body.gravityScale = originalGravity;
+                hasGrabbedColumn = false;
+                hasResetVelocity = false;
+            }
+
+            if (hasGrabbedColumn) {
+                playerInputActions.Player.ColumnMove.Enable();
+                Debug.Log("Grabbed");
+                resetVelocityGravity();
+                playerInputActions.Player.ColumnMove.started += OnColumnMove;
+                playerInputActions.Player.ColumnMove.performed += OnColumnMove;
+                playerInputActions.Player.ColumnMove.canceled += OnColumnMove;
+                if (columnMoveDirection > 0.1f || columnMoveDirection < -0.1f) {
+                    body.MovePosition(new Vector2(transform.position.x, transform.position.y) + new Vector2(transform.position.x, transform.position.y + columnMoveDirection * columnMoveSpeed) * Time.deltaTime);
+                }
+
+            } else {
+                playerInputActions.Player.ColumnMove.Disable();
+            }
+
+            RaycastHit2D raycastHit2D;
+
+            raycastHit2D = Physics2D.Raycast(transform.position + columnColliderOffset * transform.localScale.x, Vector3.right * transform.localScale.x, columnLength, columnLayerMask);
+
+            if (raycastHit2D.collider != null) {
+                // Debug.Log(raycastHit2D.collider.name);
+                canGrabColumn = true;
+            } else {
+                canGrabColumn = false;
+            }
+
+            // canGrabLeftColumn = Physics2D.Raycast(transform.position +)
+
             //Used to stop movement when the character is playing her death animation
             if (!MovementLimiter.instance.CharacterCanMove) {
                 directionX = 0;
