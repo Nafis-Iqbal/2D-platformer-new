@@ -2,32 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeavyEnemy : MonoBehaviour
+public class EnemyBase : MonoBehaviour
 {
+    [SerializeField]
     public float health;
-    public bool notPatrolling;
+    [HideInInspector]
+    private bool notPatrolling;
     [HideInInspector]
     public Rigidbody2D rb;
-    public Transform groundChecker , platformChecker;
-    Transform player;
+    [SerializeField]
+    private Transform groundChecker , platformChecker;
+    [HideInInspector]
+    public Transform player;
+    [SerializeField]
     public GameObject knife;
+    [SerializeField]
     public LayerMask environmentMask;
-    private bool turn , canHit;
+    [HideInInspector]
+    private bool turn , turn1 , canHit;
+    [HideInInspector]
     public bool isActivated;
+    [SerializeField]
     public Animator animatorEnemyGround;
+    [SerializeField]
     public GameObject bullet;
-
-
-    float walkSpeed = 50f , range = 8f , playerDistance ;
-    float timeBetweenHits = 2f;
+    [SerializeField]
+    float walkSpeed = 100f , range = 5f;
+    [HideInInspector]
+    float playerDistance;
+    [SerializeField]
+    float timeBetweenHits = 1.15f;
+    [HideInInspector]
     float foodRadius = .4f;
-    bool turn1;
+    [SerializeField]
+    float attackRange = 1f;
     void Start(){
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         notPatrolling = true;
         canHit = true;
-        knife.SetActive(false);
     }
 
     // Update is called once per frame
@@ -58,7 +71,7 @@ public class HeavyEnemy : MonoBehaviour
         rb.velocity = new Vector2(walkSpeed * Time.fixedDeltaTime , rb.velocity.y);
     }
     // to flip enemy
-    void Flip(){
+    public void Flip(){
         Vector3 Scale = transform.localScale;
 
         Scale.x *= -1;
@@ -68,21 +81,20 @@ public class HeavyEnemy : MonoBehaviour
         walkSpeed *= -1;
     }
 
-    IEnumerator hit(){
+    public virtual IEnumerator hit(){
         canHit = false;
         yield return new WaitForSeconds(timeBetweenHits);
         knife.SetActive(true);
-        yield return new WaitForSeconds(Time.fixedDeltaTime);
+        yield return new WaitForSeconds(.5f);
         knife.SetActive(false);
         canHit = true;
     }
 
-    void attack(){
+    public virtual void attack(){
         if (player.position.x > transform.position.x && transform.localScale.x < 0 || player.position.x < transform.position.x && transform.localScale.x > 0){
             Flip();
         }
         float distance = Mathf.Abs(player.transform.position.x - transform.position.x);
-        float attackRange = 2f;
 
         if (distance <= attackRange){
             notPatrolling = false;

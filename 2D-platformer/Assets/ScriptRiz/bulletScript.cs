@@ -19,11 +19,7 @@ public class bulletScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player")){
-            Debug.Log("Player");
-        }
         colliding = true;
-        Debug.Log("coll");
         Destroy(gameObject);
         StartCoroutine(VanishBullet(TimeToDistroy));
 

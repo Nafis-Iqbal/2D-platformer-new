@@ -8,7 +8,6 @@ public class healthofPlayer : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Knife")){
             health -= 15f;
-            Debug.Log(health);
         }
         if(other.CompareTag("HeavyKnife")){
             health -= 30f;
