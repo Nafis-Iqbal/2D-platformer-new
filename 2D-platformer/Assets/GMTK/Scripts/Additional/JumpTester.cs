@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Cinemachine;
+using UnityEngine;
 
 
 namespace GMTK.PlatformerToolkit {
@@ -18,7 +18,6 @@ namespace GMTK.PlatformerToolkit {
         [SerializeField] float offset;
 
         public bool ignoringJump = false;
-        public bool roundedBoundingBox = false;
 
         [SerializeField] BoxCollider2D squareBox;
         [SerializeField] BoxCollider2D roundedBox;
@@ -39,57 +38,26 @@ namespace GMTK.PlatformerToolkit {
         public bool shouldShowPresets = false;
 
 
-
         void Start() {
 
             if (ignoringJump) {
                 ignoreCharacterJump();
 
-            }
-            else {
+            } else {
                 followCharacterJump();
             }
-
-            if (roundedBoundingBox) {
-                switchToRoundedBox();
-            }
-            else {
-                switchToSquareBox();
-            }
-
-
-
         }
         [ContextMenu("Flip")]
         void flip() {
             if (ignoringJump) {
                 ignoringJump = false;
                 followCharacterJump();
-            }
-            else {
+            } else {
                 ignoringJump = true;
                 ignoreCharacterJump();
 
             }
         }
-
-
-        [ContextMenu("Flip Bounding")]
-        void flipBounds() {
-            if (roundedBoundingBox) {
-                roundedBoundingBox = false;
-                switchToSquareBox();
-            }
-            else {
-                roundedBoundingBox = true;
-                switchToRoundedBox();
-
-            }
-        }
-
-
-
-
 
         void Update() {
             transform.position = new Vector3(characterTransform.position.x, characterY);
@@ -99,8 +67,7 @@ namespace GMTK.PlatformerToolkit {
             if (!turnOn) {
                 ignoringJump = false;
                 followCharacterJump();
-            }
-            else {
+            } else {
                 ignoringJump = true;
                 ignoreCharacterJump();
 
@@ -115,34 +82,11 @@ namespace GMTK.PlatformerToolkit {
             theCamera.Follow = transform;
         }
 
-        public void switchToRoundedBox() {
-            roundedBox.enabled = true;
-            squareBox.enabled = false;
-        }
-
-        public void switchToSquareBox() {
-            squareBox.enabled = true;
-            roundedBox.enabled = false;
-        }
-
-
-        public void toggleBoundingBox(bool turnOn) {
-            if (!turnOn) {
-                roundedBoundingBox = false;
-                switchToSquareBox();
-            }
-            else {
-                roundedBoundingBox = true;
-                switchToRoundedBox();
-            }
-        }
-
 
         public void toggleJumpSFX(bool turnOn) {
             if (!turnOn) {
                 jumpSFX.enabled = false;
-            }
-            else {
+            } else {
                 jumpSFX.enabled = true;
             }
         }
@@ -150,8 +94,7 @@ namespace GMTK.PlatformerToolkit {
         public void toggleLandSFX(bool turnOn) {
             if (!turnOn) {
                 landSFX.enabled = false;
-            }
-            else {
+            } else {
                 landSFX.enabled = true;
             }
         }

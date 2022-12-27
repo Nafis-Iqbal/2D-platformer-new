@@ -134,6 +134,24 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ColumnJumpDirection"",
+                    ""type"": ""Value"",
+                    ""id"": ""5d741380-a65a-4e87-9d1e-865f83535289"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ColumnJump"",
+                    ""type"": ""Button"",
+                    ""id"": ""be7956bf-5c77-4f42-9076-b567cbcefe6b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -286,7 +304,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -413,7 +431,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""1D Axis"",
+                    ""name"": ""WS"",
                     ""id"": ""8d3a9a9f-68a7-438a-9806-80d23b990f5c"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -429,7 +447,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""ColumnMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -440,10 +458,54 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""ColumnMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""AD"",
+                    ""id"": ""b1cecf79-8a26-49bd-ade4-086d74e8e984"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ColumnJumpDirection"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""23c5cb18-3948-4bc8-839f-80ec20e213bf"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ColumnJumpDirection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""c5b7924e-e3e7-4070-a05a-938c6b155330"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ColumnJumpDirection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e2350f34-0fa3-4f7a-8483-1a7f07bac275"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ColumnJump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -914,6 +976,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_ColumnLedgeGrab = m_Player.FindAction("ColumnLedgeGrab", throwIfNotFound: true);
         m_Player_ColumnMove = m_Player.FindAction("ColumnMove", throwIfNotFound: true);
+        m_Player_ColumnJumpDirection = m_Player.FindAction("ColumnJumpDirection", throwIfNotFound: true);
+        m_Player_ColumnJump = m_Player.FindAction("ColumnJump", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -997,6 +1061,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_ColumnLedgeGrab;
     private readonly InputAction m_Player_ColumnMove;
+    private readonly InputAction m_Player_ColumnJumpDirection;
+    private readonly InputAction m_Player_ColumnJump;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1013,6 +1079,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @ColumnLedgeGrab => m_Wrapper.m_Player_ColumnLedgeGrab;
         public InputAction @ColumnMove => m_Wrapper.m_Player_ColumnMove;
+        public InputAction @ColumnJumpDirection => m_Wrapper.m_Player_ColumnJumpDirection;
+        public InputAction @ColumnJump => m_Wrapper.m_Player_ColumnJump;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1058,6 +1126,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ColumnMove.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnMove;
                 @ColumnMove.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnMove;
                 @ColumnMove.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnMove;
+                @ColumnJumpDirection.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJumpDirection;
+                @ColumnJumpDirection.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJumpDirection;
+                @ColumnJumpDirection.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJumpDirection;
+                @ColumnJump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJump;
+                @ColumnJump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJump;
+                @ColumnJump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJump;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1098,6 +1172,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ColumnMove.started += instance.OnColumnMove;
                 @ColumnMove.performed += instance.OnColumnMove;
                 @ColumnMove.canceled += instance.OnColumnMove;
+                @ColumnJumpDirection.started += instance.OnColumnJumpDirection;
+                @ColumnJumpDirection.performed += instance.OnColumnJumpDirection;
+                @ColumnJumpDirection.canceled += instance.OnColumnJumpDirection;
+                @ColumnJump.started += instance.OnColumnJump;
+                @ColumnJump.performed += instance.OnColumnJump;
+                @ColumnJump.canceled += instance.OnColumnJump;
             }
         }
     }
@@ -1239,6 +1319,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnColumnLedgeGrab(InputAction.CallbackContext context);
         void OnColumnMove(InputAction.CallbackContext context);
+        void OnColumnJumpDirection(InputAction.CallbackContext context);
+        void OnColumnJump(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

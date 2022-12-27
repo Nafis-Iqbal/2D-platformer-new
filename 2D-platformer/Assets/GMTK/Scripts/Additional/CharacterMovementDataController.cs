@@ -33,7 +33,7 @@ namespace GMTK.PlatformerToolkit {
             //MOVE
             _moveScript.maxAcceleration = _preset.Acceleration;
             _moveScript.maxSpeed = _preset.TopSpeed;
-            _moveScript.maxDecceleration = _preset.Deceleration;
+            _moveScript.maxDeceleration = _preset.Deceleration;
             _moveScript.maxTurnSpeed = _preset.TurnSpeed;
 
 

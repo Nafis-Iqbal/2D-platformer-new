@@ -15,7 +15,7 @@ TagManager:
   - 
   - Ground
   - Column
-  - 
+  - Player
   - 
   - 
   - 
@@ -46,4 +46,7 @@ TagManager:
     locked: 0
   - name: Column Tiles
     uniqueID: 1060420883
+    locked: 0
+  - name: Player
+    uniqueID: 2624648059
     locked: 0

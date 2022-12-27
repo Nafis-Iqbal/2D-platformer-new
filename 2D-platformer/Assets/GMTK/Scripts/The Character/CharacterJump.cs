@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,14 +7,14 @@ namespace GMTK.PlatformerToolkit {
     //This script handles moving the character on the Y axis, for jumping and gravity
 
     public class CharacterJump : MonoBehaviour {
-        private PlayerInputActions playerInputActions;
-
         [Header("Components")]
         [HideInInspector] public Rigidbody2D body;
-        private CharacterGround ground;
+        private CharacterGround characterGround;
         [HideInInspector] public Vector2 velocity;
         private CharacterJuice juice;
         private CharacterMovement characterMovement;
+        private CharacterDash characterDash;
+        private CharacterColumn characterColumn;
 
 
         [Header("Jumping Stats")]
@@ -46,15 +47,12 @@ namespace GMTK.PlatformerToolkit {
 
         void Awake() {
             characterMovement = GetComponent<CharacterMovement>();
-            playerInputActions = new PlayerInputActions();
-            playerInputActions.Player.Enable();
-            playerInputActions.Player.Jump.started += OnJump;
-            playerInputActions.Player.Jump.performed += OnJump;
-            playerInputActions.Player.Jump.canceled += OnJump;
+            characterColumn = GetComponent<CharacterColumn>();
 
             //Find the character's Rigidbody and ground detection and juice scripts
             body = GetComponent<Rigidbody2D>();
-            ground = GetComponent<CharacterGround>();
+            characterGround = GetComponent<CharacterGround>();
+            characterDash = GetComponent<CharacterDash>();
             juice = GetComponentInChildren<CharacterJuice>();
             defaultGravityScale = 1f;
         }
@@ -77,16 +75,14 @@ namespace GMTK.PlatformerToolkit {
         }
 
         void Update() {
-            if (characterMovement.isDashing) {
-                return;
-            }
-            if (characterMovement.hasGrabbedColumn) {
+            //Check if we're on ground, using Kit's Ground script
+            onGround = characterGround.isGrounded;
+
+            if (characterDash.isDashing || characterColumn.hasGrabbedColumn) {
                 return;
             }
             setPhysics();
 
-            //Check if we're on ground, using Kit's Ground script
-            onGround = ground.GetOnGround();
 
             //Jump buffer allows us to queue up a jump, which will play when we next hit the ground
             if (jumpBuffer > 0) {
@@ -120,7 +116,7 @@ namespace GMTK.PlatformerToolkit {
         }
 
         private void FixedUpdate() {
-            if (characterMovement.isDashing) {
+            if (characterDash.isDashing) {
                 return;
             }
             //Get velocity from Kit's Rigidbody 
