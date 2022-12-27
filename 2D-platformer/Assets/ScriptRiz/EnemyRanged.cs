@@ -2,38 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy1 : MonoBehaviour
+public class EnemyRanged : MonoBehaviour
 {
-    public float health;
+    public float health = 50f;
     public bool notPatrolling;
-    [HideInInspector]
     public Rigidbody2D rb;
+    public Transform rowPossition;
     public Transform groundChecker , platformChecker;
     Transform player;
-    public GameObject knife;
     public LayerMask environmentMask;
-    private bool turn , canHit;
+    private bool turn , canThrow;
     public bool isActivated;
     public Animator animatorEnemyGround;
-    public GameObject bullet;
+    public GameObject row;
 
 
     float walkSpeed = 100f , range = 5f , playerDistance ;
-    float timeBetweenHits = 1.15f;
+    float timeBetweenShoots = 1.15f;
     float foodRadius = .4f;
     bool turn1;
     void Start(){
         player = GameObject.FindGameObjectWithTag("Player").transform;
         notPatrolling = true;
-        canHit = true;
-        knife.SetActive(false);
+        canThrow = true;
     }
 
     // Update is called once per frame
     void Update(){
         turn = !Physics2D.OverlapCircle(groundChecker.position, foodRadius, environmentMask);
         turn1 = Physics2D.OverlapCircle(platformChecker.position, foodRadius, environmentMask);
-
         if (notPatrolling){
             Patrol();
         }
@@ -41,6 +38,8 @@ public class Enemy1 : MonoBehaviour
 
         if (playerDistance <= range && player.position.y + 2f >= transform.position.y)
         {
+            notPatrolling = false;
+            rb.velocity = Vector3.zero;
             attack();
         }
         else
@@ -67,33 +66,41 @@ public class Enemy1 : MonoBehaviour
         walkSpeed *= -1;
     }
 
-    IEnumerator hit(){
-        canHit = false;
-        yield return new WaitForSeconds(timeBetweenHits);
-        knife.SetActive(true);
-        yield return new WaitForSeconds(.5f);
-        knife.SetActive(false);
-        canHit = true;
+
+    IEnumerator Throw(){
+        canThrow = false;
+        yield return new WaitForSeconds(timeBetweenShoots);
+
+        GameObject throwRow = Instantiate(row, rowPossition.position, Quaternion.identity);
+        throwRow.transform.position = rowPossition.position;
+        throwRow.transform.rotation = transform.rotation;
+
+        int dir;
+        if (transform.position.x > player.position.x)
+        {
+            dir = -1;
+        }
+        else
+        {
+            dir = 1;
+        }
+
+        Vector2 rowScale = throwRow.transform.localScale;
+        rowScale.x *= dir;
+        throwRow.transform.localScale = rowScale;
+        canThrow = true;
     }
 
     void attack(){
         if (player.position.x > transform.position.x && transform.localScale.x < 0 || player.position.x < transform.position.x && transform.localScale.x > 0){
             Flip();
         }
-        float distance = Mathf.Abs(player.transform.position.x - transform.position.x);
-        float attackRange = 1f;
 
-        if (distance <= attackRange){
-            notPatrolling = false;
-            rb.velocity = Vector3.zero;
-            if (canHit){
-                StartCoroutine(hit());
-            }
+        if (canThrow){
+            StartCoroutine(Throw());
         }
-        else notPatrolling = true;
-
-        
     }
+
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("bullet")){

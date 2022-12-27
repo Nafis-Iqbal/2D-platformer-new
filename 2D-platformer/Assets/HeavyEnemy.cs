@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy1 : MonoBehaviour
+public class HeavyEnemy : MonoBehaviour
 {
     public float health;
     public bool notPatrolling;
@@ -18,11 +18,12 @@ public class Enemy1 : MonoBehaviour
     public GameObject bullet;
 
 
-    float walkSpeed = 100f , range = 5f , playerDistance ;
-    float timeBetweenHits = 1.15f;
+    float walkSpeed = 50f , range = 8f , playerDistance ;
+    float timeBetweenHits = 2f;
     float foodRadius = .4f;
     bool turn1;
     void Start(){
+        rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         notPatrolling = true;
         canHit = true;
@@ -71,7 +72,7 @@ public class Enemy1 : MonoBehaviour
         canHit = false;
         yield return new WaitForSeconds(timeBetweenHits);
         knife.SetActive(true);
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(Time.fixedDeltaTime);
         knife.SetActive(false);
         canHit = true;
     }
@@ -81,7 +82,7 @@ public class Enemy1 : MonoBehaviour
             Flip();
         }
         float distance = Mathf.Abs(player.transform.position.x - transform.position.x);
-        float attackRange = 1f;
+        float attackRange = 2f;
 
         if (distance <= attackRange){
             notPatrolling = false;
