@@ -8,6 +8,7 @@ public class EnemyRanged : EnemyBase
     private bool canThrow = true;
     public GameObject row;
     float timeBetweenShoots = 1.15f;
+
     IEnumerator Throw(){
         canThrow = false;
         yield return new WaitForSeconds(timeBetweenShoots);

@@ -7,7 +7,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]
     public float health;
     [HideInInspector]
-    private bool notPatrolling;
+    public bool notPatrolling;
     [HideInInspector]
     public Rigidbody2D rb;
     [SerializeField]
@@ -19,7 +19,8 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]
     public LayerMask environmentMask;
     [HideInInspector]
-    private bool turn , turn1 , canHit;
+    private bool turn, turn1;
+    public bool canHit;
     [HideInInspector]
     public bool isActivated;
     [SerializeField]

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8972609476792024069}
   - component: {fileID: 794043102108867095}
   - component: {fileID: 6429746383677640371}
-  - component: {fileID: 4257418844806338612}
   - component: {fileID: 2456214348401765712}
-  - component: {fileID: 4488809208120353464}
+  - component: {fileID: 5859820204093575064}
+  - component: {fileID: 2583443463310159364}
   m_Layer: 0
   m_Name: row
   m_TagString: Knife
@@ -148,18 +148,6 @@ MonoBehaviour:
   m_OptimizeGeometry: 1
   m_EnableTangents: 0
   m_GeometryCached: 0
---- !u!114 &4257418844806338612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1920131381889971676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04aeab61b5f4d7146b4a461bebf5777d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &2456214348401765712
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -186,7 +174,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 4.0000005, y: 4.000001}
   m_EdgeRadius: 0
---- !u!50 &4488809208120353464
+--- !u!50 &5859820204093575064
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -200,10 +188,24 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 1
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &2583443463310159364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920131381889971676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e3fb6ea44617640a7bcfbdf62ae6a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  speed: 5

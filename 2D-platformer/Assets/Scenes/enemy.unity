@@ -327,6 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 50
+  notPatrolling: 0
   rb: {fileID: 0}
   groundChecker: {fileID: 567498977}
   platformChecker: {fileID: 1878328542}
@@ -335,6 +336,7 @@ MonoBehaviour:
   environmentMask:
     serializedVersion: 2
     m_Bits: 256
+  canHit: 0
   isActivated: 0
   animatorEnemyGround: {fileID: 0}
   bullet: {fileID: 0}
@@ -900,6 +902,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 300
+  notPatrolling: 0
   rb: {fileID: 0}
   groundChecker: {fileID: 1943621394}
   platformChecker: {fileID: 1772027884}
@@ -908,6 +911,7 @@ MonoBehaviour:
   environmentMask:
     serializedVersion: 2
     m_Bits: 256
+  canHit: 0
   isActivated: 0
   animatorEnemyGround: {fileID: 0}
   bullet: {fileID: 0}
@@ -1620,6 +1624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
+  notPatrolling: 0
   rb: {fileID: 0}
   groundChecker: {fileID: 328094887}
   platformChecker: {fileID: 782598837}
@@ -1628,6 +1633,7 @@ MonoBehaviour:
   environmentMask:
     serializedVersion: 2
     m_Bits: 256
+  canHit: 0
   isActivated: 0
   animatorEnemyGround: {fileID: 0}
   bullet: {fileID: 0}
@@ -1789,7 +1795,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1189239285}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.38, y: -0.7, z: 0}
+  m_LocalPosition: {x: -1, y: 0, z: 0}
   m_LocalScale: {x: 0.1797394, y: 0.27688986, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
