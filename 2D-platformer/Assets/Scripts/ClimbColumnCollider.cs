@@ -5,12 +5,17 @@ using DG.Tweening;
 using UnityEngine;
 
 public class ClimbColumnCollider : MonoBehaviour {
-    [SerializeField] private Animator playerAnimator;
     private Transform playerTransform;
-    [SerializeField] private CharacterColumn characterColumn;
-    [SerializeField] private Rigidbody2D playerRigidbody;
     private float originalGravityScale;
 
+    [SerializeField] private Animator playerAnimator;
+    [SerializeField] private CharacterColumn characterColumn;
+    [SerializeField] private Rigidbody2D playerRigidbody;
+
+    /// <summary>
+    /// On trigger enter the ledge section, start animating player.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
             playerTransform = other.transform;
@@ -20,6 +25,10 @@ public class ClimbColumnCollider : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// remove gravity and reset gravity after some time and move the player.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator movePlayerCoroutine() {
         PlayerInputManager.Instance.playerInputActions.Player.Disable();
         originalGravityScale = playerRigidbody.gravityScale;

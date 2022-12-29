@@ -17,6 +17,10 @@ public class CharacterDash : MonoBehaviour {
         body = GetComponent<Rigidbody2D>();
     }
 
+    /// <summary>
+    /// removes gravity, adds velocity to the player and then reset gravity after some times.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Dash() {
         canDash = false;
         isDashing = true;
@@ -30,6 +34,10 @@ public class CharacterDash : MonoBehaviour {
         canDash = true;
     }
 
+    /// <summary>
+    /// On dash key pressed play dash animation and dash with coroutine.
+    /// </summary>
+    /// <param name="context"></param>
     public void OnDash(InputAction.CallbackContext context) {
         if (canDash) {
             playerAnimator.SetTrigger("Dash");

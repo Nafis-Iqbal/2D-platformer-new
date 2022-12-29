@@ -27,29 +27,37 @@ public class PlayerInputManager : MonoBehaviour {
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
 
+        // player run
         playerInputActions.Player.Run.started += OnRun;
         playerInputActions.Player.Run.performed += OnRun;
         playerInputActions.Player.Run.canceled += OnRun;
 
+        // player walk
         playerInputActions.Player.Walk.started += OnWalk;
         playerInputActions.Player.Walk.canceled += OnWalk;
 
+        // player jump
         playerInputActions.Player.Jump.started += OnJump;
         playerInputActions.Player.Jump.performed += OnJump;
         playerInputActions.Player.Jump.canceled += OnJump;
 
-
+        // player roll
         playerInputActions.Player.Roll.performed += OnRoll;
 
+        // player dash
         playerInputActions.Player.Dash.performed += OnDash;
 
+        // player column ledge grab
         playerInputActions.Player.ColumnLedgeGrab.performed += OnColumnGrab;
 
+        // player column jump
         playerInputActions.Player.ColumnJump.performed += OnColumnJump;
 
+        // player column jump direction set
         playerInputActions.Player.ColumnJumpDirection.started += OnColumnJumpDirection;
         playerInputActions.Player.ColumnJumpDirection.canceled += OnColumnJumpDirection;
 
+        // player column move
         playerInputActions.Player.ColumnMove.started += OnColumnMove;
         playerInputActions.Player.ColumnMove.performed += OnColumnMove;
         playerInputActions.Player.ColumnMove.canceled += OnColumnMove;

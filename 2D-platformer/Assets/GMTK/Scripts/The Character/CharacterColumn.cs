@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CharacterColumn : MonoBehaviour {
-
     private enum Direction {
         up,
         left,
@@ -21,11 +20,15 @@ public class CharacterColumn : MonoBehaviour {
     private Rigidbody2D body;
     private float originalGravity;
     private bool hasResetVelocity = false;
-    [SerializeField] private float columnWalkSpeed = 2f;
+    private float timeElapsedSinceColumnGrab = 0f;
+    private float originalColliderSize;
+    private bool columnMechanicsSet = false;
+    private bool fallingStarted = false;
 
     [Header("Column Grab")]
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private Vector3 columnColliderOffset;
+    [SerializeField] private float columnWalkSpeed = 2f;
     [SerializeField] private float columnLength = 2f;
     [SerializeField] public bool canGrabColumn = false;
     [SerializeField] public bool hasGrabbedColumn = false;
@@ -35,10 +38,6 @@ public class CharacterColumn : MonoBehaviour {
     [SerializeField] private float holdColumnTime = 1f;
     [SerializeField] private float gravityDuringTired = 1f;
     public float columnMoveDirection;
-    private float timeElapsedSinceColumnGrab = 0f;
-    private float originalColliderSize;
-    private bool columnMechanicsSet = false;
-    private bool fallingStarted = false;
 
     private void Awake() {
         body = GetComponent<Rigidbody2D>();
@@ -49,6 +48,9 @@ public class CharacterColumn : MonoBehaviour {
         disableColumnMechanics();
     }
 
+    /// <summary>
+    /// make player velocity = 0 and gravityScale = 0
+    /// </summary>
     private void resetVelocityGravity() {
         if (!hasResetVelocity) {
             body.velocity = Vector2.zero;
@@ -105,6 +107,9 @@ public class CharacterColumn : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Start falling from column
+    /// </summary>
     private void startFalling() {
         if (!fallingStarted) {
             body.gravityScale = gravityDuringTired;
@@ -113,11 +118,17 @@ public class CharacterColumn : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Enables tired animations
+    /// </summary>
     private void enableTiredMechanics() {
         playerAnimator.Play("column grab tired");
         PlayerInputManager.Instance.playerInputActions.Player.ColumnMove.Disable();
     }
 
+    /// <summary>
+    /// Disables column mechanics and enables normal mechanics
+    /// </summary>
     private void disableColumnMechanics() {
         timeElapsedSinceColumnGrab = 0f;
         PlayerInputManager.Instance.playerInputActions.Player.Run.Enable();
@@ -129,6 +140,9 @@ public class CharacterColumn : MonoBehaviour {
         PlayerInputManager.Instance.playerInputActions.Player.ColumnJumpDirection.Disable();
     }
 
+    /// <summary>
+    /// Disables normal mechanics and enables column mechanics
+    /// </summary>
     private void enableColumnMechanics() {
         PlayerInputManager.Instance.playerInputActions.Player.Run.Disable();
         PlayerInputManager.Instance.playerInputActions.Player.Walk.Disable();
@@ -140,6 +154,10 @@ public class CharacterColumn : MonoBehaviour {
         resetVelocityGravity();
     }
 
+    /// <summary>
+    /// On column jump add force to the player
+    /// </summary>
+    /// <param name="context">InputAction context</param>
     public void OnColumnJump(InputAction.CallbackContext context) {
         if (hasGrabbedColumn) {
             playerAnimator.SetTrigger("Jump");
@@ -156,10 +174,17 @@ public class CharacterColumn : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// On column move store the axis-value in move direction.
+    /// </summary>
+    /// <param name="context">Input action context</param>
     public void OnColumnMove(InputAction.CallbackContext context) {
         columnMoveDirection = context.ReadValue<float>();
     }
 
+    /// <summary>
+    /// Draws column hint gizmos.
+    /// </summary>
     private void OnDrawGizmos() {
         if (canGrabColumn) {
             Gizmos.color = Color.green;
@@ -171,6 +196,10 @@ public class CharacterColumn : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// On column grab play column grab animation and set hasGrabbedColumn to true.
+    /// </summary>
+    /// <param name="context"></param>
     public void OnColumnGrab(InputAction.CallbackContext context) {
         if (context.phase == InputActionPhase.Performed) {
             if (hasGrabbedColumn) {
@@ -182,6 +211,10 @@ public class CharacterColumn : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// On column jump direction set, set jump direction.
+    /// </summary>
+    /// <param name="context">Input action context</param>
     public void OnColumnJumpDirection(InputAction.CallbackContext context) {
         if (context.ReadValue<float>() < 0) {
             jumpDirection = Direction.left;
