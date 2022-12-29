@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using GMTK.PlatformerToolkit;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -30,10 +31,10 @@ public class CharacterColumn : MonoBehaviour {
     [SerializeField] public bool hasGrabbedColumn = false;
     [SerializeField] private LayerMask columnLayerMask;
     [SerializeField] private float columnMoveSpeed = 20f;
-    [SerializeField] private float columnMoveDirection;
     [SerializeField] private float columnJumpForce = 3f;
     [SerializeField] private float holdColumnTime = 1f;
     [SerializeField] private float gravityDuringTired = 1f;
+    public float columnMoveDirection;
     private float timeElapsedSinceColumnGrab = 0f;
     private float originalColliderSize;
     private bool columnMechanicsSet = false;
@@ -65,7 +66,6 @@ public class CharacterColumn : MonoBehaviour {
 
         if (!canGrabColumn) {
             hasGrabbedColumn = false;
-            hasResetVelocity = false;
         }
 
         if (hasGrabbedColumn) {
@@ -88,6 +88,7 @@ public class CharacterColumn : MonoBehaviour {
                 playerAnimator.SetFloat("columnWalkSpeed", 0);
             }
         } else {
+            hasResetVelocity = false;
             fallingStarted = false;
             if (columnMechanicsSet) {
                 disableColumnMechanics();
@@ -151,6 +152,7 @@ public class CharacterColumn : MonoBehaviour {
             } else {
                 body.AddForce(new Vector2(1, 1) * columnJumpForce, ForceMode2D.Impulse);
             }
+            hasGrabbedColumn = false;
         }
     }
 
