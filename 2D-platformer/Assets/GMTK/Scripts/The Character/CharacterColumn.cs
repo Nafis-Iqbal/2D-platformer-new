@@ -161,14 +161,19 @@ public class CharacterColumn : MonoBehaviour {
     public void OnColumnJump(InputAction.CallbackContext context) {
         if (hasGrabbedColumn) {
             playerAnimator.SetTrigger("Jump");
+            body.velocity = Vector2.zero;
+            columnMoveDirection = 0f;
             body.gravityScale = originalGravity;
             if (jumpDirection == Direction.up) {
-
-                body.AddForce(Vector2.up * columnJumpForce, ForceMode2D.Impulse);
+                // body.AddForce(Vector2.up * columnJumpForce, ForceMode2D.Impulse);
+                body.velocity = Vector2.up * columnJumpForce;
             } else if (jumpDirection == Direction.left) {
-                body.AddForce(new Vector2(-1, 1) * columnJumpForce, ForceMode2D.Impulse);
+                // body.AddForce(new Vector2(-1, 1) * columnJumpForce, ForceMode2D.Impulse);
+                body.velocity = new Vector2(-1f, 1f) * columnJumpForce;
+
             } else {
-                body.AddForce(new Vector2(1, 1) * columnJumpForce, ForceMode2D.Impulse);
+                // body.AddForce(new Vector2(1, 1) * columnJumpForce, ForceMode2D.Impulse);
+                body.velocity = new Vector2(1f, 1f) * columnJumpForce;
             }
             hasGrabbedColumn = false;
         }
