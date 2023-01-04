@@ -313,7 +313,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304258442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.1, y: 14.14, z: 0}
+  m_LocalPosition: {x: -10.136, y: 14.231, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1942178770}
@@ -5363,7 +5363,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511175302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.77, y: 5.119, z: 0}
+  m_LocalPosition: {x: -12.796, y: 5.322, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1942178770}
@@ -5946,6 +5946,9 @@ MonoBehaviour:
   jumpSpeed: 15.789474
   gravMultiplier: 1
   canJumpAgain: 0
+  desiredJump: 0
+  pressingJump: 0
+  currentlyJumping: 0
   onGround: 1
 --- !u!114 &640968030
 MonoBehaviour:
@@ -6030,7 +6033,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   columnMoveSpeed: 10
-  columnJumpForce: 16
+  columnJumpForce: 24
   holdColumnTime: 1.8
   gravityDuringTired: 1
   columnMoveDirection: 0
@@ -131915,7 +131918,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495938496}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.817, y: 17.129, z: 0}
+  m_LocalPosition: {x: -3.836, y: 17.226, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1942178770}
@@ -138246,7 +138249,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823577778}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.985, y: 14.14, z: 0}
+  m_LocalPosition: {x: -11.87, y: 14.255, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1942178770}
@@ -138319,7 +138322,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896219955}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.16, y: 17.152, z: 0}
+  m_LocalPosition: {x: -2.128, y: 17.269, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1942178770}

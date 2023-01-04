@@ -38,12 +38,12 @@ namespace GMTK.PlatformerToolkit {
 
         [Header("Current State")]
         public bool canJumpAgain = false;
-        private bool desiredJump;
+        [SerializeField] private bool desiredJump;
+        [SerializeField] private bool pressingJump;
+        [SerializeField] private bool currentlyJumping;
+        public bool onGround;
         private float jumpBufferCounter;
         private float coyoteTimeCounter = 0;
-        private bool pressingJump;
-        public bool onGround;
-        private bool currentlyJumping;
 
         void Awake() {
             characterMovement = GetComponent<CharacterMovement>();
@@ -116,6 +116,9 @@ namespace GMTK.PlatformerToolkit {
         }
 
         private void FixedUpdate() {
+            if (characterColumn.hasGrabbedColumn) {
+                currentlyJumping = false;
+            }
             if (characterDash.isDashing || characterColumn.hasGrabbedColumn) {
                 return;
             }
@@ -175,7 +178,7 @@ namespace GMTK.PlatformerToolkit {
             }
             //Else not moving vertically at all
             else {
-                if (onGround) {
+                if (onGround || characterColumn.hasGrabbedColumn) {
                     currentlyJumping = false;
                 }
 
