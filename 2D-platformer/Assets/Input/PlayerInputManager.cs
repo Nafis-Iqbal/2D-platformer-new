@@ -9,11 +9,11 @@ public class PlayerInputManager : MonoBehaviour {
     // Instance for Singleton.
     public static PlayerInputManager Instance;
     public PlayerInputActions playerInputActions;
-    [SerializeField] private CharacterMovement characterMovement;
-    [SerializeField] private CharacterDash characterDash;
-    [SerializeField] private CharacterRoll characterRoll;
-    [SerializeField] private CharacterColumn characterColumn;
-    [SerializeField] private CharacterJump characterJump;
+    private CharacterMovement characterMovement;
+    private CharacterDash characterDash;
+    private CharacterRoll characterRoll;
+    private CharacterColumn characterColumn;
+    private CharacterJump characterJump;
 
 
     private void Awake() {
@@ -23,6 +23,13 @@ public class PlayerInputManager : MonoBehaviour {
             Destroy(gameObject);
             return;
         }
+
+        var playerTransform = GameManager.Instance.playerTransform;
+        characterMovement = playerTransform.GetComponent<CharacterMovement>();
+        characterDash = playerTransform.GetComponent<CharacterDash>();
+        characterRoll = playerTransform.GetComponent<CharacterRoll>();
+        characterColumn = playerTransform.GetComponent<CharacterColumn>();
+        characterJump = playerTransform.GetComponent<CharacterJump>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();

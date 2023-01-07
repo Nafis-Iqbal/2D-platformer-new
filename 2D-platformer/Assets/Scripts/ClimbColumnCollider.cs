@@ -8,9 +8,13 @@ public class ClimbColumnCollider : MonoBehaviour {
     private Transform playerTransform;
     private float originalGravityScale;
 
-    [SerializeField] private Animator playerAnimator;
-    [SerializeField] private CharacterColumn characterColumn;
-    [SerializeField] private Rigidbody2D playerRigidbody;
+    private CharacterColumn characterColumn;
+    private Rigidbody2D playerRigidbody;
+
+    private void Awake() {
+        characterColumn = GameManager.Instance.playerTransform.GetComponent<CharacterColumn>();
+        playerRigidbody = GameManager.Instance.playerTransform.GetComponent<Rigidbody2D>();
+    }
 
     /// <summary>
     /// On trigger enter the ledge section, start animating player.
@@ -33,7 +37,7 @@ public class ClimbColumnCollider : MonoBehaviour {
         PlayerInputManager.Instance.playerInputActions.Player.Disable();
         originalGravityScale = playerRigidbody.gravityScale;
         playerRigidbody.gravityScale = 0f;
-        playerAnimator.Play("column crawl");
+        GameManager.Instance.playerAnimator.Play("column crawl");
         yield return new WaitForSeconds(0.3f);
         playerTransform.position = transform.position;
         playerRigidbody.gravityScale = originalGravityScale;
