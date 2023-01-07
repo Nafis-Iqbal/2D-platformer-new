@@ -6,12 +6,12 @@ using UnityEngine;
 namespace GMTK.PlatformerToolkit {
     //This script handles purely aesthetic things like particles, squash & stretch, and tilt
 
-    public class CharacterJuice : MonoBehaviour {
+    public class PlayerEffect : MonoBehaviour {
         [Header("Components")]
-        CharacterMovement moveScript;
-        CharacterJump jumpScript;
+        PlayerMovement moveScript;
+        PlayerJump jumpScript;
         [SerializeField] Animator playerAnimator;
-        [SerializeField] GameObject characterSprite;
+        [SerializeField] GameObject playerSprite;
 
         [Header("Components - Particles")]
         [SerializeField] private ParticleSystem moveParticles;
@@ -43,12 +43,12 @@ namespace GMTK.PlatformerToolkit {
         public bool cameraFalling = false;
 
         void Start() {
-            moveScript = GetComponent<CharacterMovement>();
-            jumpScript = GetComponent<CharacterJump>();
+            moveScript = GetComponent<PlayerMovement>();
+            jumpScript = GetComponent<PlayerJump>();
         }
 
         void Update() {
-            tiltCharacter();
+            TiltPlayer();
 
             //We need to change the character's running animation to suit their current speed
             runningSpeed = Mathf.Clamp(Mathf.Abs(moveScript.velocity.x), 0, maxSpeed);
@@ -57,7 +57,7 @@ namespace GMTK.PlatformerToolkit {
             checkForLanding();
         }
 
-        private void tiltCharacter() {
+        private void TiltPlayer() {
             //See which direction the character is currently running towards, and tilt in that direction
             float directionToTilt = 0;
             if (moveScript.velocity.x != 0) {
@@ -128,8 +128,8 @@ namespace GMTK.PlatformerToolkit {
             float t = 0f;
             while (t <= 1.0) {
                 t += Time.deltaTime / 0.01f;
-                characterSprite.transform.localScale = Vector3.Lerp(originalSize, newSize, t);
-                characterSprite.transform.localPosition = Vector3.Lerp(originalPosition, newPosition, t);
+                playerSprite.transform.localScale = Vector3.Lerp(originalSize, newSize, t);
+                playerSprite.transform.localPosition = Vector3.Lerp(originalPosition, newPosition, t);
                 yield return null;
             }
 
@@ -138,8 +138,8 @@ namespace GMTK.PlatformerToolkit {
             t = 0f;
             while (t <= 1.0) {
                 t += Time.deltaTime / seconds;
-                characterSprite.transform.localScale = Vector3.Lerp(newSize, originalSize, t);
-                characterSprite.transform.localPosition = Vector3.Lerp(newPosition, originalPosition, t);
+                playerSprite.transform.localScale = Vector3.Lerp(newSize, originalSize, t);
+                playerSprite.transform.localPosition = Vector3.Lerp(newPosition, originalPosition, t);
                 yield return null;
             }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterDash : MonoBehaviour {
+public class PlayerDash : MonoBehaviour {
     private Rigidbody2D body;
     [Header("Dash")]
     [SerializeField] private Animator playerAnimator;

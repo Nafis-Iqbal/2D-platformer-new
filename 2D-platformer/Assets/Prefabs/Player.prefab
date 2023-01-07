@@ -10383,7 +10383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAnimator: {fileID: 6825991441445998724}
-  characterSprite: {fileID: 6825991441445998746}
+  playerSprite: {fileID: 6825991441445998746}
   moveParticles: {fileID: 6825991441419017072}
   jumpParticles: {fileID: 6825991441121758397}
   landParticles: {fileID: 6825991440262998360}

@@ -4,23 +4,23 @@ using GMTK.PlatformerToolkit;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterRoll : MonoBehaviour {
+public class PlayerRoll : MonoBehaviour {
     [Header("Roll")]
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private float rollForce = 25f;
     [SerializeField] private float rollDuration = 0.5f;
     public bool isRolling = false;
     private Rigidbody2D body;
-    private CharacterGround characterGround;
+    private PlayerGround playerGround;
     private bool onGround;
 
     private void Awake() {
-        characterGround = GetComponent<CharacterGround>();
+        playerGround = GetComponent<PlayerGround>();
         body = GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate() {
-        onGround = characterGround.isGrounded;
+        onGround = playerGround.isGrounded;
     }
 
     IEnumerator deactivateRolling() {

@@ -9,11 +9,11 @@ public class PlayerInputManager : MonoBehaviour {
     // Instance for Singleton.
     public static PlayerInputManager Instance;
     public PlayerInputActions playerInputActions;
-    private CharacterMovement characterMovement;
-    private CharacterDash characterDash;
-    private CharacterRoll characterRoll;
-    private CharacterColumn characterColumn;
-    private CharacterJump characterJump;
+    private PlayerMovement playerMovement;
+    private PlayerDash playerDash;
+    private PlayerRoll playerRoll;
+    private PlayerColumn playerColumn;
+    private PlayerJump playerJump;
 
 
     private void Awake() {
@@ -25,11 +25,11 @@ public class PlayerInputManager : MonoBehaviour {
         }
 
         var playerTransform = GameManager.Instance.playerTransform;
-        characterMovement = playerTransform.GetComponent<CharacterMovement>();
-        characterDash = playerTransform.GetComponent<CharacterDash>();
-        characterRoll = playerTransform.GetComponent<CharacterRoll>();
-        characterColumn = playerTransform.GetComponent<CharacterColumn>();
-        characterJump = playerTransform.GetComponent<CharacterJump>();
+        playerMovement = playerTransform.GetComponent<PlayerMovement>();
+        playerDash = playerTransform.GetComponent<PlayerDash>();
+        playerRoll = playerTransform.GetComponent<PlayerRoll>();
+        playerColumn = playerTransform.GetComponent<PlayerColumn>();
+        playerJump = playerTransform.GetComponent<PlayerJump>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
@@ -71,42 +71,42 @@ public class PlayerInputManager : MonoBehaviour {
     }
 
     private void OnJump(InputAction.CallbackContext context) {
-        characterJump.OnJump(context);
+        playerJump.OnJump(context);
     }
 
     private void OnColumnMove(InputAction.CallbackContext context) {
-        characterColumn.OnColumnMove(context);
+        playerColumn.OnColumnMove(context);
     }
 
     private void OnColumnJumpDirection(InputAction.CallbackContext context) {
-        characterColumn.OnColumnJumpDirection(context);
+        playerColumn.OnColumnJumpDirection(context);
     }
 
     private void OnColumnJump(InputAction.CallbackContext context) {
-        characterColumn.OnColumnJump(context);
+        playerColumn.OnColumnJump(context);
     }
 
     private void OnColumnGrab(InputAction.CallbackContext context) {
-        characterColumn.OnColumnGrab(context);
+        playerColumn.OnColumnGrab(context);
     }
 
     private void OnDash(InputAction.CallbackContext context) {
-        characterDash.OnDash(context);
+        playerDash.OnDash(context);
     }
 
     private void OnRoll(InputAction.CallbackContext context) {
-        characterRoll.OnRoll(context);
+        playerRoll.OnRoll(context);
     }
 
     private void OnWalk(InputAction.CallbackContext context) {
         playerInputActions.Player.Run.Disable();
         playerInputActions.Player.Run.Enable();
 
-        characterMovement.OnWalk(context);
+        playerMovement.OnWalk(context);
     }
 
     public void OnRun(InputAction.CallbackContext context) {
-        characterMovement.OnMovement(context);
+        playerMovement.OnMovement(context);
     }
 
 }

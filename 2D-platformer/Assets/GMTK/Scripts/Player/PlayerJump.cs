@@ -6,15 +6,15 @@ using UnityEngine.InputSystem;
 namespace GMTK.PlatformerToolkit {
     //This script handles moving the character on the Y axis, for jumping and gravity
 
-    public class CharacterJump : MonoBehaviour {
+    public class PlayerJump : MonoBehaviour {
         [Header("Components")]
         [HideInInspector] public Rigidbody2D body;
-        private CharacterGround characterGround;
+        private PlayerGround playerGround;
         [HideInInspector] public Vector2 velocity;
-        private CharacterJuice juice;
-        private CharacterMovement characterMovement;
-        private CharacterDash characterDash;
-        private CharacterColumn characterColumn;
+        private PlayerEffect playerEffect;
+        private PlayerMovement playerMovement;
+        private PlayerDash playerDash;
+        private PlayerColumn playerColumn;
 
 
         [Header("Jumping Stats")]
@@ -46,21 +46,21 @@ namespace GMTK.PlatformerToolkit {
         private float coyoteTimeCounter = 0;
 
         void Awake() {
-            characterMovement = GetComponent<CharacterMovement>();
-            characterColumn = GetComponent<CharacterColumn>();
+            playerMovement = GetComponent<PlayerMovement>();
+            playerColumn = GetComponent<PlayerColumn>();
 
             //Find the character's Rigidbody and ground detection and juice scripts
             body = GetComponent<Rigidbody2D>();
-            characterGround = GetComponent<CharacterGround>();
-            characterDash = GetComponent<CharacterDash>();
-            juice = GetComponentInChildren<CharacterJuice>();
+            playerGround = GetComponent<PlayerGround>();
+            playerDash = GetComponent<PlayerDash>();
+            playerEffect = GetComponentInChildren<PlayerEffect>();
             defaultGravityScale = 1f;
         }
 
         public void OnJump(InputAction.CallbackContext context) {
             //This function is called when one of the jump buttons (like space or the A button) is pressed.
 
-            if (MovementLimiter.instance.CharacterCanMove) {
+            if (MovementLimiter.instance.playerCanMove) {
                 //When we press the jump button, tell the script that we desire a jump.
                 //Also, use the started and canceled contexts to know if we're currently holding the button
                 if (context.started) {
@@ -76,9 +76,9 @@ namespace GMTK.PlatformerToolkit {
 
         void Update() {
             //Check if we're on ground, using Kit's Ground script
-            onGround = characterGround.isGrounded;
+            onGround = playerGround.isGrounded;
 
-            if (characterDash.isDashing || characterColumn.hasGrabbedColumn) {
+            if (playerDash.isDashing || playerColumn.hasGrabbedColumn) {
                 return;
             }
             setPhysics();
@@ -116,10 +116,10 @@ namespace GMTK.PlatformerToolkit {
         }
 
         private void FixedUpdate() {
-            if (characterColumn.hasGrabbedColumn) {
+            if (playerColumn.hasGrabbedColumn) {
                 currentlyJumping = false;
             }
-            if (characterDash.isDashing || characterColumn.hasGrabbedColumn) {
+            if (playerDash.isDashing || playerColumn.hasGrabbedColumn) {
                 return;
             }
             //Get velocity from Kit's Rigidbody 
@@ -178,7 +178,7 @@ namespace GMTK.PlatformerToolkit {
             }
             //Else not moving vertically at all
             else {
-                if (onGround || characterColumn.hasGrabbedColumn) {
+                if (onGround || playerColumn.hasGrabbedColumn) {
                     currentlyJumping = false;
                 }
 
@@ -193,7 +193,7 @@ namespace GMTK.PlatformerToolkit {
         private void DoAJump() {
 
             //Create the jump, provided we are on the ground, in coyote time, or have a double jump available
-            if (!characterColumn.hasGrabbedColumn && (onGround || (coyoteTimeCounter > 0.03f && coyoteTimeCounter < coyoteTime) || canJumpAgain)) {
+            if (!playerColumn.hasGrabbedColumn && (onGround || (coyoteTimeCounter > 0.03f && coyoteTimeCounter < coyoteTime) || canJumpAgain)) {
                 desiredJump = false;
                 jumpBufferCounter = 0;
                 coyoteTimeCounter = 0;
@@ -216,9 +216,9 @@ namespace GMTK.PlatformerToolkit {
                 velocity.y += jumpSpeed;
                 currentlyJumping = true;
 
-                if (juice != null) {
+                if (playerEffect != null) {
                     //Apply the jumping effects on the juice script
-                    juice.jumpEffects();
+                    playerEffect.jumpEffects();
                 }
             }
 

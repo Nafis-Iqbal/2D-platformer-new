@@ -8,11 +8,11 @@ public class ClimbColumnCollider : MonoBehaviour {
     private Transform playerTransform;
     private float originalGravityScale;
 
-    private CharacterColumn characterColumn;
+    private PlayerColumn playerColumn;
     private Rigidbody2D playerRigidbody;
 
     private void Awake() {
-        characterColumn = GameManager.Instance.playerTransform.GetComponent<CharacterColumn>();
+        playerColumn = GameManager.Instance.playerTransform.GetComponent<PlayerColumn>();
         playerRigidbody = GameManager.Instance.playerTransform.GetComponent<Rigidbody2D>();
     }
 
@@ -23,7 +23,7 @@ public class ClimbColumnCollider : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
             playerTransform = other.transform;
-            if ((playerTransform.position.y < transform.position.y) && (playerRigidbody.velocity.y < 0.01f) && characterColumn.columnMoveDirection > 0.1f) {
+            if ((playerTransform.position.y < transform.position.y) && (playerRigidbody.velocity.y < 0.01f) && playerColumn.columnMoveDirection > 0.1f) {
                 StartCoroutine(movePlayerCoroutine());
             }
         }

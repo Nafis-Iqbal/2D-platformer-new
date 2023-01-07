@@ -5,7 +5,7 @@ using UnityEngine;
 namespace GMTK.PlatformerToolkit {
     //This script is used by both movement and jump to detect when the character is touching the ground
 
-    public class CharacterGround : MonoBehaviour {
+    public class PlayerGround : MonoBehaviour {
         public bool isGrounded;
         [SerializeField] private Animator playerAnimator;
 

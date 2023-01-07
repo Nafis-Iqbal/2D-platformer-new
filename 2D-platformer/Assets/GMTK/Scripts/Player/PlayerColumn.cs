@@ -6,7 +6,7 @@ using GMTK.PlatformerToolkit;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterColumn : MonoBehaviour {
+public class PlayerColumn : MonoBehaviour {
     private enum Direction {
         up,
         left,
@@ -14,9 +14,9 @@ public class CharacterColumn : MonoBehaviour {
     }
 
     private Direction jumpDirection;
-    private CharacterMovement characterMovement;
-    private CharacterGround characterGround;
-    private CharacterJump characterJump;
+    private PlayerMovement playerMovement;
+    private PlayerGround playerGround;
+    private PlayerJump playerJump;
     private Rigidbody2D body;
     private float originalGravity;
     private bool hasResetVelocity = false;
@@ -42,9 +42,9 @@ public class CharacterColumn : MonoBehaviour {
     private void Awake() {
         body = GetComponent<Rigidbody2D>();
         originalGravity = body.gravityScale;
-        characterJump = GetComponent<CharacterJump>();
-        characterMovement = GetComponent<CharacterMovement>();
-        characterGround = GetComponent<CharacterGround>();
+        playerJump = GetComponent<PlayerJump>();
+        playerMovement = GetComponent<PlayerMovement>();
+        playerGround = GetComponent<PlayerGround>();
         disableColumnMechanics();
     }
 
@@ -61,7 +61,7 @@ public class CharacterColumn : MonoBehaviour {
     }
 
     private void Update() {
-        if (characterGround.isGrounded && (timeElapsedSinceColumnGrab > holdColumnTime)) {
+        if (playerGround.isGrounded && (timeElapsedSinceColumnGrab > holdColumnTime)) {
             timeElapsedSinceColumnGrab = 0f;
             hasGrabbedColumn = false;
         }

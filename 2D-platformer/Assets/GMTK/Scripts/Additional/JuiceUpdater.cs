@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 
 namespace GMTK.PlatformerToolkit {
-    public class JuiceUpdater : MonoBehaviour {
+    public class PlayerEffectUpdater : MonoBehaviour {
 
-        [SerializeField] CharacterJuice juiceScript;
+        [SerializeField] PlayerEffect playerEffect;
 
         [SerializeField] ParticleSystem runParticles;
         [SerializeField] ParticleSystem jumpParticles;
         [SerializeField] ParticleSystem landParticles;
 
-        [SerializeField] TrailRenderer characterTrail;
+        [SerializeField] TrailRenderer playerTrail;
 
         [Header("Values")]
         [Range(0, 10)]
@@ -67,23 +67,23 @@ namespace GMTK.PlatformerToolkit {
         }
 
         public void changeJumpSquash(float amount) {
-            juiceScript.jumpSqueezeMultiplier = amount;
+            playerEffect.jumpSqueezeMultiplier = amount;
         }
 
         public void changeLandSquash(float amount) {
-            juiceScript.landSqueezeMultiplier = amount;
+            playerEffect.landSqueezeMultiplier = amount;
         }
 
         public void changeTrail(float amount) {
-            characterTrail.time = amount;
+            playerTrail.time = amount;
         }
 
         public void changeTiltAmount(float amount) {
-            juiceScript.maxTilt = amount;
+            playerEffect.maxTilt = amount;
         }
 
         public void changeTiltSpeed(float amount) {
-            juiceScript.tiltSpeed = amount;
+            playerEffect.tiltSpeed = amount;
         }
     }
 }

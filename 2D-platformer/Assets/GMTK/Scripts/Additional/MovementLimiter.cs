@@ -7,15 +7,15 @@ namespace GMTK.PlatformerToolkit {
     public class MovementLimiter : MonoBehaviour {
         public static MovementLimiter instance;
 
-        [SerializeField] bool _initialCharacterCanMove = true;
-        public bool CharacterCanMove;
+        [SerializeField] bool _initialPlayerCanMove = true;
+        public bool playerCanMove;
 
         private void OnEnable() {
             instance = this;
         }
 
         private void Start() {
-            CharacterCanMove = _initialCharacterCanMove;
+            playerCanMove = _initialPlayerCanMove;
         }
     }
 }

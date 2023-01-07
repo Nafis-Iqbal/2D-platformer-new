@@ -7,11 +7,11 @@ using UnityEngine.InputSystem.Interactions;
 namespace GMTK.PlatformerToolkit {
     //This script handles moving the character on the X axis, both on the ground and in the air.
 
-    public class CharacterMovement : MonoBehaviour {
-        private CharacterGround characterGround;
-        private CharacterColumn characterColumn;
-        private CharacterDash characterDash;
-        private CharacterRoll characterRoll;
+    public class PlayerMovement : MonoBehaviour {
+        private PlayerGround playerGround;
+        private PlayerColumn playerColumn;
+        private PlayerDash playerDash;
+        private PlayerRoll playerRoll;
         private Rigidbody2D body;
         private Vector2 desiredVelocity;
         private float maxSpeedChange;
@@ -53,9 +53,9 @@ namespace GMTK.PlatformerToolkit {
 
             //Find the character's Rigidbody and ground detection script
             body = GetComponent<Rigidbody2D>();
-            characterGround = GetComponent<CharacterGround>();
-            characterDash = GetComponent<CharacterDash>();
-            characterRoll = GetComponent<CharacterRoll>();
+            playerGround = GetComponent<PlayerGround>();
+            playerDash = GetComponent<PlayerDash>();
+            playerRoll = GetComponent<PlayerRoll>();
         }
 
         public void OnMovement(InputAction.CallbackContext context) {
@@ -67,7 +67,7 @@ namespace GMTK.PlatformerToolkit {
             if (isWalking) {
                 speedMultiplier = walkMultiplier;
             }
-            if (MovementLimiter.instance.CharacterCanMove) {
+            if (MovementLimiter.instance.playerCanMove) {
                 directionX = context.ReadValue<float>() * speedMultiplier;
             }
         }
@@ -81,12 +81,12 @@ namespace GMTK.PlatformerToolkit {
         }
 
         private void Update() {
-            if (characterDash.isDashing || characterRoll.isRolling) {
+            if (playerDash.isDashing || playerRoll.isRolling) {
                 return;
             }
 
             //Used to stop movement when the character is playing her death animation
-            if (!MovementLimiter.instance.CharacterCanMove) {
+            if (!MovementLimiter.instance.playerCanMove) {
                 directionX = 0;
             }
 
@@ -106,14 +106,14 @@ namespace GMTK.PlatformerToolkit {
         }
 
         private void FixedUpdate() {
-            if (characterDash.isDashing || characterRoll.isRolling) {
+            if (playerDash.isDashing || playerRoll.isRolling) {
                 return;
             }
 
             //Fixed update runs in sync with Unity's physics engine
 
             //Get Kit's current ground status from her ground script
-            onGround = characterGround.isGrounded;
+            onGround = playerGround.isGrounded;
 
             //Get the Rigidbody's current velocity
             velocity = body.velocity;

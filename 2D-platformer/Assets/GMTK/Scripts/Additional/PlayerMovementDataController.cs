@@ -5,18 +5,18 @@ using UnityEngine;
 
 namespace GMTK.PlatformerToolkit {
 
-    [RequireComponent(typeof(CharacterMovement), typeof(CharacterJump))]
-    public class CharacterMovementDataController : MonoBehaviour {
+    [RequireComponent(typeof(PlayerMovement), typeof(PlayerJump))]
+    public class PlayerMovementDataController : MonoBehaviour {
         [SerializeField] PresetObject _preset;
 
-        CharacterMovement _moveScript;
-        CharacterJump _jumpScript;
+        PlayerMovement _moveScript;
+        PlayerJump _jumpScript;
 
         PresetObject _installedPreset;
 
         void Awake() {
-            _moveScript = GetComponent<CharacterMovement>();
-            _jumpScript = GetComponent<CharacterJump>();
+            _moveScript = GetComponent<PlayerMovement>();
+            _jumpScript = GetComponent<PlayerJump>();
 
             InstallPresetData();
         }
