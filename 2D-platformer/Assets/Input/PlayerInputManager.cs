@@ -14,6 +14,7 @@ public class PlayerInputManager : MonoBehaviour {
     private PlayerRoll playerRoll;
     private PlayerColumn playerColumn;
     private PlayerJump playerJump;
+    private PlayerSwordAttack playerSwordAttack;
 
 
     private void Awake() {
@@ -30,6 +31,7 @@ public class PlayerInputManager : MonoBehaviour {
         playerRoll = playerTransform.GetComponent<PlayerRoll>();
         playerColumn = playerTransform.GetComponent<PlayerColumn>();
         playerJump = playerTransform.GetComponent<PlayerJump>();
+        playerSwordAttack = playerTransform.GetComponent<PlayerSwordAttack>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
@@ -68,6 +70,14 @@ public class PlayerInputManager : MonoBehaviour {
         playerInputActions.Player.ColumnMove.started += OnColumnMove;
         playerInputActions.Player.ColumnMove.performed += OnColumnMove;
         playerInputActions.Player.ColumnMove.canceled += OnColumnMove;
+
+        // player sword attack
+        playerInputActions.Player.SwordAttack.started += OnSwordAttack;
+    }
+
+    private void OnSwordAttack(InputAction.CallbackContext context)
+    {
+        playerSwordAttack.OnSwordAttack(context);
     }
 
     private void OnJump(InputAction.CallbackContext context) {

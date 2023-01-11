@@ -85,6 +85,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SwordAttack",
+                    "type": "Button",
+                    "id": "1a99b950-8ed6-4ee9-8e9f-aeb9d7e88dd0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -415,6 +424,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ColumnJump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "27cfbf27-93fe-4926-aa34-08a67be31d1b",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SwordAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
