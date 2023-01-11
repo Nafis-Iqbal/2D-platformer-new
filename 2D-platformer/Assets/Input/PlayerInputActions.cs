@@ -116,6 +116,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShurikenAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""911518cc-5e5d-4a37-abe9-afd8df2920b4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -457,6 +466,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""SwordAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""920ea07e-c232-45dc-a14a-eb71a2a6c1d4"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ShurikenAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -927,6 +947,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_ColumnJumpDirection = m_Player.FindAction("ColumnJumpDirection", throwIfNotFound: true);
         m_Player_ColumnJump = m_Player.FindAction("ColumnJump", throwIfNotFound: true);
         m_Player_SwordAttack = m_Player.FindAction("SwordAttack", throwIfNotFound: true);
+        m_Player_ShurikenAttack = m_Player.FindAction("ShurikenAttack", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1008,6 +1029,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ColumnJumpDirection;
     private readonly InputAction m_Player_ColumnJump;
     private readonly InputAction m_Player_SwordAttack;
+    private readonly InputAction m_Player_ShurikenAttack;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1022,6 +1044,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @ColumnJumpDirection => m_Wrapper.m_Player_ColumnJumpDirection;
         public InputAction @ColumnJump => m_Wrapper.m_Player_ColumnJump;
         public InputAction @SwordAttack => m_Wrapper.m_Player_SwordAttack;
+        public InputAction @ShurikenAttack => m_Wrapper.m_Player_ShurikenAttack;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1061,6 +1084,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @SwordAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwordAttack;
                 @SwordAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwordAttack;
                 @SwordAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwordAttack;
+                @ShurikenAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShurikenAttack;
+                @ShurikenAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShurikenAttack;
+                @ShurikenAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShurikenAttack;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1095,6 +1121,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @SwordAttack.started += instance.OnSwordAttack;
                 @SwordAttack.performed += instance.OnSwordAttack;
                 @SwordAttack.canceled += instance.OnSwordAttack;
+                @ShurikenAttack.started += instance.OnShurikenAttack;
+                @ShurikenAttack.performed += instance.OnShurikenAttack;
+                @ShurikenAttack.canceled += instance.OnShurikenAttack;
             }
         }
     }
@@ -1234,6 +1263,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnColumnJumpDirection(InputAction.CallbackContext context);
         void OnColumnJump(InputAction.CallbackContext context);
         void OnSwordAttack(InputAction.CallbackContext context);
+        void OnShurikenAttack(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

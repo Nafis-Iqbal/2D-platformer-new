@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerSwordAttack : MonoBehaviour {
+public class PlayerShurikenAttack : MonoBehaviour {
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private float timeElapsedSinceAttack = 0f;
     [SerializeField] private float attackCooldownTime = 1f;
     [SerializeField] private bool isAttacking = false;
+    [SerializeField] private GameObject shurikenPrefab;
 
     private PlayerColumn playerColumn;
 
@@ -24,12 +25,14 @@ public class PlayerSwordAttack : MonoBehaviour {
                 isAttacking = false;
             }
         }
-
     }
-    public void OnSwordAttack(InputAction.CallbackContext context) {
+
+    public void OnShurikenAttack(InputAction.CallbackContext context) {
         if (!isAttacking && !playerColumn.hasGrabbedColumn) {
-            isAttacking = true;
-            playerAnimator.Play("sword attack");
+            Debug.Log("shuriken throw...");
+            playerAnimator.Play("shuriken throw");
+            var shuriken = ObjectPooler.Instance.SpawnFromPool("PlayerShuriken", transform.position, Quaternion.identity);
+            shuriken.GetComponent<PlayerShuriken>().Deploy(Vector2.right * transform.localScale.x);
         }
     }
 }

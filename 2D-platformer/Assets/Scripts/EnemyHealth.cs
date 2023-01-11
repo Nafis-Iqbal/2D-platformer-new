@@ -9,7 +9,7 @@ public class EnemyHealth : MonoBehaviour {
     [SerializeField] private Color normalColor;
 
     public void takeDamage(float damageAmount) {
-        Debug.Log("took damage");
+        Debug.Log("took damage " + damageAmount);
         spriteRenderer.color = damagedColor;
         StartCoroutine(changeToNormalColorCoroutine());
     }

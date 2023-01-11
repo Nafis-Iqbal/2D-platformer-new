@@ -1095,34 +1095,12 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.48837042, y: 0.18993664}
   m_EdgeRadius: 0
---- !u!1 &640968022 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6825991441321897635, guid: a5ab13beee15b1443a1aefec1b01a6b0,
-    type: 3}
-  m_PrefabInstance: {fileID: 6825991441893641205}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &640968025 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6825991441321897644, guid: a5ab13beee15b1443a1aefec1b01a6b0,
     type: 3}
   m_PrefabInstance: {fileID: 6825991441893641205}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &640968034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 640968022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a12998563fce7c4591d3685ccb4dbf7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerAnimator: {fileID: 517184369}
-  timeElapsedSinceAttack: 0
-  attackCooldownTime: 0.3
-  isAttacking: 0
 --- !u!1 &709600652
 GameObject:
   m_ObjectHideFlags: 0
@@ -121564,20 +121542,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'move = w,d
+  m_text: 'move = w,d\t\tjump = space
 
-    jump = space
+    walk = shift+w,d\troll = i
 
-    walk = shift+w,d
+    dash =
+    j\t\tclimb = k
 
-    roll = i
-
-    dash
-    = j
-
-    climb = k
-
-'
+    sword attack = h\tshuriken = l'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -123452,6 +123424,54 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.48837042, y: 0.18993664}
   m_EdgeRadius: 0
+--- !u!1 &1900459801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1900459803}
+  - component: {fileID: 1900459802}
+  m_Layer: 0
+  m_Name: Object Pooler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1900459802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900459801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2bbefaeeff1324f8839e97fa0665cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - name: PlayerShuriken
+    prefab: {fileID: 3318870667500167459, guid: 04a028871f1056d4198e64e267d137ae,
+      type: 3}
+    size: 20
+--- !u!4 &1900459803
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900459801}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.775644, y: 5.81275, z: -30.149397}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1924883735
 GameObject:
   m_ObjectHideFlags: 0
