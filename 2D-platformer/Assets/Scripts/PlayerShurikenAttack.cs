@@ -29,7 +29,6 @@ public class PlayerShurikenAttack : MonoBehaviour {
 
     public void OnShurikenAttack(InputAction.CallbackContext context) {
         if (!isAttacking && !playerColumn.hasGrabbedColumn) {
-            Debug.Log("shuriken throw...");
             playerAnimator.Play("shuriken throw");
             var shuriken = ObjectPooler.Instance.SpawnFromPool("PlayerShuriken", transform.position, Quaternion.identity);
             shuriken.GetComponent<PlayerShuriken>().Deploy(Vector2.right * transform.localScale.x);

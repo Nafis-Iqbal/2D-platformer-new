@@ -9,7 +9,7 @@ public class PlayerShurikenCollider : MonoBehaviour {
     }
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
-            other.transform.GetComponent<EnemyHealth>().takeDamage(5f);
+            other.transform.GetComponent<EnemyHealth>().takeDamage(playerShuriken.damageAmount);
             gameObject.SetActive(false);
         } else {
             playerShuriken.Stop();

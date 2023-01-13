@@ -121549,7 +121549,9 @@ MonoBehaviour:
     dash =
     j\t\tclimb = k
 
-    sword attack = h\tshuriken = l'
+    sword attack = h\tshuriken = l
+
+    projectile = u'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -123456,6 +123458,10 @@ MonoBehaviour:
   pools:
   - name: PlayerShuriken
     prefab: {fileID: 3318870667500167459, guid: 04a028871f1056d4198e64e267d137ae,
+      type: 3}
+    size: 20
+  - name: PlayerProjectile
+    prefab: {fileID: 4293796941166353219, guid: 37220d623d9e51e4e913de7e0ee80aaa,
       type: 3}
     size: 20
 --- !u!4 &1900459803
@@ -131002,6 +131008,11 @@ PrefabInstance:
     - target: {fileID: 6825991441445998725, guid: a5ab13beee15b1443a1aefec1b01a6b0,
         type: 3}
       propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6825991441445998725, guid: a5ab13beee15b1443a1aefec1b01a6b0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

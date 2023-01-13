@@ -16,7 +16,7 @@ public class PlayerInputManager : MonoBehaviour {
     private PlayerJump playerJump;
     private PlayerSwordAttack playerSwordAttack;
     private PlayerShurikenAttack playerShurikenAttack;
-
+    private PlayerProjectileAttack playerProjectileAttack;
 
     private void Awake() {
         if (Instance == null) {
@@ -34,6 +34,7 @@ public class PlayerInputManager : MonoBehaviour {
         playerJump = playerTransform.GetComponent<PlayerJump>();
         playerSwordAttack = playerTransform.GetComponent<PlayerSwordAttack>();
         playerShurikenAttack = playerTransform.GetComponent<PlayerShurikenAttack>();
+        playerProjectileAttack = playerTransform.GetComponent<PlayerProjectileAttack>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
@@ -78,6 +79,14 @@ public class PlayerInputManager : MonoBehaviour {
 
         // player shuriken attack
         playerInputActions.Player.ShurikenAttack.started += OnShurikenAttack;
+
+        // player projectile attack
+        playerInputActions.Player.ProjectileAttack.started += OnProjectileAttack;
+    }
+
+    private void OnProjectileAttack(InputAction.CallbackContext context)
+    {
+        playerProjectileAttack.OnProjectileAttack(context);
     }
 
     private void OnShurikenAttack(InputAction.CallbackContext context)

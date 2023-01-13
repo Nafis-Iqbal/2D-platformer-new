@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerShuriken : MonoBehaviour {
+    public float damageAmount = 5f;
     [SerializeField] private float rotationSpeed = 450f;
     [SerializeField] private Transform shurikenSpriteTransform;
     [SerializeField] private float shurikenSpeed = 10f;

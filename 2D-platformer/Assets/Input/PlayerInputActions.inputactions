@@ -103,6 +103,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ProjectileAttack",
+                    "type": "Button",
+                    "id": "6dbbee38-a9e6-4a1e-a159-d3a86fcc16ce",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -455,6 +464,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "ShurikenAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "832e94b2-73dc-40c2-a2fe-8ba35b0d09e7",
+                    "path": "<Keyboard>/u",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ProjectileAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerSwordAttack : MonoBehaviour {
-    public float damageAmount = 5f;
+public class PlayerProjectileAttack : MonoBehaviour {
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private float timeElapsedSinceAttack = 0f;
-    [SerializeField] private float attackCooldownTime = 1f;
+    [SerializeField] private float attackCooldownTime = 0.3f;
     [SerializeField] private bool isAttacking = false;
+    [SerializeField] private GameObject projectilePrefab;
 
     private PlayerColumn playerColumn;
 
@@ -25,12 +25,13 @@ public class PlayerSwordAttack : MonoBehaviour {
                 isAttacking = false;
             }
         }
-
     }
-    public void OnSwordAttack(InputAction.CallbackContext context) {
+
+    internal void OnProjectileAttack(InputAction.CallbackContext context) {
         if (!isAttacking && !playerColumn.hasGrabbedColumn) {
-            isAttacking = true;
-            playerAnimator.Play("sword attack");
+            playerAnimator.Play("projectile throw");
+            var projectile = ObjectPooler.Instance.SpawnFromPool("PlayerProjectile", transform.position, Quaternion.identity);
+            projectile.GetComponent<PlayerProjectile>().Deploy(Vector2.right * transform.localScale.x);
         }
     }
 }

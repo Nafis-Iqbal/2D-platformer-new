@@ -48,9 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c08fc97fdc9b35a4c8626d9eb2336ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _damageAmount: 10
   rotationSpeed: 500
   shurikenSpriteTransform: {fileID: 3318870668130305199}
-  shurikenSpeed: 10
+  shurikenSpeed: 5
   disappearDelay: 1.6
   shurikenActiveTime: 0
   shouldStop: 0

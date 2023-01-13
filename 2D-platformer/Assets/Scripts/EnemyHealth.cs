@@ -14,6 +14,10 @@ public class EnemyHealth : MonoBehaviour {
         StartCoroutine(changeToNormalColorCoroutine());
     }
 
+    internal void takeDamage(object damageAmount) {
+        throw new NotImplementedException();
+    }
+
     IEnumerator changeToNormalColorCoroutine() {
         yield return new WaitForSeconds(0.3f);
         spriteRenderer.color = normalColor;
