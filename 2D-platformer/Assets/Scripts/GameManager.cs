@@ -9,6 +9,19 @@ public class GameManager : MonoBehaviour {
     public Animator playerAnimator;
     public static GameManager Instance;
 
+    private void Start() {
+        if (playerTransform == null) {
+            Debug.LogError("playerTransform is required. Drag and drop player object.");
+        }
+        if (virtualCamera == null) {
+            Debug.LogError("virtualCamera is required. Drag and drop Follow camera object.");
+        }
+        if (playerAnimator == null) {
+            Debug.LogError("playerAnimator is required. Drag and drop player sprite animator.");
+
+        }
+    }
+
     private void Awake() {
         if (Instance == null) {
             Instance = this;

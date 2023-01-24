@@ -7,6 +7,17 @@ public class AudioManager : MonoBehaviour {
     public AudioSource jumpSFX;
     public AudioSource landSFX;
 
+    private void Start() {
+        if (jumpSFX == null) {
+            Debug.LogError("jumpSFX is required. Drag and drop player jump object.");
+        }
+
+        if (landSFX == null) {
+            Debug.LogError("landSFX is required. Drag and drop player land object.");
+
+        }
+    }
+
     private void Awake() {
         if (Instance == null) {
             Instance = this;

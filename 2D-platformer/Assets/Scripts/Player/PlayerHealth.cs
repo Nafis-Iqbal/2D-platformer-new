@@ -12,6 +12,12 @@ public class PlayerHealth : MonoBehaviour {
     private float normalizedHealth = 1f;
     private float maxHealth = 100f;
 
+    private void Start() {
+        if (playerHealthSlider == null) {
+            Debug.LogError("playerHealthSlider is required. Drag and drop health slider ui.");
+        }
+    }
+
     public void OnHitBySword(float damage) {
         health -= damage;
         normalizedHealth = health / maxHealth;
