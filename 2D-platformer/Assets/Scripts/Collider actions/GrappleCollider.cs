@@ -12,6 +12,12 @@ public class GrappleCollider : MonoBehaviour {
     [SerializeField] private Vector3 grappleActiveScale;
     [SerializeField] private float grappleActiveScaleSpeed;
 
+    [SerializeField] private PlayerGrapplingGun playerGrapplingGun;
+
+    // private void Awake() {
+    //     playerGrapplingGun = GameManager.Instance.playerTransform.GetComponent<PlayerGrapplingGun>();
+    // }
+
     private void Update() {
         if (grappleActive) {
             grappleSpriteTransform.localScale = Vector3.Lerp(grappleSpriteTransform.localScale, grappleActiveScale, Time.deltaTime * grappleActiveScaleSpeed);
@@ -21,7 +27,7 @@ public class GrappleCollider : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player") && !playerGrapplingGun.grappleRope.isGrappling) {
             GrappleActivate();
         }
     }
@@ -35,10 +41,13 @@ public class GrappleCollider : MonoBehaviour {
     private void GrappleInactive() {
         grappleSpriteRenderer.color = grappleInactiveColor;
         grappleActive = false;
+        playerGrapplingGun.canGrapple = false;
     }
 
     private void GrappleActivate() {
         grappleSpriteRenderer.color = grappleActiveColor;
         grappleActive = true;
+        playerGrapplingGun.grapplePoint = transform.position;
+        playerGrapplingGun.canGrapple = true;
     }
 }

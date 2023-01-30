@@ -112,6 +112,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "GrapplingGun",
+                    "type": "Button",
+                    "id": "3d6ca192-42fd-4241-8cef-985959ac8995",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -475,6 +484,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "ProjectileAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ab3f7161-9296-458f-b428-cb757b1953e0",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "GrapplingGun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

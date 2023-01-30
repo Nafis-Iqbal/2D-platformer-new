@@ -134,6 +134,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""GrapplingGun"",
+                    ""type"": ""Button"",
+                    ""id"": ""3d6ca192-42fd-4241-8cef-985959ac8995"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -497,6 +506,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""ProjectileAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab3f7161-9296-458f-b428-cb757b1953e0"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""GrapplingGun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -969,6 +989,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_SwordAttack = m_Player.FindAction("SwordAttack", throwIfNotFound: true);
         m_Player_ShurikenAttack = m_Player.FindAction("ShurikenAttack", throwIfNotFound: true);
         m_Player_ProjectileAttack = m_Player.FindAction("ProjectileAttack", throwIfNotFound: true);
+        m_Player_GrapplingGun = m_Player.FindAction("GrapplingGun", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1052,6 +1073,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SwordAttack;
     private readonly InputAction m_Player_ShurikenAttack;
     private readonly InputAction m_Player_ProjectileAttack;
+    private readonly InputAction m_Player_GrapplingGun;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1068,6 +1090,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @SwordAttack => m_Wrapper.m_Player_SwordAttack;
         public InputAction @ShurikenAttack => m_Wrapper.m_Player_ShurikenAttack;
         public InputAction @ProjectileAttack => m_Wrapper.m_Player_ProjectileAttack;
+        public InputAction @GrapplingGun => m_Wrapper.m_Player_GrapplingGun;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1113,6 +1136,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ProjectileAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProjectileAttack;
                 @ProjectileAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProjectileAttack;
                 @ProjectileAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProjectileAttack;
+                @GrapplingGun.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplingGun;
+                @GrapplingGun.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplingGun;
+                @GrapplingGun.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplingGun;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1153,6 +1179,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ProjectileAttack.started += instance.OnProjectileAttack;
                 @ProjectileAttack.performed += instance.OnProjectileAttack;
                 @ProjectileAttack.canceled += instance.OnProjectileAttack;
+                @GrapplingGun.started += instance.OnGrapplingGun;
+                @GrapplingGun.performed += instance.OnGrapplingGun;
+                @GrapplingGun.canceled += instance.OnGrapplingGun;
             }
         }
     }
@@ -1294,6 +1323,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnSwordAttack(InputAction.CallbackContext context);
         void OnShurikenAttack(InputAction.CallbackContext context);
         void OnProjectileAttack(InputAction.CallbackContext context);
+        void OnGrapplingGun(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

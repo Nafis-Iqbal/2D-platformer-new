@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour {
             return;
         }
 
-        virtualCamera.Follow = playerTransform;
+        // virtualCamera.Follow = playerTransform;
 
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("PlayerShuriken"));
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("PlayerProjectile"));

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using GMTK.PlatformerToolkit;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +16,7 @@ public class PlayerInputManager : MonoBehaviour {
     private PlayerSwordAttack playerSwordAttack;
     private PlayerShurikenAttack playerShurikenAttack;
     private PlayerProjectileAttack playerProjectileAttack;
+    private PlayerGrapplingGun playerGrapplingGun;
 
     private void Awake() {
         if (Instance == null) {
@@ -35,6 +35,7 @@ public class PlayerInputManager : MonoBehaviour {
         playerSwordAttack = playerTransform.GetComponent<PlayerSwordAttack>();
         playerShurikenAttack = playerTransform.GetComponent<PlayerShurikenAttack>();
         playerProjectileAttack = playerTransform.GetComponent<PlayerProjectileAttack>();
+        playerGrapplingGun = playerTransform.GetComponent<PlayerGrapplingGun>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
@@ -82,7 +83,15 @@ public class PlayerInputManager : MonoBehaviour {
 
         // player projectile attack
         playerInputActions.Player.ProjectileAttack.started += OnProjectileAttack;
+
+        // player grappling gun
+        // playerInputActions.Player.GrapplingGun.started += OnGrapplingGun;
     }
+
+    // private void OnGrapplingGun(InputAction.CallbackContext context)
+    // {
+    //     playerGrapplingGun.OnGrapplingGun(context);
+    // }
 
     private void OnProjectileAttack(InputAction.CallbackContext context)
     {
