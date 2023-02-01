@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour
     public float speed = 7f;
     private float towerX;
     private float targetX;
+    private float targetY;
     private float dist;
     private float nextX;
     private float baseY;
@@ -26,27 +27,31 @@ public class Projectile : MonoBehaviour
         startPos = transform.position;
         towerX = transform.position.x;
         target = GameObject.FindGameObjectWithTag("Player");
+        targetX = target.transform.position.x;
+        targetY = target.transform.position.y;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        targetX = target.transform.position.x;
+        
         
         dist = targetX - towerX;
         nextX = Mathf.MoveTowards(transform.position.x, targetX, speed * Time.deltaTime);
-        baseY = Mathf.Lerp(startPos.y , target.transform.position.y , (nextX - towerX) / dist);
-        height = .75f * (nextX - towerX) * (nextX - targetX) / (-0.25f * dist * dist);
+        baseY = Mathf.Lerp(startPos.y , targetY , (nextX - towerX) / dist);
+        height = .4f * (nextX - towerX) * (nextX - targetX) / (-0.25f * dist * dist);
 
         Vector3 movePosition = new Vector3(nextX, baseY + height, transform.position.z);
         transform.rotation = LookAtTarget(movePosition - transform.position);
         transform.position = movePosition;
 
 
-        if (targetX == transform.position.x && target.transform.position.y == transform.position.y)
+        if (targetX == transform.position.x && targetY == transform.position.y)
         {
             float time = 1f;
-            StartCoroutine(VanishBullet(time));
+            Destroy(gameObject);
+            // StartCoroutine(VanishBullet(time));
         }
     }
 
