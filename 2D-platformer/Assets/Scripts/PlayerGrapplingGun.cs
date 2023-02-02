@@ -1,15 +1,13 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerGrapplingGun : MonoBehaviour {
+    public bool playerIsOnAir = false;
     [Header("Scripts Ref:")]
-    public GrapplingRope grappleRope;
+    public GrapplingRope grapplingRope;
     [SerializeField] private PlayerJump playerJump;
-
-    [Header("Layers Settings:")]
-    [SerializeField] private bool grappleToAll = false;
-    [SerializeField] private int grappableLayerNumber = 9;
 
     [Header("Main Camera:")]
     public Camera m_camera;
@@ -22,10 +20,6 @@ public class PlayerGrapplingGun : MonoBehaviour {
     [Header("Physics Ref:")]
     public SpringJoint2D m_springJoint2D;
     public Rigidbody2D m_rigidbody;
-
-    [Header("Rotation:")]
-    [SerializeField] private bool rotateOverTime = true;
-    [Range(0, 60)][SerializeField] private float rotationSpeed = 4;
 
     [Header("Distance:")]
     [SerializeField] private bool hasMaxDistance = false;
@@ -50,78 +44,68 @@ public class PlayerGrapplingGun : MonoBehaviour {
     [HideInInspector] public Vector2 grappleDistanceVector;
     public bool canGrapple = false;
     [SerializeField] private float jumpButtonHoldTime = 0.5f;
+    [SerializeField] private float releaseForceMultiplierX = 1f;
+    [SerializeField] private float releaseForceMultiplierY = 1f;
+    [SerializeField] private float releaseRopeMovementDisableDuration = 1f;
 
     private void Awake() {
-        PlayerInputManager.Instance.playerInputActions.Player.GrapplingGun.started += OnGrappling;
         playerJump = GetComponent<PlayerJump>();
     }
 
-    private void OnGrappling(InputAction.CallbackContext obj) {
-        if (!grappleRope.isGrappling) {
-            if (canGrapple) {
+    public void OnGrapplingGun(InputAction.CallbackContext context) {
+        if (!grapplingRope.isGrappling) {
+            if (canGrapple)
+            {
                 playerJump.Jump(jumpButtonHoldTime);
                 SetGrapplePoint();
+                DisableOtherInputs();
             }
         } else {
-            grappleRope.enabled = false;
+            grapplingRope.enabled = false;
             m_springJoint2D.enabled = false;
+            m_rigidbody.AddForce(new Vector2(
+                m_rigidbody.velocity.x * releaseForceMultiplierX,
+                m_rigidbody.velocity.y * releaseForceMultiplierY),
+                ForceMode2D.Impulse);
+            EnableOtherInputs();
         }
     }
 
+    private static void DisableOtherInputs()
+    {
+        PlayerInputManager.Instance.playerInputActions.Player.SwordAttack.Disable();
+        PlayerInputManager.Instance.playerInputActions.Player.ShurikenAttack.Disable();
+        PlayerInputManager.Instance.playerInputActions.Player.Dash.Disable();
+        PlayerInputManager.Instance.playerInputActions.Player.ProjectileAttack.Disable();
+        PlayerInputManager.Instance.playerInputActions.Player.Jump.Disable();
+        PlayerInputManager.Instance.playerInputActions.Player.Roll.Disable();
+        PlayerInputManager.Instance.playerInputActions.Player.ColumnLedgeGrab.Disable();
+    }
+
+    private static void EnableOtherInputs()
+    {
+        PlayerInputManager.Instance.playerInputActions.Player.SwordAttack.Enable();
+        PlayerInputManager.Instance.playerInputActions.Player.ShurikenAttack.Enable();
+        PlayerInputManager.Instance.playerInputActions.Player.Dash.Enable();
+        PlayerInputManager.Instance.playerInputActions.Player.ProjectileAttack.Enable();
+        PlayerInputManager.Instance.playerInputActions.Player.Jump.Enable();
+        PlayerInputManager.Instance.playerInputActions.Player.Roll.Enable();
+        PlayerInputManager.Instance.playerInputActions.Player.ColumnLedgeGrab.Enable();
+    }
+
+    // private void Update() {
+    //     Debug.Log(m_rigidbody.velocity);
+    // }
+
     private void Start() {
-        grappleRope.enabled = false;
+        grapplingRope.enabled = false;
         m_springJoint2D.enabled = false;
 
     }
 
-    private void Update() {
-        if (grappleRope.enabled) {
-            RotateGun(grapplePoint, false);
-        } else {
-            Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
-            RotateGun(mousePos, true);
-        }
-
-        // if (Input.GetKeyDown(KeyCode.Mouse0)) {
-        //     SetGrapplePoint();
-        // } else if (Input.GetKey(KeyCode.Mouse0)) {
-        //     if (grappleRope.enabled) {
-        //         RotateGun(grapplePoint, false);
-        //     } else {
-        //         Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
-        //         RotateGun(mousePos, true);
-        //     }
-
-        //     if (launchToPoint && grappleRope.isGrappling) {
-        //         if (launchType == LaunchType.Transform_Launch) {
-        //             Vector2 firePointDistnace = firePoint.position - gunHolder.localPosition;
-        //             Vector2 targetPos = grapplePoint - firePointDistnace;
-        //             gunHolder.position = Vector2.Lerp(gunHolder.position, targetPos, Time.deltaTime * launchSpeed);
-        //         }
-        //     }
-        // } else if (Input.GetKeyUp(KeyCode.Mouse0)) {
-        //     grappleRope.enabled = false;
-        //     m_springJoint2D.enabled = false;
-        // } else {
-        //     Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
-        //     RotateGun(mousePos, true);
-        // }
-    }
-
-    void RotateGun(Vector3 lookPoint, bool allowRotationOverTime) {
-        Vector3 distanceVector = lookPoint - gunPivot.position;
-
-        float angle = Mathf.Atan2(distanceVector.y, distanceVector.x) * Mathf.Rad2Deg;
-        if (rotateOverTime && allowRotationOverTime) {
-            gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, Quaternion.AngleAxis(angle, Vector3.forward), Time.deltaTime * rotationSpeed);
-        } else {
-            gunPivot.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        }
-    }
-
     void SetGrapplePoint() {
         grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
-        grappleRope.enabled = true;
+        grapplingRope.enabled = true;
     }
 
     public void Grapple() {
@@ -163,4 +147,19 @@ public class PlayerGrapplingGun : MonoBehaviour {
         }
     }
 
+    public void PlayerReleasedRope() {
+        playerIsOnAir = true;
+        StartCoroutine(PlayerIsNotOnAirCoroutine());
+    }
+
+    IEnumerator PlayerIsNotOnAirCoroutine() {
+        yield return new WaitForSeconds(releaseRopeMovementDisableDuration);
+        playerIsOnAir = false;
+    }
+
+    public void UpdateGrappleTargetPosition(Vector3 position) {
+        if (!grapplingRope.isGrappling) {
+            grapplePoint = position;
+        }
+    }
 }

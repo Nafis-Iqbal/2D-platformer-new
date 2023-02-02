@@ -273,9 +273,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d56be5ef12bec242ac191480fd6a82a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grapplingGun: {fileID: 6275386986776322440}
-  m_lineRenderer: {fileID: 5323536960634619390}
-  percision: 40
+  playerGrapplingGun: {fileID: 6275386986776322440}
+  lineRenderer: {fileID: 5323536960634619390}
+  precision: 40
   straightenLineSpeed: 10
   ropeAnimationCurve:
     serializedVersion: 2
@@ -10922,18 +10922,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 215da414743c813429e4c8578d9098a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grappleRope: {fileID: 1483264960912161135}
-  playerJump: {fileID: 0}
-  grappleToAll: 1
-  grappableLayerNumber: 9
+  playerIsOnAir: 0
+  grapplingRope: {fileID: 1483264960912161135}
+  playerJump: {fileID: 6825991441321897640}
   m_camera: {fileID: 0}
   gunHolder: {fileID: 6825991441321897644}
   gunPivot: {fileID: 5959019694921306294}
   firePoint: {fileID: 4145512269932082123}
   m_springJoint2D: {fileID: 1626359948032388215}
   m_rigidbody: {fileID: 6825991441321897646}
-  rotateOverTime: 1
-  rotationSpeed: 17.6
   hasMaxDistance: 1
   maxDistnace: 20
   launchToPoint: 0
@@ -10946,6 +10943,9 @@ MonoBehaviour:
   grappleDistanceVector: {x: 0, y: 0}
   canGrapple: 0
   jumpButtonHoldTime: 0.5
+  releaseForceMultiplierX: 1
+  releaseForceMultiplierY: 1
+  releaseRopeMovementDisableDuration: 1
 --- !u!231 &1626359948032388215
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -10963,7 +10963,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 12.06325
+  m_Distance: 2.2480214
   m_DampingRatio: 1
   m_Frequency: 1
 --- !u!1 &6825991441419017079

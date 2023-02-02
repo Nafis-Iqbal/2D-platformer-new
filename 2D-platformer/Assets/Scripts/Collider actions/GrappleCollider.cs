@@ -27,7 +27,7 @@ public class GrappleCollider : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player") && !playerGrapplingGun.grappleRope.isGrappling) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
             GrappleActivate();
         }
     }
@@ -47,7 +47,7 @@ public class GrappleCollider : MonoBehaviour {
     private void GrappleActivate() {
         grappleSpriteRenderer.color = grappleActiveColor;
         grappleActive = true;
-        playerGrapplingGun.grapplePoint = transform.position;
+        playerGrapplingGun.UpdateGrappleTargetPosition(transform.position);
         playerGrapplingGun.canGrapple = true;
     }
 }

@@ -2,12 +2,12 @@
 
 public class GrapplingRope : MonoBehaviour
 {
-    [Header("General Refernces:")]
-    public PlayerGrapplingGun grapplingGun;
-    public LineRenderer m_lineRenderer;
+    [Header("General References:")]
+    public PlayerGrapplingGun playerGrapplingGun;
+    public LineRenderer lineRenderer;
 
     [Header("General Settings:")]
-    [SerializeField] private int percision = 40;
+    [SerializeField] private int precision = 40;
     [Range(0, 20)] [SerializeField] private float straightenLineSpeed = 5;
 
     [Header("Rope Animation Settings:")]
@@ -23,31 +23,32 @@ public class GrapplingRope : MonoBehaviour
 
     [HideInInspector] public bool isGrappling = true;
 
-    bool strightLine = true;
+    bool straightLine = true;
 
     private void OnEnable()
     {
         moveTime = 0;
-        m_lineRenderer.positionCount = percision;
+        lineRenderer.positionCount = precision;
         waveSize = StartWaveSize;
-        strightLine = false;
+        straightLine = false;
 
         LinePointsToFirePoint();
 
-        m_lineRenderer.enabled = true;
+        lineRenderer.enabled = true;
     }
 
     private void OnDisable()
     {
-        m_lineRenderer.enabled = false;
+        lineRenderer.enabled = false;
         isGrappling = false;
+        playerGrapplingGun.PlayerReleasedRope();
     }
 
     private void LinePointsToFirePoint()
     {
-        for (int i = 0; i < percision; i++)
+        for (int i = 0; i < precision; i++)
         {
-            m_lineRenderer.SetPosition(i, grapplingGun.firePoint.position);
+            lineRenderer.SetPosition(i, playerGrapplingGun.firePoint.position);
         }
     }
 
@@ -59,11 +60,11 @@ public class GrapplingRope : MonoBehaviour
 
     void DrawRope()
     {
-        if (!strightLine)
+        if (!straightLine)
         {
-            if (m_lineRenderer.GetPosition(percision - 1).x == grapplingGun.grapplePoint.x)
+            if (lineRenderer.GetPosition(precision - 1).x == playerGrapplingGun.grapplePoint.x)
             {
-                strightLine = true;
+                straightLine = true;
             }
             else
             {
@@ -74,7 +75,7 @@ public class GrapplingRope : MonoBehaviour
         {
             if (!isGrappling)
             {
-                grapplingGun.Grapple();
+                playerGrapplingGun.Grapple();
                 isGrappling = true;
             }
             if (waveSize > 0)
@@ -86,7 +87,7 @@ public class GrapplingRope : MonoBehaviour
             {
                 waveSize = 0;
 
-                if (m_lineRenderer.positionCount != 2) { m_lineRenderer.positionCount = 2; }
+                if (lineRenderer.positionCount != 2) { lineRenderer.positionCount = 2; }
 
                 DrawRopeNoWaves();
             }
@@ -95,20 +96,20 @@ public class GrapplingRope : MonoBehaviour
 
     void DrawRopeWaves()
     {
-        for (int i = 0; i < percision; i++)
+        for (int i = 0; i < precision; i++)
         {
-            float delta = (float)i / ((float)percision - 1f);
-            Vector2 offset = Vector2.Perpendicular(grapplingGun.grappleDistanceVector).normalized * ropeAnimationCurve.Evaluate(delta) * waveSize;
-            Vector2 targetPosition = Vector2.Lerp(grapplingGun.firePoint.position, grapplingGun.grapplePoint, delta) + offset;
-            Vector2 currentPosition = Vector2.Lerp(grapplingGun.firePoint.position, targetPosition, ropeProgressionCurve.Evaluate(moveTime) * ropeProgressionSpeed);
+            float delta = (float)i / ((float)precision - 1f);
+            Vector2 offset = Vector2.Perpendicular(playerGrapplingGun.grappleDistanceVector).normalized * ropeAnimationCurve.Evaluate(delta) * waveSize;
+            Vector2 targetPosition = Vector2.Lerp(playerGrapplingGun.firePoint.position, playerGrapplingGun.grapplePoint, delta) + offset;
+            Vector2 currentPosition = Vector2.Lerp(playerGrapplingGun.firePoint.position, targetPosition, ropeProgressionCurve.Evaluate(moveTime) * ropeProgressionSpeed);
 
-            m_lineRenderer.SetPosition(i, currentPosition);
+            lineRenderer.SetPosition(i, currentPosition);
         }
     }
 
     void DrawRopeNoWaves()
     {
-        m_lineRenderer.SetPosition(0, grapplingGun.firePoint.position);
-        m_lineRenderer.SetPosition(1, grapplingGun.grapplePoint);
+        lineRenderer.SetPosition(0, playerGrapplingGun.firePoint.position);
+        lineRenderer.SetPosition(1, playerGrapplingGun.grapplePoint);
     }
 }

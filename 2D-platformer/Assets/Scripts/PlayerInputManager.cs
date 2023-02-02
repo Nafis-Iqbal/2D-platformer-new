@@ -85,13 +85,13 @@ public class PlayerInputManager : MonoBehaviour {
         playerInputActions.Player.ProjectileAttack.started += OnProjectileAttack;
 
         // player grappling gun
-        // playerInputActions.Player.GrapplingGun.started += OnGrapplingGun;
+        playerInputActions.Player.GrapplingGun.started += OnGrapplingGun;
     }
 
-    // private void OnGrapplingGun(InputAction.CallbackContext context)
-    // {
-    //     playerGrapplingGun.OnGrapplingGun(context);
-    // }
+    private void OnGrapplingGun(InputAction.CallbackContext context)
+    {
+        playerGrapplingGun.OnGrapplingGun(context);
+    }
 
     private void OnProjectileAttack(InputAction.CallbackContext context)
     {

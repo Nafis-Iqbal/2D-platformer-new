@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void Update() {
-        if (playerDash.isDashing || playerRoll.isRolling || playerGrapplingGun.grappleRope.isGrappling) {
+        if (playerDash.isDashing || playerRoll.isRolling || playerGrapplingGun.grapplingRope.isGrappling) {
             return;
         }
 
@@ -107,7 +107,10 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (playerDash.isDashing || playerRoll.isRolling || playerGrapplingGun.grappleRope.isGrappling) {
+        if (playerDash.isDashing ||
+            playerRoll.isRolling ||
+            playerGrapplingGun.grapplingRope.isGrappling ||
+            (playerGrapplingGun.playerIsOnAir && !playerGround.isGrounded)) {
             return;
         }
 
