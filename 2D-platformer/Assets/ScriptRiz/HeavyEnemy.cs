@@ -20,20 +20,33 @@ public class HeavyEnemy : EnemyBase
         walkSpeed = speed;
     }
 
-    public override void Reposition(Vector2 target) {
-        // transform.position = target;
-        transform.position = new Vector2(target.x, target.y);
-        inRepositioningPhase = false;
+    private float dist;
+    private float nextX;
+    private float baseY;
+    private float height;
+    private Vector3 startPos;
+    public override void Reposition(Vector2 tar) {
+        // transform.position = new Vector2(tar.x, tar.y);
+        startPos = transform.position;
+        rb.gravityScale = 0f;
+        calculateVelocity(tar);
     }
 
+    void calculateVelocity(Vector2 tar) {
+        dist = tar.x - startPos.x;
+        nextX = Mathf.MoveTowards(transform.position.x, tar.x, 5f * Time.fixedDeltaTime);
+        baseY = Mathf.Lerp(startPos.y , tar.y , (nextX - startPos.x) / dist);
+        height = 1f * (nextX - startPos.x) * (nextX    - tar.x) / (-.25f * dist * dist);
 
-    Vector2 calculateVelocity(Vector2 target) {
-        float xDis = transform.position.x - target.x;
-        float yDis = transform.position.y - target.y;
+        Vector3 movePosition = new Vector3(nextX, baseY + height, transform.position.z);
+        // transform.rotation = LookAtTarget(movePosition - transform.position);
+        transform.position = movePosition;
 
-        float xVel = xDis / Time.fixedDeltaTime;
-        float yVel = yDis / Time.fixedDeltaTime + .5f * Mathf.Abs(Physics2D.gravity.y * Time.fixedDeltaTime);
 
-        return new Vector2(xVel, yVel);
+        if (tar.x == transform.position.x && tar.y == transform.position.y)
+        {
+            noReposition = true;
+            rb.gravityScale = 1f;
+        }
     }
 }

@@ -6,7 +6,7 @@ using Pathfinding;
 public class EnemyBase : MonoBehaviour
 {
     //reposition 
-    bool noReposition;
+    public bool noReposition;
     Vector2 lBox, rBox;
     public bool inRepositioningPhase;
     public healthofPlayer playerScript;
@@ -59,7 +59,7 @@ public class EnemyBase : MonoBehaviour
     public float pathUpdateSeconds = .5f;
 
     [Header("Physics")]
-    public float speed = 200f;
+    public float speed = 100f;
     public float nextWayPointDistant = 3f;
     public float jumbNodeHeightRequirment = .8f;
     public float jumpModifier = .3f;
@@ -75,7 +75,7 @@ public class EnemyBase : MonoBehaviour
     public bool isGrounded = false;
     Seeker seeker;
 
-
+    [SerializeField]
     public float walkSpeed;
     public virtual void Start(){
         startNesesarries();
@@ -95,7 +95,11 @@ public class EnemyBase : MonoBehaviour
 
     void Update(){
 
-        rayCasting();
+        // rayCasting();
+
+        if(playerScript.PlatChanged){
+            rayCasting();
+        }
 
         if(player == null){
             playerDistance = 100f;
@@ -103,7 +107,9 @@ public class EnemyBase : MonoBehaviour
         }
         turn = !Physics2D.OverlapCircle(groundChecker.position, foodRadius, environmentMask);
         turn1 = Physics2D.OverlapCircle(platformChecker.position, foodRadius, environmentMask);
+
         isInRepositionPoint = Physics2D.OverlapCircle(platformChecker.position, foodRadius, repositionLayer);
+
         if (!inRepositioningPhase)
         {
             if (notPatrolling)
@@ -128,12 +134,10 @@ public class EnemyBase : MonoBehaviour
         if(TargetInDistance()){
             if(repositionable(targetPoint) && !noReposition) {
                 Reposition(targetPoint);
-                // rb.velocity = Vector3.zero  ;
-                inRepositioningPhase = false;
             }
 
-            if (!inRepositioningPhase)
-            {
+            // if (!inRepositioningPhase)
+            // {
                 notPatrolling = false;
                 if (battleCryEnd)
                 {
@@ -153,7 +157,7 @@ public class EnemyBase : MonoBehaviour
                 {
                     attack();
                 }
-            }
+            // }
         }else {
             notPatrolling = true;
             attacking = false;
@@ -167,7 +171,6 @@ public class EnemyBase : MonoBehaviour
             rb.AddForce(Vector2.up * speed * jumpModifier);
         }
     }
-    
 
     private void UpdatePath(){
         if(followEnabled && TargetInDistance() && seeker.IsDone()){
@@ -239,7 +242,9 @@ public class EnemyBase : MonoBehaviour
         if(turn || turn1){
             Flip();
         }
-        rb.velocity = new Vector2(walkSpeed * Time.fixedDeltaTime , rb.velocity.y);
+
+        float speedDirection = (transform.localScale.x / Mathf.Abs(transform.localScale.x));
+        rb.velocity = new Vector2(walkSpeed * speedDirection * Time.fixedDeltaTime , rb.velocity.y);
     }
     // to flip enemy
     public void Flip(){
@@ -248,8 +253,6 @@ public class EnemyBase : MonoBehaviour
         Scale.x *= -1;
 
         transform.localScale = Scale;
-
-        walkSpeed *= -1;
     }
 
     public virtual IEnumerator hit(){
@@ -308,13 +311,18 @@ public class EnemyBase : MonoBehaviour
 
     private Vector2 closestRepoPoint() {
         if(Vector2.Distance(transform.position, playerScript.rightBox) < Vector2.Distance(transform.position, playerScript.leftBox)){
-            return playerScript.rightBox;
+            return new Vector2(playerScript.rightBox.x - 1.5f , playerScript.rightBox.y);
         }
-        return playerScript.leftBox;
+        return new Vector2(playerScript.leftBox.x + 1.5f , playerScript.leftBox.y);
     }
 
-    public virtual void Reposition(Vector2 target) {
-        // inRepositioningPhase = false;
+    public virtual void Reposition(Vector2 tar) {
+        transform.position = new Vector2(tar.x, tar.y);
+
+        if (tar.x == transform.position.x && tar.y == transform.position.y)
+        {
+            noReposition = true;
+        }
     }
 
     bool repositionable(Vector2 target) {
@@ -322,24 +330,32 @@ public class EnemyBase : MonoBehaviour
     }
 
 
-    void rayCasting() {
+    public void rayCasting() {
         RaycastHit2D hitLeft = Physics2D.Raycast(platformChecker.position, Vector2.left);
         RaycastHit2D hitright = Physics2D.Raycast(platformChecker.position, Vector2.right);
 
-        if(hitLeft.collider.gameObject.CompareTag("RepositionBox")) {
+        Debug.DrawRay(platformChecker.position, Vector2.left * 10f, Color.red);
+        Debug.DrawRay(platformChecker.position, Vector2.right * 10f, Color.green);
 
+        if(hitLeft.collider.gameObject.CompareTag("RepositionBox")) {
             lBox = hitLeft.collider.gameObject.transform.position;
         }
         if(hitright.collider.gameObject.CompareTag("RepositionBox")) {
             rBox = hitright.collider.gameObject.transform.position;
         }
+        
+        // Debug.Log(lBox);
+        // Debug.Log(playerScript.leftBox);
 
-        if(lBox == playerScript.leftBox || rBox == playerScript.rightBox){
+        if((lBox == playerScript.leftBox && hitright.collider.gameObject.CompareTag("Player")) 
+        || (rBox == playerScript.rightBox && hitLeft.collider.gameObject.CompareTag("Player"))){
             Debug.Log("insame");
+            speed = 100f;
             inRepositioningPhase = false;
             noReposition = true;
         }else{
-            noReposition = false;
+            if(!inRepositioningPhase)
+                noReposition = false;
         }
     }
 }

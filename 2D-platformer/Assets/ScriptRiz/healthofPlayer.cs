@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class healthofPlayer : MonoBehaviour
 {
+    public bool isGround;
+    public bool PlatChanged;
+    public LayerMask environmentMask;
     Vector2 preLeft, preRight;
     public Vector2 leftBox , rightBox;
     public Transform rayThrowerLeft;
@@ -25,6 +28,14 @@ public class healthofPlayer : MonoBehaviour
         preRight = Vector2.zero;
     }
     private void FixedUpdate() {
+
+        if(Physics2D.OverlapCircle(transform.position, 1f, environmentMask)){
+            isGround = true;
+            // Debug.Log("inGround");
+        }else {
+            isGround = false;
+        }
+
         if(health <= 0f){
             // Destroy(gameObject);
         }
@@ -45,10 +56,61 @@ public class healthofPlayer : MonoBehaviour
         Debug.DrawRay(rayThrowerRight.position, Vector2.right * 10f, Color.green);
 
         if(hitLeft.collider.gameObject.CompareTag("RepositionBox")) {
-            leftBox = hitLeft.collider.gameObject.transform.position;
+            if (isGround)
+            {
+                if (preLeft.x != hitLeft.collider.gameObject.transform.position.x && preLeft.y != hitLeft.collider.gameObject.transform.position.y)
+                {
+                    PlatChanged = true;
+                    leftBox = hitLeft.collider.gameObject.transform.position;
+                    preLeft = leftBox;
+                }
+            }
         }
         if(hitright.collider.gameObject.CompareTag("RepositionBox")) {
-            rightBox = hitright.collider.gameObject.transform.position;
+            if (isGround)
+            {
+                if ( preRight.x != hitright.collider.gameObject.transform.position.x && preRight.y != hitright.collider.gameObject.transform.position.y)
+                {
+                    PlatChanged = true;
+                    Debug.Log("upRight");
+                    rightBox = hitright.collider.gameObject.transform.position;
+                    preRight = rightBox;
+                }
+            }
         }
+        StartCoroutine(change());
     }
+
+    IEnumerator change(){
+            yield return new WaitForSeconds(.1f);
+            PlatChanged = false;
+        }
 }
+
+
+
+
+
+// if (isGround)
+//             {
+//                 if (preLeft.x != hitLeft.collider.gameObject.transform.position.x && preLeft.y != hitLeft.collider.gameObject.transform.position.y
+//                 && preRight.x != hitright.collider.gameObject.transform.position.x && preRight.y != hitright.collider.gameObject.transform.position.y)
+//                 {
+//                     PlatChanged = true;
+//                     leftBox = hitLeft.collider.gameObject.transform.position;
+//                     preLeft = leftBox;
+//                 }
+//             }
+//         }
+//         if(hitright.collider.gameObject.CompareTag("RepositionBox")) {
+//             if (isGround)
+//             {
+//                 if (preLeft.x != hitLeft.collider.gameObject.transform.position.x && preLeft.y != hitLeft.collider.gameObject.transform.position.y
+//                 && preRight.x != hitright.collider.gameObject.transform.position.x && preRight.y != hitright.collider.gameObject.transform.position.y)
+//                 {
+//                     PlatChanged = true;
+//                     Debug.Log("upRight");
+//                     rightBox = hitright.collider.gameObject.transform.position;
+//                     preRight = rightBox;
+//                 }
+//             }
