@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 //This script handles moving the character on the Y axis, for jumping and gravity
 
 public class PlayerJump : MonoBehaviour {
+    public float jumpMovementMultiplier = 1f;
+    public float jumpMovementMultiplierX = 1f;
+    public float jumpMovementMultiplierY = 1f;
     [Header("Components")]
     [HideInInspector] public Rigidbody2D body;
     private PlayerGround playerGround;
@@ -18,10 +21,10 @@ public class PlayerJump : MonoBehaviour {
 
 
     [Header("Jumping Stats")]
-    [SerializeField, Range(2f, 5.5f)][Tooltip("Maximum jump height")] public float jumpHeight = 7.3f;
-    [SerializeField, Range(0.2f, 1.25f)][Tooltip("How long it takes to reach that height before coming back down")] public float timeToJumpApex;
-    [SerializeField, Range(0f, 5f)][Tooltip("Gravity multiplier to apply when going up")] public float upwardMovementMultiplier = 1f;
-    [SerializeField, Range(1f, 10f)][Tooltip("Gravity multiplier to apply when coming down")] public float downwardMovementMultiplier = 6.17f;
+    [SerializeField, Range(0f, 20f)][Tooltip("Maximum jump height")] public float jumpHeight = 7.3f;
+    [SerializeField, Range(0f, 20f)][Tooltip("How long it takes to reach that height before coming back down")] public float timeToJumpApex;
+    [SerializeField, Range(0f, 20f)][Tooltip("Gravity multiplier to apply when going up")] public float upwardMovementMultiplier = 1f;
+    [SerializeField, Range(0f, 20f)][Tooltip("Gravity multiplier to apply when coming down")] public float downwardMovementMultiplier = 6.17f;
     [SerializeField, Range(0, 1)][Tooltip("How many times can you jump in the air?")] public int maxAirJumps = 0;
 
     [Header("Options")]
@@ -33,7 +36,7 @@ public class PlayerJump : MonoBehaviour {
 
     [Header("Calculations")]
     public float jumpSpeed;
-    private float defaultGravityScale;
+    public float defaultGravityScale;
     public float gravMultiplier;
 
     [Header("Current State")]
@@ -147,7 +150,7 @@ public class PlayerJump : MonoBehaviour {
         //Keep trying to do a jump, for as long as desiredJump is true
         if (desiredJump) {
             DoAJump();
-            body.velocity = velocity;
+            body.velocity = velocity * jumpMovementMultiplier;
 
             //Skip gravity calculations this frame, so currentlyJumping doesn't turn off
             //This makes sure you can't do the coyote time double jump bug
@@ -206,7 +209,7 @@ public class PlayerJump : MonoBehaviour {
 
         //Set the character's Rigidbody's velocity
         //But clamp the Y variable within the bounds of the speed limit, for the terminal velocity assist option
-        body.velocity = new Vector3(velocity.x, Mathf.Clamp(velocity.y, -speedLimit, 100));
+        body.velocity = new Vector3(velocity.x * jumpMovementMultiplierX, Mathf.Clamp(velocity.y * jumpMovementMultiplierY, -speedLimit, 100));
     }
 
     private void DoAJump() {
@@ -245,10 +248,5 @@ public class PlayerJump : MonoBehaviour {
             //If we don't have a jump buffer, then turn off desiredJump immediately after hitting jumping
             desiredJump = false;
         }
-    }
-
-    public void bounceUp(float bounceAmount) {
-        //Used by the springy pad
-        body.AddForce(Vector2.up * bounceAmount, ForceMode2D.Impulse);
     }
 }

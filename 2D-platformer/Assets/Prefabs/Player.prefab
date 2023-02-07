@@ -10605,6 +10605,7 @@ GameObject:
   - component: {fileID: 4884654362931437617}
   - component: {fileID: 6275386986776322440}
   - component: {fileID: 1626359948032388215}
+  - component: {fileID: 4506568898256517799}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -10687,6 +10688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d9fcc1289b79458d9a4ac5c7cbbb62d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeedMultiplier: 1
   playerAnimator: {fileID: 6825991441445998724}
   maxSpeed: 9
   maxAcceleration: 8.3
@@ -10713,6 +10715,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3928c961806c941d3a53b2a0500a5e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpMovementMultiplier: 1
+  jumpMovementMultiplierX: 1
+  jumpMovementMultiplierY: 1
   body: {fileID: 6825991441321897646}
   velocity: {x: 0, y: 0}
   jumpHeight: 3
@@ -10726,6 +10731,7 @@ MonoBehaviour:
   coyoteTime: 0.01
   jumpBuffer: 0.08
   jumpSpeed: 15.789474
+  defaultGravityScale: 1
   gravMultiplier: 1
   canJumpAgain: 0
   desiredJump: 0
@@ -10966,6 +10972,22 @@ SpringJoint2D:
   m_Distance: 2.2480214
   m_DampingRatio: 1
   m_Frequency: 1
+--- !u!114 &4506568898256517799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6825991441321897635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cd20ad5cfc0f5746a2834ac167cf0ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationSlowMotionMultiplier: 0.5
+  playerMovementSpeedMultiplier: 0.5
+  playerJumpSpeedMultiplier: 0.5
+  slowMotionDuration: 0.5
 --- !u!1 &6825991441419017079
 GameObject:
   m_ObjectHideFlags: 0

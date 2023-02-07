@@ -7,6 +7,7 @@ using UnityEngine.InputSystem.Interactions;
 //This script handles moving the character on the X axis, both on the ground and in the air.
 
 public class PlayerMovement : MonoBehaviour {
+    [HideInInspector] public float movementSpeedMultiplier = 1f;
     private PlayerGround playerGround;
     private PlayerColumn playerColumn;
     private PlayerDash playerDash;
@@ -34,7 +35,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to reach max speed when in mid-air")] public float maxAirAcceleration;
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to stop in mid-air when no direction is used")] public float maxAirDeceleration;
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to stop when changing direction when in mid-air")] public float maxAirTurnSpeed = 80f;
-    [SerializeField, Range(0f, 1f)][Tooltip("walk speed = walkMultiplier * runningSpeed")] private float walkMultiplier = 0.1f;
+    [SerializeField, Range(0f, 1f)][Tooltip("walk speed = walkMultiplier * runningSpeed")] public float walkMultiplier = 0.1f;
     [SerializeField][Tooltip("Friction to apply against movement on stick")] private float friction;
 
     [Header("Options")]
@@ -158,8 +159,7 @@ public class PlayerMovement : MonoBehaviour {
         velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
 
         //Update the Rigidbody with this new velocity
-        body.velocity = velocity;
-        Debug.Log("velocity with accel");
+        body.velocity = velocity * movementSpeedMultiplier;
 
     }
 
@@ -167,7 +167,6 @@ public class PlayerMovement : MonoBehaviour {
         //If we're not using acceleration and deceleration, just send our desired velocity (direction * max speed) to the Rigidbody
         velocity.x = desiredVelocity.x;
 
-        body.velocity = velocity;
-        Debug.Log("velocity without accel");
+        body.velocity = velocity * movementSpeedMultiplier;
     }
 }

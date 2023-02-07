@@ -53,14 +53,16 @@ public class PlayerGrapplingGun : MonoBehaviour {
     }
 
     public void OnGrapplingGun(InputAction.CallbackContext context) {
+        var playerAnimator = GameManager.Instance.playerAnimator;
         if (!grapplingRope.isGrappling) {
-            if (canGrapple)
-            {
+            if (canGrapple) {
                 playerJump.Jump(jumpButtonHoldTime);
+                playerAnimator.SetBool("grapplingHookThrew", true);
                 SetGrapplePoint();
                 DisableOtherInputs();
             }
         } else {
+            playerAnimator.SetBool("grapplingHookThrew", false);
             grapplingRope.enabled = false;
             m_springJoint2D.enabled = false;
             m_rigidbody.AddForce(new Vector2(
@@ -71,8 +73,7 @@ public class PlayerGrapplingGun : MonoBehaviour {
         }
     }
 
-    private static void DisableOtherInputs()
-    {
+    private static void DisableOtherInputs() {
         PlayerInputManager.Instance.playerInputActions.Player.SwordAttack.Disable();
         PlayerInputManager.Instance.playerInputActions.Player.ShurikenAttack.Disable();
         PlayerInputManager.Instance.playerInputActions.Player.Dash.Disable();
@@ -82,8 +83,7 @@ public class PlayerGrapplingGun : MonoBehaviour {
         PlayerInputManager.Instance.playerInputActions.Player.ColumnLedgeGrab.Disable();
     }
 
-    private static void EnableOtherInputs()
-    {
+    private static void EnableOtherInputs() {
         PlayerInputManager.Instance.playerInputActions.Player.SwordAttack.Enable();
         PlayerInputManager.Instance.playerInputActions.Player.ShurikenAttack.Enable();
         PlayerInputManager.Instance.playerInputActions.Player.Dash.Enable();

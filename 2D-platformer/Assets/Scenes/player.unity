@@ -130594,7 +130594,7 @@ PrefabInstance:
     - target: {fileID: 1977151809615943781, guid: bb13fab5dd26c4e41bf911441a210393,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 71.55495
+      value: 77.56111
       objectReference: {fileID: 0}
     - target: {fileID: 1977151809615943781, guid: bb13fab5dd26c4e41bf911441a210393,
         type: 3}
@@ -130604,7 +130604,7 @@ PrefabInstance:
     - target: {fileID: 1977151809615943781, guid: bb13fab5dd26c4e41bf911441a210393,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -35.76
+      value: -38.76
       objectReference: {fileID: 0}
     - target: {fileID: 1977151809724539874, guid: bb13fab5dd26c4e41bf911441a210393,
         type: 3}
@@ -130619,7 +130619,9 @@ PrefabInstance:
         sword attack = h\tshuriken = l
 
         projectile
-        = u\tgrapple = o'
+        = u\tgrapple = o
+
+        slow motion = x'
       objectReference: {fileID: 0}
     - target: {fileID: 1977151809724539874, guid: bb13fab5dd26c4e41bf911441a210393,
         type: 3}
@@ -130749,6 +130751,16 @@ PrefabInstance:
       propertyPath: playerHealthSlider
       value: 
       objectReference: {fileID: 1137306587}
+    - target: {fileID: 4145512269932082123, guid: a5ab13beee15b1443a1aefec1b01a6b0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.491
+      objectReference: {fileID: 0}
+    - target: {fileID: 4145512269932082123, guid: a5ab13beee15b1443a1aefec1b01a6b0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.523
+      objectReference: {fileID: 0}
     - target: {fileID: 4670843211627507641, guid: a5ab13beee15b1443a1aefec1b01a6b0,
         type: 3}
       propertyPath: m_Icon
@@ -130775,6 +130787,11 @@ PrefabInstance:
       propertyPath: m_camera
       value: 
       objectReference: {fileID: 2036124268}
+    - target: {fileID: 6825991441321897620, guid: a5ab13beee15b1443a1aefec1b01a6b0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6825991441321897634, guid: a5ab13beee15b1443a1aefec1b01a6b0,
         type: 3}
       propertyPath: m_Enabled
@@ -130839,6 +130856,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6825991441445998727, guid: a5ab13beee15b1443a1aefec1b01a6b0,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5ab13beee15b1443a1aefec1b01a6b0, type: 3}
