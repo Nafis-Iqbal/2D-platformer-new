@@ -5,6 +5,7 @@ using UnityEngine;
 public class HeavyEnemy : EnemyBase
 {
     public override void Start(){
+        noReposition = true;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
         timeBetweenHits = EnemyManager.Instance.heavyEnemyAttackSpeed;
@@ -26,9 +27,9 @@ public class HeavyEnemy : EnemyBase
     private float height;
     private Vector3 startPos;
     public override void Reposition(Vector2 tar) {
-        // transform.position = new Vector2(tar.x, tar.y);
         startPos = transform.position;
         rb.gravityScale = 0f;
+        tar.y += 1f;
         calculateVelocity(tar);
     }
 
@@ -45,8 +46,13 @@ public class HeavyEnemy : EnemyBase
 
         if (tar.x == transform.position.x && tar.y == transform.position.y)
         {
-            noReposition = true;
-            rb.gravityScale = 1f;
+            if(!isGrounded) {
+                rb.gravityScale = 100f;
+            }else{
+                noReposition = true;
+                rb.gravityScale = 1f;
+            }
+            
         }
     }
 }

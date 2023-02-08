@@ -368,6 +368,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ce76ad6cea3e754ebfdb36926b231d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inTarget: 0
+  isReadyToClimp: 0
   noReposition: 0
   inRepositioningPhase: 0
   playerScript: {fileID: 0}
@@ -1096,7 +1098,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1189239285}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26, y: 2.61, z: 0}
+  m_LocalPosition: {x: 9, y: -1.28, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children:
   - {fileID: 519420032}
@@ -1408,7 +1410,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 277c61f46cdac424187f5208a0b1dc46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noReposition: 0
+  inTarget: 0
+  isReadyToClimp: 0
+  noReposition: 1
   inRepositioningPhase: 0
   playerScript: {fileID: 0}
   minimumDistanceForRepo: 10
@@ -2273,6 +2277,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff9a914c7c148d40abfa8d226639908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inTarget: 0
+  isReadyToClimp: 0
   noReposition: 0
   inRepositioningPhase: 0
   playerScript: {fileID: 0}
@@ -2301,7 +2307,7 @@ MonoBehaviour:
   randomNumber: 100
   attackRange: 0
   player: {fileID: 0}
-  activateDistance: 10
+  activateDistance: 20
   pathUpdateSeconds: 0.5
   speed: 200
   nextWayPointDistant: 3
