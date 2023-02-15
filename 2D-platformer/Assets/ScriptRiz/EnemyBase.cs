@@ -75,6 +75,7 @@ public class EnemyBase : MonoBehaviour
     private Path path;
     private int currentWayPoint = 0;
     public bool isGrounded = false;
+    public Vector2 playerRight, playerLeft;
     Seeker seeker;
 
     [SerializeField]
@@ -97,10 +98,27 @@ public class EnemyBase : MonoBehaviour
 
     void Update(){
 
-        // rayCasting();
+        if(Input.GetKeyDown("space")){
+            Debug.Log("slow");
+            slowMotionstate(.5f, 4f);
+        }
 
         if(playerScript.PlatChanged){
-            rayCasting();
+            playerLeft = playerScript.leftBox;
+            playerRight = playerScript.rightBox;
+        }
+
+        if(isGrounded){
+            rb.gravityScale = 1f;
+            if((lBox == playerLeft) || (rBox == playerScript.rightBox)){
+                // Debug.Log("insame");
+                speed = 100f;
+                inRepositioningPhase = false;
+                noReposition = true;
+            }else{
+                if(!inRepositioningPhase && TargetInDistance())
+                    noReposition = false;
+            }
         }
 
         if(player == null){
@@ -128,6 +146,7 @@ public class EnemyBase : MonoBehaviour
         }
     }
     Vector2 preTarget;
+    public bool notInRepositioningPhase;
     private void FixedUpdate() {
         isGrounded = Physics2D.OverlapCircle(botGroundCheck.position, foodRadius, environmentMask);
         bool atJumpPoint = Physics2D.OverlapCircle(platformChecker.position, foodRadius, environmentMask);
@@ -136,12 +155,15 @@ public class EnemyBase : MonoBehaviour
         if(TargetInDistance()){
             inTarget = true;
             if(repositionable(targetPoint) && !noReposition) {
+                seeker.enabled = false;
                 preTarget = targetPoint;
                 Reposition(targetPoint);
             }
 
-            // if (noReposition)
-            // {
+            if (noReposition)
+            {
+                makeFace();
+
                 notPatrolling = false;
                 if (battleCryEnd)
                 {
@@ -161,7 +183,7 @@ public class EnemyBase : MonoBehaviour
                 {
                     attack();
                 }
-            // }
+            }
         }else {
             inTarget = false;
             if(!noReposition){
@@ -181,9 +203,23 @@ public class EnemyBase : MonoBehaviour
             animator.Play("Patrolling animation");
         }
 
-        if(atJumpPoint && isGrounded && TargetInDistance() && noReposition) {
-            rb.AddForce(Vector2.up * speed * jumpModifier);
-        }
+        // if(atJumpPoint && isGrounded && TargetInDistance() && noReposition) {
+        //     rb.AddForce(Vector2.up * speed * jumpModifier);
+        // }
+    }
+
+    void makeFace(){
+        bool watchRight = true;
+            if(player.position.x > transform.position.x){
+                watchRight = true;
+            }else if(player.position.x < transform.position.x){
+                watchRight = false;
+            }
+            if(!watchRight) {
+                transform.localScale = new Vector3(-1f * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            }else if(watchRight) {
+                transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            }
     }
 
     private void UpdatePath(){
@@ -324,17 +360,18 @@ public class EnemyBase : MonoBehaviour
     }
 
     private Vector2 closestRepoPoint() {
-        if(Vector2.Distance(transform.position, playerScript.rightBox) < Vector2.Distance(transform.position, playerScript.leftBox)){
-            return new Vector2(playerScript.rightBox.x - 1.5f , playerScript.rightBox.y);
+        if(Vector2.Distance(transform.position, playerScript.rightBox) < Vector2.Distance(transform.position, playerLeft)){
+            return new Vector2(playerScript.rightBox.x - 1f , playerScript.rightBox.y);
         }
-        return new Vector2(playerScript.leftBox.x + 1.5f , playerScript.leftBox.y);
+        return new Vector2(playerLeft.x + 1f , playerLeft.y);
     }
 
     public Vector2 enemyClosestRepoStartPoint() {
-        if(Vector2.Distance(transform.position, playerScript.rightBox) < Vector2.Distance(transform.position, playerScript.leftBox)){
-            return new Vector2(lBox.x + 1f , transform.position.y);
+        float scale = .5f;
+        if(Vector2.Distance(transform.position, playerScript.rightBox) < Vector2.Distance(transform.position, playerLeft)){
+            return new Vector2(lBox.x + scale , transform.position.y);
         }
-        return new Vector2(rBox.x - 1f , transform.position.y);
+        return new Vector2(rBox.x - scale , transform.position.y);
     }
 
     public virtual void Reposition(Vector2 tar) {
@@ -350,296 +387,32 @@ public class EnemyBase : MonoBehaviour
         return Vector2.Distance(transform.position, target) <= minimumDistanceForRepo;
     }
 
-
-    public void rayCasting() {
-        RaycastHit2D hitLeft = Physics2D.Raycast(platformChecker.position, Vector2.left);
-        RaycastHit2D hitright = Physics2D.Raycast(platformChecker.position, Vector2.right);
-
-        Debug.DrawRay(platformChecker.position, Vector2.left * 10f, Color.red);
-        Debug.DrawRay(platformChecker.position, Vector2.right * 10f, Color.green);
-
-        if(hitLeft.collider.gameObject.CompareTag("RepositionBox")) {
-            lBox = hitLeft.collider.gameObject.transform.position;
-        }
-        if(hitright.collider.gameObject.CompareTag("RepositionBox")) {
-            rBox = hitright.collider.gameObject.transform.position;
-        }
-
-        if((lBox == playerScript.leftBox && hitright.collider.gameObject.CompareTag("Player")) 
-        || (rBox == playerScript.rightBox && hitLeft.collider.gameObject.CompareTag("Player"))){
-            Debug.Log("insame");
-            speed = 100f;
-            inRepositioningPhase = false;
-            noReposition = true;
-        }else{
-            if(!inRepositioningPhase)
-                noReposition = false;
+    public void setEnemyPlat(Vector2 left , Vector2 right) {
+        if (transform.position.x <= right.x && transform.position.x >= left.x 
+        && transform.position. y <= left.y + 5f && transform.position. y >= left.y-5f){
+            lBox = left;
+            rBox = right;
+            Debug.Log(lBox);
+            seeker.enabled = true;
+            isReadyToClimp = false;
         }
     }
+
+
+
+    public void slowMotionstate(float multiplier , float dureation){
+        speed *= multiplier;
+        walkSpeed *= multiplier;
+        float prevSpeed = animator.speed;
+        animator.speed = multiplier;
+
+        StartCoroutine(leaveSlowMotonState(multiplier, dureation,prevSpeed));
+    }
+
+    IEnumerator leaveSlowMotonState(float multiplier , float duration , float prevSpeed){
+        yield return new WaitForSeconds(duration);
+        speed /= multiplier;
+        walkSpeed /= multiplier;
+        animator.speed = prevSpeed;
+    }
 }
-
-
-
-// // using System.Collections;
-// // using System.Collections.Generic;
-// // using UnityEngine;
-
-// // public class EnemyBase : MonoBehaviour
-// // {
-
-// //     //reposition 
-// //     public bool isReadyToClimp = false;
-// //     public bool noReposition;
-// //     Vector2 lBox, rBox;
-// //     public bool inRepositioningPhase;
-// //     public healthofPlayer playerScript;
-// //     // private bool isActivated;
-// //     public float minimumDistanceForRepo = 50f;
-// //     //reposition End
-// //     [SerializeField]
-// //     public float health;
-// //     [HideInInspector]
-// //     public bool notPatrolling;
-// //     [HideInInspector]
-// //     public Rigidbody2D rb;
-// //     [SerializeField]
-// //     private Transform groundChecker , platformChecker;
-// //     [HideInInspector]
-// //     public Transform player;
-// //     [SerializeField]
-// //     public GameObject knife;
-// //     [SerializeField]
-// //     public LayerMask environmentMask;
-// //     [HideInInspector]
-// //     private bool turn, turn1;
-// //     public bool canHit;
-// //     [HideInInspector]
-// //     public bool isActivated;
-// //     [SerializeField]
-// //     public Animator animatorEnemyGround;
-// //     [SerializeField]
-// //     public GameObject bullet;
-// //     [HideInInspector]
-// //     public float walkSpeed = 100f;
-// //     [SerializeField]
-// //     public float range = 5f;
-// //     public float battleCryRange = 3f;
-// //     [HideInInspector]
-// //     float playerDistance;
-// //     [HideInInspector]
-// //     public float timeBetweenHits = 1.15f;
-// //     [HideInInspector]
-// //     float foodRadius = .4f;
-// //     [SerializeField]
-// //     public float attackRange;
-
-// //     [SerializeField]
-// //     public Animator animator;
-
-// //     [SerializeField]
-// //     public bool attacking;
-
-// //     public bool battleCryEnd = false;
-// //     public bool farAnimationPlayed = true;
-// //     public int randomNumber = 100;
-// //     public virtual void Start(){
-// //         rb = GetComponent<Rigidbody2D>();
-// //         player = GameObject.FindGameObjectWithTag("Player").transform;
-// //         notPatrolling = true;
-// //         canHit = true;
-// //         attacking = false;
-// //     }
-
-// //     // Update is called once per frame
-// //     void Update(){
-// //         if(player == null){
-// //             playerDistance = 100f;
-// //             notPatrolling = true;
-// //         }
-// //         turn = !Physics2D.OverlapCircle(groundChecker.position, foodRadius, environmentMask);
-// //         turn1 = Physics2D.OverlapCircle(platformChecker.position, foodRadius, environmentMask);
-
-// //         if (notPatrolling){
-// //             Patrol();
-// //         }
-// //         playerDistance = Vector2.Distance(transform.position, player.position);
-
-// //         if (playerDistance <= range && player.position.y + 2f >= transform.position.y)
-// //         {
-// //             if (battleCryEnd) {
-// //                 attacking = true;
-// //                 attack();
-// //             }else{
-// //                 rb.velocity = Vector3.zero;
-// //                 notPatrolling = false;
-// //                 animator.Play("BattleCry");
-// //             }
-// //         }else{
-// //             notPatrolling = true;
-// //             attacking = false;
-
-// //         }
-
-// //         if (attacking) {
-// //             Vector2 targetPoint = closestRepoPoint();
-// //             if(repositionable(targetPoint) && !noReposition) {
-// //                 Debug.Log("repo");
-// //                 Reposition(targetPoint);
-// //             }
-// //         } else {
-// //             rb.velocity = new Vector2(rb.velocity.x, 0f);
-// //         }
-
-// //         if (playerDistance >= battleCryRange && !farAnimationPlayed){
-// //             rb.velocity = Vector3.zero;
-// //             notPatrolling = false;
-// //             animator.Play("BattleCry");
-// //         }
-// //     }
-// //     // make player patroll
-// //     void Patrol(){
-// //         // play walking animation;
-// //         animator.Play("Patrolling animation");
-// //         // animator.SetInteger("state", 0);
-// //         if(turn || turn1){
-// //             Flip();
-// //         }
-// //         rb.velocity = new Vector2(walkSpeed * Time.fixedDeltaTime , rb.velocity.y);
-// //     }
-// //     // to flip enemy
-// //     public void Flip(){
-// //         Vector3 Scale = transform.localScale;
-
-// //         Scale.x *= -1;
-
-// //         transform.localScale = Scale;
-
-// //         walkSpeed *= -1;
-// //     }
-
-// //     public virtual IEnumerator hit(){
-// //         canHit = false;
-// //         animator.Play("Idle");
-// //         // animator.SetInteger("state", 1);
-// //         yield return new WaitForSeconds(timeBetweenHits);
-// //         animator.Play("attacking");
-// //         // animator.SetInteger("state", 2);
-// //         yield return new WaitForSeconds(timeBetweenHits);
-// //         knife.SetActive(true);
-// //         yield return new WaitForSeconds(.2f);
-// //         randomNumber = Random.Range(1,5);
-// //         knife.SetActive(false);
-// //         canHit = true;
-// //     }
-
-// //     public virtual void attack(){
-// //         // play aproaching animation
-// //         if (player.position.x > transform.position.x && transform.localScale.x < 0 || player.position.x < transform.position.x && transform.localScale.x > 0){
-// //             Flip();
-// //         }
-// //         float distance = Vector2.Distance(transform.position, player.position);
-
-// //         if (distance <= attackRange){
-// //             notPatrolling = false;
-// //             rb.velocity = Vector3.zero;
-// //             if (canHit){
-// //                 farAnimationPlayed = false;
-// //                 StartCoroutine(hit());
-// //             }
-
-// //             if(randomNumber == 3){
-// //                 canHit = false;
-// //                 animator.Play("BattleCry");
-// //             }
-// //         }
-// //         else
-// //         {
-// //             notPatrolling = true;
-// //         }
-
-
-// //     }
-
-// //     private void OnTriggerEnter2D(Collider2D other) {
-// //         if(other.CompareTag("bullet")){
-// //             health -= 20f;
-// //             if(health <= 0f){
-// //                 StartCoroutine(death(.1f));
-// //             }
-// //         }
-// //     }
-
-// //     IEnumerator death(float time){
-// //         yield return new WaitForSeconds(time);
-// //         Destroy(gameObject);
-// //     }
-
-// //     public void animationEnd(){
-// //         rb.velocity = new Vector2(walkSpeed * Time.fixedDeltaTime , rb.velocity.y);
-// //         notPatrolling = true;
-// //         animator.Play("Patrolling animation");
-// //         if(battleCryEnd){
-// //             farAnimationPlayed = true;
-// //         }
-// //         battleCryEnd = true;
-// //         randomNumber = 100;
-// //         canHit = true;
-// //     }
-
-
-// //     private Vector2 closestRepoPoint() {
-// //         if(Vector2.Distance(transform.position, playerScript.rightBox) < Vector2.Distance(transform.position, playerScript.leftBox)){
-// //             return new Vector2(playerScript.rightBox.x - 1.5f , playerScript.rightBox.y);
-// //         }
-// //         return new Vector2(playerScript.leftBox.x + 1.5f , playerScript.leftBox.y);
-// //     }
-
-// //     public Vector2 enemyClosestRepoStartPoint() {
-// //         if(Vector2.Distance(transform.position, playerScript.rightBox) < Vector2.Distance(transform.position, playerScript.leftBox)){
-// //             return new Vector2(lBox.x + 1f , transform.position.y);
-// //         }
-// //         return new Vector2(rBox.x - 1f , transform.position.y);
-// //     }
-
-// //     public virtual void Reposition(Vector2 tar) {
-// //         transform.position = new Vector2(tar.x, tar.y);
-
-// //         if (tar.x == transform.position.x && tar.y == transform.position.y)
-// //         {
-// //             noReposition = true;
-// //         }
-// //     }
-
-// //     bool repositionable(Vector2 target) {
-// //         return Vector2.Distance(transform.position, target) <= minimumDistanceForRepo;
-// //     }
-
-
-// //     public void rayCasting() {
-// //         RaycastHit2D hitLeft = Physics2D.Raycast(platformChecker.position, Vector2.left);
-// //         RaycastHit2D hitright = Physics2D.Raycast(platformChecker.position, Vector2.right);
-
-// //         Debug.DrawRay(platformChecker.position, Vector2.left * 10f, Color.red);
-// //         Debug.DrawRay(platformChecker.position, Vector2.right * 10f, Color.green);
-
-// //         if(hitLeft.collider.gameObject.CompareTag("RepositionBox")) {
-// //             lBox = hitLeft.collider.gameObject.transform.position;
-// //         }
-// //         if(hitright.collider.gameObject.CompareTag("RepositionBox")) {
-// //             rBox = hitright.collider.gameObject.transform.position;
-// //         }
-
-// //         if((lBox == playerScript.leftBox && hitright.collider.gameObject.CompareTag("Player")) 
-// //         || (rBox == playerScript.rightBox && hitLeft.collider.gameObject.CompareTag("Player"))){
-// //             Debug.Log("insame");
-// //             walkSpeed = 100f;
-// //             inRepositioningPhase = false;
-// //             noReposition = true;
-// //         }else{
-// //             if(!inRepositioningPhase)
-// //                 noReposition = false;
-// //         }
-// //     }
-// // }
-
-

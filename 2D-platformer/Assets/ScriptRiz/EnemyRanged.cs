@@ -10,6 +10,10 @@ public class EnemyRanged : EnemyBase
     float timeBetweenShoots;
 
     public override void Start(){
+        isReadyToClimp = false;
+        noReposition = true;
+        notPatrolling = true;
+        canHit = true;
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         timeBetweenShoots = EnemyManager.Instance.enemyAttackSpeed;
@@ -17,9 +21,7 @@ public class EnemyRanged : EnemyBase
         battleCryRange = EnemyManager.Instance.genRange;
         health = EnemyManager.Instance.enemyHealth;
         animator = GetComponent<Animator>();
-
         startNesesarries();
-
         walkSpeed = speed;
     }
 
@@ -99,6 +101,7 @@ public class EnemyRanged : EnemyBase
                 noReposition = true;
                 rb.gravityScale = 1f;
                 isReadyToClimp = false;
+                notInRepositioningPhase = true;
             }
         }else{
             startPos = transform.position;
@@ -120,22 +123,22 @@ public class EnemyRanged : EnemyBase
 
     void calculateVelocity(Vector2 tar) {
         dist = tar.x - startPos.x;
-        nextX = Mathf.MoveTowards(transform.position.x, tar.x, speed/50f * Time.fixedDeltaTime);
+        nextX = Mathf.MoveTowards(transform.position.x, tar.x, 5f * Time.fixedDeltaTime);
         baseY = Mathf.Lerp(startPos.y , tar.y , (nextX - startPos.x) / dist);
         height = 1f * (nextX - startPos.x) * (nextX    - tar.x) / (-.25f * dist * dist);
 
         Vector3 movePosition = new Vector3(nextX, baseY + height, transform.position.z);
-        // transform.rotation = LookAtTarget(movePosition - transform.position);
         transform.position = movePosition;
 
 
         if (tar.x == transform.position.x && tar.y == transform.position.y)
         {
             if(!isGrounded) {
-                rb.gravityScale = 100f;
+                rb.gravityScale = 50f;
             }else{
                 noReposition = true;
                 rb.gravityScale = 1f;
+                notInRepositioningPhase = true;
             }
             
         }

@@ -41,7 +41,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - PlatformInfo
   m_SortingLayers:
   - name: Default
     uniqueID: 0

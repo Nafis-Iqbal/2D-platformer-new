@@ -7,7 +7,6 @@ public class EnemyMele : EnemyBase
 
     int repoMode = 0;
     public override void Start(){
-        isReadyToClimp = false;
         noReposition = true;
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -31,7 +30,6 @@ public class EnemyMele : EnemyBase
     public override void Reposition(Vector2 tar) {
         if (tar.y > transform.position.y){
             Vector2 RepoStart = enemyClosestRepoStartPoint();
-            // Debug.Log(RepoStart.x+ " "+ RepoStart.y);
             if (Mathf.Abs(transform.position.x - RepoStart.x) > 0.05f)
             {
                 if (!isReadyToClimp)
@@ -77,19 +75,18 @@ public class EnemyMele : EnemyBase
 
     void calculateVelocity(Vector2 tar) {
         dist = tar.x - startPos.x;
-        nextX = Mathf.MoveTowards(transform.position.x, tar.x, speed/50f * Time.fixedDeltaTime);
+        nextX = Mathf.MoveTowards(transform.position.x, tar.x, 5f * Time.fixedDeltaTime);
         baseY = Mathf.Lerp(startPos.y , tar.y , (nextX - startPos.x) / dist);
         height = 1f * (nextX - startPos.x) * (nextX    - tar.x) / (-.25f * dist * dist);
 
         Vector3 movePosition = new Vector3(nextX, baseY + height, transform.position.z);
-        // transform.rotation = LookAtTarget(movePosition - transform.position);
         transform.position = movePosition;
 
 
         if (tar.x == transform.position.x && tar.y == transform.position.y)
         {
             if(!isGrounded) {
-                rb.gravityScale = 100f;
+                rb.gravityScale = 20f;
             }else{
                 noReposition = true;
                 rb.gravityScale = 1f;

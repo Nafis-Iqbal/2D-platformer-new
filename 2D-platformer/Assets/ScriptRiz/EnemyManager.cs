@@ -1,9 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    public GameObject player;
+
+    public GameObject platforms;
     public float archerRange = 5f;
     public float enemyHealth = 50f;
     public float heavyEnemyHealth = 300f;
