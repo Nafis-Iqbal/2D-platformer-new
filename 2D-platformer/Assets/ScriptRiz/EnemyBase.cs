@@ -112,7 +112,7 @@ public class EnemyBase : MonoBehaviour
             rb.gravityScale = 1f;
             if((lBox == playerLeft) || (rBox == playerScript.rightBox)){
                 // Debug.Log("insame");
-                speed = 100f;
+                // speed = 100f;
                 inRepositioningPhase = false;
                 noReposition = true;
             }else{
@@ -155,9 +155,13 @@ public class EnemyBase : MonoBehaviour
         if(TargetInDistance()){
             inTarget = true;
             if(repositionable(targetPoint) && !noReposition) {
+                notPatrolling = false;
                 seeker.enabled = false;
                 preTarget = targetPoint;
                 Reposition(targetPoint);
+            }else{
+                inTarget = false;
+                notPatrolling = true;
             }
 
             if (noReposition)
@@ -191,6 +195,7 @@ public class EnemyBase : MonoBehaviour
                     noReposition = true;
                     rb.gravityScale = 1f;
                     isReadyToClimp = false;
+                notPatrolling = true;
             }
             if(!isReadyToClimp){
                 noReposition = true;
@@ -404,7 +409,7 @@ public class EnemyBase : MonoBehaviour
         speed *= multiplier;
         walkSpeed *= multiplier;
         float prevSpeed = animator.speed;
-        animator.speed = multiplier;
+        animator.speed = prevSpeed * multiplier;
 
         StartCoroutine(leaveSlowMotonState(multiplier, dureation,prevSpeed));
     }
@@ -414,5 +419,6 @@ public class EnemyBase : MonoBehaviour
         speed /= multiplier;
         walkSpeed /= multiplier;
         animator.speed = prevSpeed;
+        Debug.Log("pre");
     }
 }

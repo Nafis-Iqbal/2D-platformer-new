@@ -134,7 +134,7 @@ public class EnemyRanged : EnemyBase
         if (tar.x == transform.position.x && tar.y == transform.position.y)
         {
             if(!isGrounded) {
-                rb.gravityScale = 50f;
+                rb.gravityScale = 20f;
             }else{
                 noReposition = true;
                 rb.gravityScale = 1f;
