@@ -9,6 +9,11 @@ public class PlayerHealth : MonoBehaviour {
     [SerializeField] private float health = 100f;
     [SerializeField] private float healthUIUpdateDuration = 2f;
 
+    [Header("Demo damage effect")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Color damagedColor;
+    [SerializeField] private Color normalColor;
+
     private float normalizedHealth = 1f;
     private float maxHealth = 100f;
 
@@ -18,8 +23,14 @@ public class PlayerHealth : MonoBehaviour {
         }
     }
 
-    public void OnHitBySword(float damage) {
-        health -= damage;
+    private void Update() {
+        Debug.Log(spriteRenderer.color);
+    }
+
+    public void TakeDamage(float damageAmount) {
+        spriteRenderer.color = damagedColor;
+        StartCoroutine(changeToNormalColorCoroutine());
+        health -= damageAmount;
         normalizedHealth = health / maxHealth;
         DOTween.To(() => playerHealthSlider.value, x => playerHealthSlider.value = x, normalizedHealth, healthUIUpdateDuration);
         if (health <= 0f) {
@@ -27,5 +38,10 @@ public class PlayerHealth : MonoBehaviour {
             normalizedHealth = 0f;
             gameObject.SetActive(false);
         }
+    }
+
+    IEnumerator changeToNormalColorCoroutine() {
+        yield return new WaitForSeconds(0.3f);
+        spriteRenderer.color = normalColor;
     }
 }

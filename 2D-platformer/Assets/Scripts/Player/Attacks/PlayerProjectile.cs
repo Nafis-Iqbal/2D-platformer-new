@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerProjectile : MonoBehaviour {
-    public float damageAmount = 5f;
     [SerializeField] private float projectileThrowForce = 10f;
     [SerializeField] private float projectileActiveTime = 0.8f;
     [SerializeField] private ParticleSystem projectileParticle;
@@ -40,7 +39,13 @@ public class PlayerProjectile : MonoBehaviour {
         Gizmos.DrawLine(transform.position - colliderOffset, transform.position - colliderOffset + Vector3.down * groundLength);
     }
 
+    private void OnEnable() {
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameManager.Instance.playerTransform.GetComponent<Collider2D>());
+
+    }
+
     private void Awake() {
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameManager.Instance.playerTransform.GetComponent<Collider2D>());
         projectileRigidbody = GetComponent<Rigidbody2D>();
         originalGravityScale = projectileRigidbody.gravityScale;
         projectileCollider = GetComponent<Collider2D>();

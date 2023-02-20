@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerShuriken : MonoBehaviour {
-    public float damageAmount = 5f;
     [SerializeField] private float rotationSpeed = 450f;
     [SerializeField] private Transform shurikenSpriteTransform;
     [SerializeField] private float shurikenSpeed = 10f;
@@ -19,10 +18,12 @@ public class PlayerShuriken : MonoBehaviour {
     }
 
     private void Awake() {
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameManager.Instance.playerTransform.GetComponent<Collider2D>());
         shurikenRigidbody = GetComponent<Rigidbody2D>();
     }
 
     private void OnEnable() {
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameManager.Instance.playerTransform.GetComponent<Collider2D>());
         shurikenActiveTime = 0f;
         shouldStop = false;
     }

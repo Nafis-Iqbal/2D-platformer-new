@@ -10606,6 +10606,7 @@ GameObject:
   - component: {fileID: 6275386986776322440}
   - component: {fileID: 1626359948032388215}
   - component: {fileID: 4506568898256517799}
+  - component: {fileID: 8401240131982248757}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -10875,7 +10876,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a12998563fce7c4591d3685ccb4dbf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 5
   playerAnimator: {fileID: 6825991441445998724}
   timeElapsedSinceAttack: 0
   attackCooldownTime: 0.3
@@ -10988,6 +10988,21 @@ MonoBehaviour:
   playerMovementSpeedMultiplier: 0.5
   playerJumpSpeedMultiplier: 0.5
   slowMotionDuration: 0.5
+--- !u!114 &8401240131982248757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6825991441321897635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3528eb9e7e7bb1343b1401ec3c5d07de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  swordDamage: 5
+  shurikenDamage: 8
+  projectileDamage: 15
 --- !u!1 &6825991441419017079
 GameObject:
   m_ObjectHideFlags: 0

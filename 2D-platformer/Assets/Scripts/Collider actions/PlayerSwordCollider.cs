@@ -10,7 +10,7 @@ public class PlayerSwordCollider : MonoBehaviour {
     }
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
-            other.GetComponent<EnemyHealth>().takeDamage(playerSwordAttack.damageAmount);
+            other.GetComponent<EnemyHealth>().takeDamage(PlayerCombatManager.SwordDamage);
         }
     }
 }

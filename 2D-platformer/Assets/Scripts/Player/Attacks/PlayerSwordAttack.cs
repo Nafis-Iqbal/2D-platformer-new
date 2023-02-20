@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerSwordAttack : MonoBehaviour {
-    public float damageAmount = 5f;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private float timeElapsedSinceAttack = 0f;
     [SerializeField] private float attackCooldownTime = 1f;

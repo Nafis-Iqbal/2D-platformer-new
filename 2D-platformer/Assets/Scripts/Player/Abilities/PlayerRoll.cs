@@ -24,14 +24,16 @@ public class PlayerRoll : MonoBehaviour {
 
     IEnumerator deactivateRolling() {
         yield return new WaitForSeconds(rollDuration);
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), false);
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("EnemyWeapon"), false);
         isRolling = false;
     }
 
     public void OnRoll(InputAction.CallbackContext context) {
         if (onGround) {
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), true);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("EnemyWeapon"), true);
             body.velocity = new Vector2(transform.localScale.x, 0) * rollForce;
-            // Vector2 v = new Vector2(transform.localScale.x, 0) * rollForce;
-            // body.AddForce(v, ForceMode2D.Impulse);
             playerAnimator.SetTrigger("Roll");
             isRolling = true;
             StartCoroutine(deactivateRolling());
