@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerShuriken : MonoBehaviour {
-    [SerializeField] private float rotationSpeed = 450f;
-    [SerializeField] private Transform shurikenSpriteTransform;
-    [SerializeField] private float shurikenSpeed = 10f;
-    [SerializeField] private float disappearDelay = 0.3f;
+    private float rotationSpeed = 450f;
+    private float shurikenSpeed = 10f;
+    private float disappearDelay = 0.3f;
 
+    [SerializeField] private Transform shurikenSpriteTransform;
     [SerializeField] private float shurikenActiveTime;
     [SerializeField] private bool shouldStop = false;
 
@@ -29,6 +29,10 @@ public class PlayerShuriken : MonoBehaviour {
     }
 
     private void Update() {
+        rotationSpeed = PlayerCombatManager.ShurikenRotationSpeed;
+        shurikenSpeed = PlayerCombatManager.ShurikenSpeed;
+        disappearDelay = PlayerCombatManager.ShurikenDisappearDelay;
+
         shurikenActiveTime += Time.deltaTime;
         if (shurikenActiveTime > disappearDelay) {
             gameObject.SetActive(false);

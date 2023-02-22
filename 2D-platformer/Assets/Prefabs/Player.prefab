@@ -10599,7 +10599,6 @@ GameObject:
   - component: {fileID: 6825991441321897621}
   - component: {fileID: 6825991441321897620}
   - component: {fileID: 6825991441321897645}
-  - component: {fileID: 2992304236180938561}
   - component: {fileID: 6646158213697917972}
   - component: {fileID: 3828920130300547230}
   - component: {fileID: 4884654362931437617}
@@ -10849,21 +10848,6 @@ MonoBehaviour:
   dashingTime: 0.2
   dashingCooldown: 1
   canDash: 1
---- !u!114 &2992304236180938561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6825991441321897635}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78f2e0d4801a780499e2cc1d46f7cfc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerHealthSlider: {fileID: 0}
-  health: 100
-  healthUIUpdateDuration: 0.3
 --- !u!114 &6646158213697917972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11001,8 +10985,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   swordDamage: 5
+  swordCooldownTime: 0.3
   shurikenDamage: 8
+  shurikenCooldownTime: 0.5
+  shurikenRotationSpeed: 500
+  shurikenSpeed: 5
+  shurikenDisappearDelay: 1.6
   projectileDamage: 15
+  projectileCooldownTime: 0.5
+  playerHealthSlider: {fileID: 0}
+  health: 100
+  healthUIUpdateDuration: 0.3
 --- !u!1 &6825991441419017079
 GameObject:
   m_ObjectHideFlags: 0

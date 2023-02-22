@@ -21,7 +21,7 @@ public class ClimbColumnCollider : MonoBehaviour {
     /// </summary>
     /// <param name="other"></param>
     private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
+        if (other.gameObject.tag == "Player") {
             playerTransform = other.transform;
             if ((playerTransform.position.y < transform.position.y) && (playerRigidbody.velocity.y < 0.01f) && playerColumn.columnMoveDirection > 0.1f) {
                 StartCoroutine(movePlayerCoroutine());

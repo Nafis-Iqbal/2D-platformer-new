@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerShurikenAttack : MonoBehaviour {
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private float timeElapsedSinceAttack = 0f;
-    [SerializeField] private float attackCooldownTime = 1f;
+    [HideInInspector] public float attackCooldownTime = 1f;
     [SerializeField] private bool isAttacking = false;
     [SerializeField] private GameObject shurikenPrefab;
 

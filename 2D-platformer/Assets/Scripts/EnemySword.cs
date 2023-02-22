@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySword : MonoBehaviour {
-    private PlayerHealth playerHealth;
-    [SerializeField] private float swordDamage = 5f;
+    private PlayerCombatManager playerCombatManager;
+    [SerializeField] private int swordDamage = 5;
 
     private void Awake() {
-        playerHealth = GameManager.Instance.playerTransform.GetComponent<PlayerHealth>();
+        playerCombatManager = GameManager.Instance.playerTransform.GetComponent<PlayerCombatManager>();
     }
     private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
-            playerHealth.TakeDamage(swordDamage);
+        if (other.gameObject.tag == "Player") {
+            playerCombatManager.TakeDamage(swordDamage);
         }
     }
 }

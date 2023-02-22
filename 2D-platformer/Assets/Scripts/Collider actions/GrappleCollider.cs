@@ -27,13 +27,13 @@ public class GrappleCollider : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
+        if (other.gameObject.tag == "Player") {
             GrappleActivate();
         }
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
+        if (other.gameObject.tag == "Player") {
             GrappleInactive();
         }
     }

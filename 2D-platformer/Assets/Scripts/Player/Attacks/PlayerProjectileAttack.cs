@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerProjectileAttack : MonoBehaviour {
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private float timeElapsedSinceAttack = 0f;
-    [SerializeField] private float attackCooldownTime = 0.3f;
+    [HideInInspector] public float attackCooldownTime = 0.3f;
     [SerializeField] private bool isAttacking = false;
     [SerializeField] private GameObject projectilePrefab;
 
