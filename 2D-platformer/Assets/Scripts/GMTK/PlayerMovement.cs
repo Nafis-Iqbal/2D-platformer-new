@@ -60,6 +60,21 @@ public class PlayerMovement : MonoBehaviour {
         playerGrapplingGun = GetComponent<PlayerGrapplingGun>();
     }
 
+    public void moveLeft() {
+        directionX = -0.001f;
+        StartCoroutine(IdleMovementRoutine(0.01f));
+    }
+
+    public void moveRight() {
+        directionX = 0.001f;
+        StartCoroutine(IdleMovementRoutine(0.01f));
+    }
+
+    IEnumerator IdleMovementRoutine(float duration) {
+        yield return new WaitForSeconds(duration);
+        directionX = 0f;
+    }
+
     public void OnMovement(InputAction.CallbackContext context) {
         //This is called when you input a direction on a valid input type, such as arrow keys or analogue stick
         //The value will read -1 when pressing left, 0 when idle, and 1 when pressing right.
@@ -159,7 +174,7 @@ public class PlayerMovement : MonoBehaviour {
         velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
 
         //Update the Rigidbody with this new velocity
-        body.velocity = velocity * movementSpeedMultiplier;
+        body.velocity = velocity * movementSpeedMultiplier / Time.timeScale;
 
     }
 
@@ -167,6 +182,6 @@ public class PlayerMovement : MonoBehaviour {
         //If we're not using acceleration and deceleration, just send our desired velocity (direction * max speed) to the Rigidbody
         velocity.x = desiredVelocity.x;
 
-        body.velocity = velocity * movementSpeedMultiplier;
+        body.velocity = velocity * movementSpeedMultiplier / Time.timeScale;
     }
 }

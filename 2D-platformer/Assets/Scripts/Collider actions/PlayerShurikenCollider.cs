@@ -11,6 +11,7 @@ public class PlayerShurikenCollider : MonoBehaviour {
         if (other.gameObject.tag == "Enemy") {
             // other.transform.GetComponent<EnemyCombatManager>().takeDamage(PlayerCombatManager.ShurikenDamage);
             Debug.Log("enemy damage(shuriken): " + PlayerCombatManager.ShurikenDamage);
+            other.transform.GetComponent<EnemyBase>().health -= PlayerCombatManager.ShurikenDamage;
             gameObject.SetActive(false);
         } else {
             playerShuriken.Stop();

@@ -11,10 +11,12 @@ public class PlayerRoll : MonoBehaviour {
     public bool isRolling = false;
     private Rigidbody2D body;
     private PlayerGround playerGround;
+    private PlayerMovement playerMovement;
     private bool onGround;
 
     private void Awake() {
         playerGround = GetComponent<PlayerGround>();
+        playerMovement = GetComponent<PlayerMovement>();
         body = GetComponent<Rigidbody2D>();
     }
 

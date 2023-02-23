@@ -59,6 +59,13 @@ public class PlayerColumn : MonoBehaviour {
         }
     }
 
+    private void FixedUpdate() {
+        if (columnMoveDirection > 0.1f || columnMoveDirection < -0.1f) {
+            var movePos = new Vector2(transform.position.x, transform.position.y + columnMoveDirection * columnMoveSpeed * Time.fixedDeltaTime);
+            body.MovePosition(movePos);
+        }
+    }
+
     private void Update() {
         if (playerGround.isGrounded && (timeElapsedSinceColumnGrab > holdColumnTime)) {
             timeElapsedSinceColumnGrab = 0f;
@@ -82,8 +89,6 @@ public class PlayerColumn : MonoBehaviour {
             }
 
             if (columnMoveDirection > 0.1f || columnMoveDirection < -0.1f) {
-                var movePos = new Vector2(transform.position.x, transform.position.y + columnMoveDirection * columnMoveSpeed * Time.deltaTime);
-                body.MovePosition(movePos);
                 playerAnimator.SetFloat("columnWalkSpeed", columnWalkSpeed);
             } else {
                 playerAnimator.SetFloat("columnWalkSpeed", 0);

@@ -151,6 +151,7 @@ public class PlayerJump : MonoBehaviour {
         if (desiredJump) {
             DoAJump();
             body.velocity = velocity * jumpMovementMultiplier;
+            Debug.Log("velo: " + body.velocity);
 
             //Skip gravity calculations this frame, so currentlyJumping doesn't turn off
             //This makes sure you can't do the coyote time double jump bug
