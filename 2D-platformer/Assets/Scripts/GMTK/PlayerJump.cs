@@ -151,7 +151,6 @@ public class PlayerJump : MonoBehaviour {
         if (desiredJump) {
             DoAJump();
             body.velocity = velocity * jumpMovementMultiplier;
-            Debug.Log("velo: " + body.velocity);
 
             //Skip gravity calculations this frame, so currentlyJumping doesn't turn off
             //This makes sure you can't do the coyote time double jump bug
@@ -210,7 +209,7 @@ public class PlayerJump : MonoBehaviour {
 
         //Set the character's Rigidbody's velocity
         //But clamp the Y variable within the bounds of the speed limit, for the terminal velocity assist option
-        body.velocity = new Vector3(velocity.x * jumpMovementMultiplierX, Mathf.Clamp(velocity.y * jumpMovementMultiplierY, -speedLimit, 100));
+        // body.velocity = new Vector3(velocity.x * jumpMovementMultiplierX, Mathf.Clamp(velocity.y * jumpMovementMultiplierY, -speedLimit, 100));
     }
 
     private void DoAJump() {

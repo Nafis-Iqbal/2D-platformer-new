@@ -129,8 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9a53640606f13409259c13371f7f02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 15
-  projectileThrowForce: 25
+  projectileThrowForce: 7
   projectileActiveTime: 0.3
   projectileParticle: {fileID: 4293796942278296214}
   isGrounded: 0

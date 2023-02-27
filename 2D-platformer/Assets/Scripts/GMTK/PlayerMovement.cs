@@ -7,7 +7,12 @@ using UnityEngine.InputSystem.Interactions;
 //This script handles moving the character on the X axis, both on the ground and in the air.
 
 public class PlayerMovement : MonoBehaviour {
-    [HideInInspector] public float movementSpeedMultiplier = 1f;
+    public float tempSpeedTurn;
+    public float tempSpeedAccel;
+    public float tempSpeedDecel;
+    public float tempSpeedWithoutAccel;
+
+    public float movementSpeedMultiplier = 1f;
     private PlayerGround playerGround;
     private PlayerColumn playerColumn;
     private PlayerDash playerDash;
@@ -39,7 +44,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField][Tooltip("Friction to apply against movement on stick")] private float friction;
 
     [Header("Options")]
-    [Tooltip("When false, the charcter will skip acceleration and deceleration and instantly move and stop")] private bool useAcceleration;
+    [Tooltip("When false, the charcter will skip acceleration and deceleration and instantly move and stop")][SerializeField] private bool useAcceleration;
 
     [Header("Calculations")]
     [SerializeField] public Vector2 velocity;
@@ -160,21 +165,21 @@ public class PlayerMovement : MonoBehaviour {
         if (pressingKey) {
             //If the sign (i.e. positive or negative) of our input direction doesn't match our movement, it means we're turning around and so should use the turn speed stat.
             if (Mathf.Sign(directionX) != Mathf.Sign(velocity.x)) {
-                maxSpeedChange = turnSpeed * Time.deltaTime;
+                maxSpeedChange = turnSpeed * Time.fixedDeltaTime * tempSpeedTurn;
             } else {
                 //If they match, it means we're simply running along and so should use the acceleration stat
-                maxSpeedChange = acceleration * Time.deltaTime;
+                maxSpeedChange = acceleration * Time.fixedDeltaTime * tempSpeedAccel;
             }
         } else {
             //And if we're not pressing a direction at all, use the deceleration stat
-            maxSpeedChange = deceleration * Time.deltaTime;
+            maxSpeedChange = deceleration * Time.fixedDeltaTime * tempSpeedDecel;
         }
 
         //Move our velocity towards the desired velocity, at the rate of the number calculated above
         velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
 
         //Update the Rigidbody with this new velocity
-        body.velocity = velocity * movementSpeedMultiplier / Time.timeScale;
+        body.velocity = velocity * movementSpeedMultiplier;
 
     }
 
@@ -182,6 +187,6 @@ public class PlayerMovement : MonoBehaviour {
         //If we're not using acceleration and deceleration, just send our desired velocity (direction * max speed) to the Rigidbody
         velocity.x = desiredVelocity.x;
 
-        body.velocity = velocity * movementSpeedMultiplier / Time.timeScale;
+        body.velocity = velocity * movementSpeedMultiplier * tempSpeedWithoutAccel;
     }
 }

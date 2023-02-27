@@ -5,27 +5,22 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerCombatManager : MonoBehaviour {
-    public static int SwordDamage;
-    public static int ShurikenDamage;
-    public static int ProjectileDamage;
-    public static float ShurikenRotationSpeed;
-    public static float ShurikenSpeed;
-    public static float ShurikenDisappearDelay;
+    public static PlayerCombatManager Instance;
 
     [Header("Sword Attack")]
-    [SerializeField] private int swordDamage;
-    [SerializeField] private float swordCooldownTime;
+    public int swordDamage;
+    public float swordCooldownTime;
 
     [Header("Shuriken Attack")]
-    [SerializeField] private int shurikenDamage;
-    [SerializeField] private float shurikenCooldownTime;
-    [SerializeField] private float shurikenRotationSpeed;
-    [SerializeField] private float shurikenSpeed;
-    [SerializeField] private float shurikenDisappearDelay;
+    public int shurikenDamage;
+    public float shurikenCooldownTime;
+    public float shurikenRotationSpeed;
+    public float shurikenSpeed;
+    public float shurikenDisappearDelay;
 
     [Header("Projectile Attack")]
-    [SerializeField] private int projectileDamage;
-    [SerializeField] private float projectileCooldownTime;
+    public int projectileDamage;
+    public float projectileCooldownTime;
 
     [Header("Player health section")]
     [SerializeField] private Slider playerHealthSlider;
@@ -39,21 +34,22 @@ public class PlayerCombatManager : MonoBehaviour {
     private int maxHealth = 100;
 
     private void Awake() {
+        if (Instance == null) {
+            Instance = this;
+        } else {
+            Destroy(gameObject);
+            return;
+        }
+
         playerSwordAttack = GameManager.Instance.playerTransform.GetComponent<PlayerSwordAttack>();
         playerShurikenAttack = GameManager.Instance.playerTransform.GetComponent<PlayerShurikenAttack>();
         playerProjectileAttack = GameManager.Instance.playerTransform.GetComponent<PlayerProjectileAttack>();
     }
 
     private void Update() {
-        SwordDamage = swordDamage;
-        ShurikenDamage = shurikenDamage;
-        ProjectileDamage = projectileDamage;
         playerSwordAttack.attackCooldownTime = swordCooldownTime;
         playerShurikenAttack.attackCooldownTime = shurikenCooldownTime;
         playerProjectileAttack.attackCooldownTime = projectileCooldownTime;
-        ShurikenRotationSpeed = shurikenRotationSpeed;
-        ShurikenSpeed = shurikenSpeed;
-        ShurikenDisappearDelay = shurikenDisappearDelay;
     }
 
 

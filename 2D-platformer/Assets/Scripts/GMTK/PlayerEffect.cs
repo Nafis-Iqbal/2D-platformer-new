@@ -18,8 +18,8 @@ public class PlayerEffect : MonoBehaviour {
     [SerializeField] private ParticleSystem landParticles;
 
     [Header("Settings - Squash and Stretch")]
-    [SerializeField, Tooltip("Width Squeeze, Height Squeeze, Duration")] Vector3 jumpSquashSettings;
-    [SerializeField, Tooltip("Width Squeeze, Height Squeeze, Duration")] Vector3 landSquashSettings;
+    [SerializeField, Tooltip("Width Squeeze, Height Squeeze, Duration")] public Vector3 jumpSquashSettings;
+    [SerializeField, Tooltip("Width Squeeze, Height Squeeze, Duration")] public Vector3 landSquashSettings;
     [SerializeField, Tooltip("How powerful should the effect be?")] public float landSqueezeMultiplier;
     [SerializeField, Tooltip("How powerful should the effect be?")] public float jumpSqueezeMultiplier;
     [SerializeField] float landDrop = 1;

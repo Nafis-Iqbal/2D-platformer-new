@@ -17,6 +17,7 @@ public class PlayerInputManager : MonoBehaviour {
     private PlayerShurikenAttack playerShurikenAttack;
     private PlayerProjectileAttack playerProjectileAttack;
     private PlayerGrapplingGun playerGrapplingGun;
+    private PlayerBlockDefense playerBlockDefense;
 
     private void Awake() {
         if (Instance == null) {
@@ -36,6 +37,7 @@ public class PlayerInputManager : MonoBehaviour {
         playerShurikenAttack = playerTransform.GetComponent<PlayerShurikenAttack>();
         playerProjectileAttack = playerTransform.GetComponent<PlayerProjectileAttack>();
         playerGrapplingGun = playerTransform.GetComponent<PlayerGrapplingGun>();
+        playerBlockDefense = playerTransform.GetComponent<PlayerBlockDefense>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
@@ -88,23 +90,19 @@ public class PlayerInputManager : MonoBehaviour {
         playerInputActions.Player.GrapplingGun.started += OnGrapplingGun;
     }
 
-    private void OnGrapplingGun(InputAction.CallbackContext context)
-    {
+    private void OnGrapplingGun(InputAction.CallbackContext context) {
         playerGrapplingGun.OnGrapplingGun(context);
     }
 
-    private void OnProjectileAttack(InputAction.CallbackContext context)
-    {
+    private void OnProjectileAttack(InputAction.CallbackContext context) {
         playerProjectileAttack.OnProjectileAttack(context);
     }
 
-    private void OnShurikenAttack(InputAction.CallbackContext context)
-    {
+    private void OnShurikenAttack(InputAction.CallbackContext context) {
         playerShurikenAttack.OnShurikenAttack(context);
     }
 
-    private void OnSwordAttack(InputAction.CallbackContext context)
-    {
+    private void OnSwordAttack(InputAction.CallbackContext context) {
         playerSwordAttack.OnSwordAttack(context);
     }
 

@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerSlowMotion : MonoBehaviour {
-    [SerializeField, Range(0f, 1f)] private float animationSlowMotionMultiplier = 1f;
-    [SerializeField, Range(0f, 1f)] private float playerMovementSpeedMultiplier = 1f;
-    [SerializeField, Range(0f, 1f)] private float playerJumpSpeedMultiplier = 1f;
-    [SerializeField, Range(0f, 2f)] private float slowMotionDuration = 0.5f;
+    [SerializeField, Range(0f, 4f)] private float animationSlowMotionMultiplier = 1f;
+    [SerializeField, Range(0f, 4f)] private float playerMovementSpeedMultiplier = 1f;
+    [SerializeField, Range(0f, 4f)] private float playerJumpSpeedMultiplier = 1f;
+    [SerializeField, Range(0f, 4f)] private float slowMotionDuration = 0.5f;
 
     private Animator playerAnimator;
     private PlayerMovement playerMovement;

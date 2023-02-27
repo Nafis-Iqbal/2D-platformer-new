@@ -55,7 +55,8 @@ public class PlayerProjectile : MonoBehaviour {
 
     public void Deploy(Vector2 direction) {
         var forceDirection = (Vector2.up + direction) * projectileThrowForce;
-        projectileRigidbody.AddForce(forceDirection, ForceMode2D.Impulse);
+        projectileRigidbody.velocity = forceDirection;
+        // projectileRigidbody.AddForce(forceDirection, ForceMode2D.Impulse);
     }
 
     public void Hit() {

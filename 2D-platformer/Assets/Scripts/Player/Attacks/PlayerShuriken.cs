@@ -29,9 +29,9 @@ public class PlayerShuriken : MonoBehaviour {
     }
 
     private void Update() {
-        rotationSpeed = PlayerCombatManager.ShurikenRotationSpeed;
-        shurikenSpeed = PlayerCombatManager.ShurikenSpeed;
-        disappearDelay = PlayerCombatManager.ShurikenDisappearDelay;
+        rotationSpeed = PlayerCombatManager.Instance.shurikenRotationSpeed;
+        shurikenSpeed = PlayerCombatManager.Instance.shurikenSpeed;
+        disappearDelay = PlayerCombatManager.Instance.shurikenDisappearDelay;
 
         shurikenActiveTime += Time.deltaTime;
         if (shurikenActiveTime > disappearDelay) {

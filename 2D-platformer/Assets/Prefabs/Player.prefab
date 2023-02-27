@@ -10751,17 +10751,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d9fcc1289b79458d9a4ac5c7cbbb62d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tempSpeedTurn: 0
+  tempSpeedAccel: 0
+  tempSpeedDecel: 0
+  tempSpeedWithoutAccel: 0
+  animatorSpeed: 0
   movementSpeedMultiplier: 1
   playerAnimator: {fileID: 6825991441445998724}
   maxSpeed: 9
   maxAcceleration: 8.3
   maxDeceleration: 52
-  maxTurnSpeed: 76
+  maxTurnSpeed: 80
   maxAirAcceleration: 80
   maxAirDeceleration: 80
   maxAirTurnSpeed: 80
   walkMultiplier: 0.2
   friction: 0
+  useAcceleration: 0
   velocity: {x: 0, y: 0}
   directionX: 0
   onGround: 1

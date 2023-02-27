@@ -121,6 +121,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Blocking",
+                    "type": "Button",
+                    "id": "756b96ad-6285-49e9-bf5a-55ad04765ca2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -495,6 +504,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "GrapplingGun",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d75c09c0-e1d0-4907-bf81-98312ceb322d",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Blocking",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
