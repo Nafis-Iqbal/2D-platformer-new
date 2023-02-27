@@ -547,6 +547,9 @@ MonoBehaviour:
   playerRight: {x: 0, y: 0}
   playerLeft: {x: 0, y: 0}
   walkSpeed: 100
+  comboMode: 0
+  comboPauseTime: 0.5
+  comboAttackTime: 1.5
   notInRepositioningPhase: 0
   rowPossition: {fileID: 741336033}
   row: {fileID: 1920131381889971676, guid: 1a5da4ce9d0d11c4183fa598d5584d49, type: 3}
@@ -4308,7 +4311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1400936484
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4434,6 +4437,9 @@ MonoBehaviour:
   playerRight: {x: 0, y: 0}
   playerLeft: {x: 0, y: 0}
   walkSpeed: 100
+  comboMode: 0
+  comboPauseTime: 0.5
+  comboAttackTime: 1.5
   notInRepositioningPhase: 0
 --- !u!50 &1400936487
 Rigidbody2D:
@@ -7686,6 +7692,9 @@ MonoBehaviour:
   playerRight: {x: 0, y: 0}
   playerLeft: {x: 0, y: 0}
   walkSpeed: 100
+  comboMode: 1
+  comboPauseTime: 1
+  comboAttackTime: 1.8
   notInRepositioningPhase: 0
 --- !u!114 &3137284496791674968
 MonoBehaviour:

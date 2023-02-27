@@ -80,11 +80,17 @@ public class EnemyBase : MonoBehaviour
 
     [SerializeField]
     public float walkSpeed;
+
+    //Combo Attack Things
+    public bool comboMode = false;
+    public float comboAttackTime = 2f;
+
     public virtual void Start(){
         startNesesarries();
     }
 
     public void startNesesarries(){
+        comboMode = false;
         inRepositioningPhase = false;
         isActivated = false;
         seeker = GetComponent<Seeker>();
@@ -100,7 +106,8 @@ public class EnemyBase : MonoBehaviour
 
         if(Input.GetKeyDown("space")){
             Debug.Log("slow");
-            slowMotionstate(.5f, 4f);
+            comboMode = true;
+            // slowMotionstate(.5f, 4f);
         }
 
         if(playerScript.PlatChanged){
@@ -327,6 +334,12 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void attack(){
         rb.velocity = Vector3.zero;
+
+        if(comboMode){
+            StartCoroutine(comboAttack(0));
+            return;
+        }
+
         if (canHit){
             farAnimationPlayed = false;
             StartCoroutine(hit());
@@ -420,5 +433,30 @@ public class EnemyBase : MonoBehaviour
         walkSpeed /= multiplier;
         animator.speed = prevSpeed;
         Debug.Log("pre");
+    }
+
+
+    public virtual IEnumerator comboAttack(int type){
+        comboMode = false;
+        canHit = false;
+        string preAnim , atkAnim;
+        if(type == 0){
+            atkAnim = "ComboAttackType0";
+        }
+        else{
+            atkAnim = "ComboAttacktype1";
+        }
+        animator.Play(atkAnim);
+        knife.SetActive(true);
+        yield return new WaitForSeconds(comboAttackTime);
+        knife.SetActive(false);
+        canHit = true;
+    }
+
+    public void DamagePlayerStart(){
+        knife.SetActive(true);
+    }
+    public void DamagePlayerEnd(){
+        knife.SetActive(false);
     }
 }
