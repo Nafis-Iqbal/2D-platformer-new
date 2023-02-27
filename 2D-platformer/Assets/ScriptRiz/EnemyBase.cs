@@ -454,9 +454,7 @@ public class EnemyBase : MonoBehaviour
             atkAnim = "ComboAttacktype1";
         }
         animator.Play(atkAnim);
-        knife.SetActive(true);
         yield return new WaitForSeconds(comboAttackTime);
-        knife.SetActive(false);
         canHit = true;
     }
 
