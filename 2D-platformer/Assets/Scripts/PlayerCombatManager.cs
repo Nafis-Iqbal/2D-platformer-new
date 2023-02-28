@@ -24,14 +24,18 @@ public class PlayerCombatManager : MonoBehaviour {
 
     [Header("Player health section")]
     [SerializeField] private Slider playerHealthSlider;
-    [SerializeField] private int health = 100;
+    [SerializeField] private int health;
     [SerializeField] private float healthUIUpdateDuration = 2f;
 
+    private PlayerBlockDefense playerBlockDefense;
     private PlayerSwordAttack playerSwordAttack;
     private PlayerShurikenAttack playerShurikenAttack;
     private PlayerProjectileAttack playerProjectileAttack;
     private float normalizedHealth = 1f;
     private int maxHealth = 100;
+
+    [Header("Block defense")]
+    public bool isBlocking;
 
     private void Awake() {
         if (Instance == null) {
@@ -41,6 +45,9 @@ public class PlayerCombatManager : MonoBehaviour {
             return;
         }
 
+        health = maxHealth;
+
+        playerBlockDefense = GameManager.Instance.playerTransform.GetComponent<PlayerBlockDefense>();
         playerSwordAttack = GameManager.Instance.playerTransform.GetComponent<PlayerSwordAttack>();
         playerShurikenAttack = GameManager.Instance.playerTransform.GetComponent<PlayerShurikenAttack>();
         playerProjectileAttack = GameManager.Instance.playerTransform.GetComponent<PlayerProjectileAttack>();
@@ -60,8 +67,41 @@ public class PlayerCombatManager : MonoBehaviour {
         }
     }
 
-    public void TakeDamage(int damageAmount) {
-        health -= damageAmount;
+    /// <summary>
+    /// Applies damage to the player
+    /// </summary>
+    /// <param name="damageAmount">The amount of damage to apply to the player</param>
+    /// <param name="isBlockableAttack">Is the attack blockable or not.</param>
+    public void TakeDamage(int damageAmount, bool isBlockableAttack) {
+        if (!isBlocking) {
+            // !blocking
+            health -= damageAmount;
+            Debug.Log($"took damage: {damageAmount}");
+        } else {
+            if (isBlockableAttack) {
+                // blocking and blockable attack
+                playerBlockDefense.HandleAttack(damageAmount);
+            } else {
+                // blocking and !blockable attack
+
+                if (playerBlockDefense.currentStamina >= playerBlockDefense.maxStamina / 2f) {
+                    // blocking and !blockable attack and stamina is greater than half full
+                    health -= (damageAmount / 2);
+                    Debug.Log($"took damage(half): {damageAmount / 2}");
+                } else {
+                    // blocking and !blockable attack and stamina is less than half full
+                    health -= damageAmount;
+                    Debug.Log($"took damage: {damageAmount}");
+                }
+                Debug.Log("stamina: 0");
+                playerBlockDefense.currentStamina = 0f;
+            }
+        }
+        UpdateHealthUI();
+        playerBlockDefense.UpdateStaminaUI();
+    }
+
+    private void UpdateHealthUI() {
         normalizedHealth = (float)health / (float)maxHealth;
         DOTween.To(() => playerHealthSlider.value, x => playerHealthSlider.value = x, normalizedHealth, healthUIUpdateDuration);
         if (health <= 0) {
@@ -70,5 +110,4 @@ public class PlayerCombatManager : MonoBehaviour {
             gameObject.SetActive(false);
         }
     }
-
 }

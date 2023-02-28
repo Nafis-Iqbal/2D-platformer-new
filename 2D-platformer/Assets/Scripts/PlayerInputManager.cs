@@ -88,6 +88,15 @@ public class PlayerInputManager : MonoBehaviour {
 
         // player grappling gun
         playerInputActions.Player.GrapplingGun.started += OnGrapplingGun;
+
+        // player blocking defense
+        playerInputActions.Player.Blocking.started += OnBlockingDefense;
+        playerInputActions.Player.Blocking.canceled += OnBlockingDefense;
+    }
+
+    private void OnBlockingDefense(InputAction.CallbackContext context)
+    {
+        playerBlockDefense.OnBlockDefense(context);
     }
 
     private void OnGrapplingGun(InputAction.CallbackContext context) {
