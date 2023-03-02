@@ -5,6 +5,7 @@ using Pathfinding;
 
 public class EnemyBase : MonoBehaviour
 {
+    EnemyWeapon weaponScript;
     //reposition 
     public bool inTarget = false;
     public bool isReadyToClimp = false;
@@ -90,6 +91,7 @@ public class EnemyBase : MonoBehaviour
     }
 
     public void startNesesarries(){
+        weaponScript = GetComponent<EnemyWeapon>();
         comboMode = false;
         inRepositioningPhase = false;
         isActivated = false;
@@ -458,7 +460,8 @@ public class EnemyBase : MonoBehaviour
         canHit = true;
     }
 
-    public void DamagePlayerStart(){
+    public void DamagePlayerStart(bool blockable){
+        weaponScript.SetIfBlockable(blockable);
         knife.SetActive(true);
     }
     public void DamagePlayerEnd(){

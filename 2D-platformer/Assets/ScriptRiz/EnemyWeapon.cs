@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyWeapon : MonoBehaviour
 {
+    private bool isBlockable;
     public int id;
     healthofPlayer playerScript;
 
@@ -14,6 +15,10 @@ public class EnemyWeapon : MonoBehaviour
     // private void OnEnable() {
     //     playerScript = EnemyManager.Instance.player.GetComponent <healthofPlayer>();
     // }
+    public void SetIfBlockable(bool temp){
+        isBlockable = temp;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Player")){
