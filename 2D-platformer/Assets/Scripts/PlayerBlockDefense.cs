@@ -10,7 +10,8 @@ using UnityEngine.UI;
 public class PlayerBlockDefense : MonoBehaviour {
     private Animator playerAnimator;
     [SerializeField] private Slider playerStaminaSlider;
-    [SerializeField] private bool isBlocking = false;
+    public bool isExecuting;
+    public bool isBlocking = false;
     [SerializeField] private bool isBlockingRequested = false;
     [SerializeField] private GameObject blockDefenseObject;
     [SerializeField] private float normalStaminaBarFillRate = 2f;
@@ -36,12 +37,11 @@ public class PlayerBlockDefense : MonoBehaviour {
             blockDefenseObject.SetActive(false);
             playerAnimator.SetBool("isBlocking", false);
         }
+        isExecuting = isBlocking;
         if (isBlocking) {
             currentStamina += blockingStaminaBarFillRate * Time.deltaTime;
-            PlayerInputManager.Instance.playerInputActions.Player.Run.Disable();
         } else {
             currentStamina += normalStaminaBarFillRate * Time.deltaTime;
-            PlayerInputManager.Instance.playerInputActions.Player.Run.Enable();
         }
         StaminaBoundCheck();
         UpdateStaminaUI();

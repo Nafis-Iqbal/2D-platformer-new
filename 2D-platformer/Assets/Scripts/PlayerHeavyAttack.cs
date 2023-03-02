@@ -19,6 +19,7 @@ public class PlayerHeavyAttack : MonoBehaviour {
     private Animator playerAnimator;
     [SerializeField] private bool canAttack = true;
     [SerializeField] private bool attackDone = true;
+    public bool isExecuting;
 
     private void Awake() {
         playerAnimator = GameManager.Instance.playerAnimator;
@@ -36,6 +37,8 @@ public class PlayerHeavyAttack : MonoBehaviour {
             }
         }
 
+        isExecuting = (isKeyPressed && canAttack);
+
         if (isKeyPressed && canAttack) {
             ChargeForAttack();
         } else {
@@ -50,7 +53,6 @@ public class PlayerHeavyAttack : MonoBehaviour {
     }
 
     private void ChargeForAttack() {
-        PlayerInputManager.Instance.playerInputActions.Player.Run.Disable();
         currentCharge += Time.deltaTime * chargeFillRate;
         playerAnimator.SetBool("isCharging", true);
     }
@@ -64,7 +66,6 @@ public class PlayerHeavyAttack : MonoBehaviour {
         playerAnimator.Play("heavy attack");
         timeElapsedSinceAttack = 0f;
         attackDone = true;
-        PlayerInputManager.Instance.playerInputActions.Player.Run.Enable();
     }
 
     private void BoundCheckCharge() {
@@ -96,6 +97,5 @@ public class PlayerHeavyAttack : MonoBehaviour {
         playerAnimator.Play("heavy attack");
         timeElapsedSinceAttack = 0f;
         attackDone = true;
-        PlayerInputManager.Instance.playerInputActions.Player.Run.Enable();
     }
 }

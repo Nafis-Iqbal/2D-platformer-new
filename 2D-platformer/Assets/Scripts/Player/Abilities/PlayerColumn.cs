@@ -23,6 +23,7 @@ public class PlayerColumn : MonoBehaviour {
     private float originalColliderSize;
     private bool columnMechanicsSet = false;
     private bool fallingStarted = false;
+    public bool isExecuting;
 
     [Header("Column Grab")]
     [SerializeField] private Animator playerAnimator;
@@ -134,27 +135,29 @@ public class PlayerColumn : MonoBehaviour {
     /// Disables column mechanics and enables normal mechanics
     /// </summary>
     private void disableColumnMechanics() {
+        isExecuting = false;
         timeElapsedSinceColumnGrab = 0f;
-        PlayerInputManager.Instance.playerInputActions.Player.Run.Enable();
-        PlayerInputManager.Instance.playerInputActions.Player.Walk.Enable();
-        PlayerInputManager.Instance.playerInputActions.Player.Jump.Enable();
+        // PlayerInputManager.Instance.playerInputActions.Player.Run.Enable();
+        // PlayerInputManager.Instance.playerInputActions.Player.Walk.Enable();
+        // PlayerInputManager.Instance.playerInputActions.Player.Jump.Enable();
 
-        PlayerInputManager.Instance.playerInputActions.Player.ColumnJump.Disable();
-        PlayerInputManager.Instance.playerInputActions.Player.ColumnMove.Disable();
-        PlayerInputManager.Instance.playerInputActions.Player.ColumnJumpDirection.Disable();
+        // PlayerInputManager.Instance.playerInputActions.Player.ColumnJump.Disable();
+        // PlayerInputManager.Instance.playerInputActions.Player.ColumnMove.Disable();
+        // PlayerInputManager.Instance.playerInputActions.Player.ColumnJumpDirection.Disable();
     }
 
     /// <summary>
     /// Disables normal mechanics and enables column mechanics
     /// </summary>
     private void enableColumnMechanics() {
-        PlayerInputManager.Instance.playerInputActions.Player.Run.Disable();
-        PlayerInputManager.Instance.playerInputActions.Player.Walk.Disable();
-        PlayerInputManager.Instance.playerInputActions.Player.Jump.Disable();
+        isExecuting = true;
+        // PlayerInputManager.Instance.playerInputActions.Player.Run.Disable();
+        // PlayerInputManager.Instance.playerInputActions.Player.Walk.Disable();
+        // PlayerInputManager.Instance.playerInputActions.Player.Jump.Disable();
 
-        PlayerInputManager.Instance.playerInputActions.Player.ColumnJump.Enable();
-        PlayerInputManager.Instance.playerInputActions.Player.ColumnMove.Enable();
-        PlayerInputManager.Instance.playerInputActions.Player.ColumnJumpDirection.Enable();
+        // PlayerInputManager.Instance.playerInputActions.Player.ColumnJump.Enable();
+        // PlayerInputManager.Instance.playerInputActions.Player.ColumnMove.Enable();
+        // PlayerInputManager.Instance.playerInputActions.Player.ColumnJumpDirection.Enable();
         resetVelocityGravity();
     }
 

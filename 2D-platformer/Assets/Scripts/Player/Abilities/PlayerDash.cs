@@ -13,8 +13,11 @@ public class PlayerDash : MonoBehaviour {
     [SerializeField] public float dashingCooldown = 1f;
     [SerializeField] private bool canDash = true;
 
+    private PlayerMovement playerMovement;
+
     private void Awake() {
         body = GetComponent<Rigidbody2D>();
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     /// <summary>

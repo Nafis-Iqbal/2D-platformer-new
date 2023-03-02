@@ -100,13 +100,37 @@ public class PlayerInputManager : MonoBehaviour {
         playerInputActions.Player.HeavyAttack.canceled += OnHeavyAttack;
     }
 
-    private void OnHeavyAttack(InputAction.CallbackContext context)
-    {
+    private void Update() {
+        // handle input interference
+
+        if (playerBlockDefense.isExecuting ||
+            playerHeavyAttack.isExecuting ||
+            playerColumn.isExecuting) {
+            playerInputActions.Player.Run.Disable();
+            playerInputActions.Player.Walk.Disable();
+            playerInputActions.Player.Jump.Disable();
+        } else {
+            playerInputActions.Player.Run.Enable();
+            playerInputActions.Player.Walk.Enable();
+            playerInputActions.Player.Jump.Enable();
+        }
+
+        if (playerColumn.isExecuting) {
+            playerInputActions.Player.ColumnJump.Enable();
+            playerInputActions.Player.ColumnMove.Enable();
+            playerInputActions.Player.ColumnJumpDirection.Enable();
+        } else {
+            playerInputActions.Player.ColumnJump.Disable();
+            playerInputActions.Player.ColumnMove.Disable();
+            playerInputActions.Player.ColumnJumpDirection.Disable();
+        }
+    }
+
+    private void OnHeavyAttack(InputAction.CallbackContext context) {
         playerHeavyAttack.OnHeavyAttack(context);
     }
 
-    private void OnBlockingDefense(InputAction.CallbackContext context)
-    {
+    private void OnBlockingDefense(InputAction.CallbackContext context) {
         playerBlockDefense.OnBlockDefense(context);
     }
 

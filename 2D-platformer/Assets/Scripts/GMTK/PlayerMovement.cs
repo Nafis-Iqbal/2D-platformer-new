@@ -67,12 +67,12 @@ public class PlayerMovement : MonoBehaviour {
 
     public void moveLeft() {
         directionX = -0.001f;
-        StartCoroutine(IdleMovementRoutine(0.01f));
+        StartCoroutine(IdleMovementRoutine(0.00001f));
     }
 
     public void moveRight() {
         directionX = 0.001f;
-        StartCoroutine(IdleMovementRoutine(0.01f));
+        StartCoroutine(IdleMovementRoutine(0.00001f));
     }
 
     IEnumerator IdleMovementRoutine(float duration) {
