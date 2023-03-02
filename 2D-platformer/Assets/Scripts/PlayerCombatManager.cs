@@ -11,6 +11,9 @@ public class PlayerCombatManager : MonoBehaviour {
     public int swordDamage;
     public float swordCooldownTime;
 
+    [Header("Heavy Attack")]
+    public int heavyAttackDamage;
+
     [Header("Shuriken Attack")]
     public int shurikenDamage;
     public float shurikenCooldownTime;
@@ -31,6 +34,7 @@ public class PlayerCombatManager : MonoBehaviour {
     private PlayerSwordAttack playerSwordAttack;
     private PlayerShurikenAttack playerShurikenAttack;
     private PlayerProjectileAttack playerProjectileAttack;
+    private PlayerHeavyAttack playerHeavyAttack;
     private float normalizedHealth = 1f;
     private int maxHealth = 100;
 
@@ -51,12 +55,14 @@ public class PlayerCombatManager : MonoBehaviour {
         playerSwordAttack = GameManager.Instance.playerTransform.GetComponent<PlayerSwordAttack>();
         playerShurikenAttack = GameManager.Instance.playerTransform.GetComponent<PlayerShurikenAttack>();
         playerProjectileAttack = GameManager.Instance.playerTransform.GetComponent<PlayerProjectileAttack>();
+        playerHeavyAttack = GameManager.Instance.playerTransform.GetComponent<PlayerHeavyAttack>();
     }
 
     private void Update() {
         playerSwordAttack.attackCooldownTime = swordCooldownTime;
         playerShurikenAttack.attackCooldownTime = shurikenCooldownTime;
         playerProjectileAttack.attackCooldownTime = projectileCooldownTime;
+        heavyAttackDamage = playerHeavyAttack.attackDamage;
     }
 
 

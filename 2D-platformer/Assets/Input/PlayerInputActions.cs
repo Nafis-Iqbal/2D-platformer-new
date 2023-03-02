@@ -152,6 +152,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HeavyAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""75ecfe7e-2f9d-4060-91b6-a48eb6174726"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -510,7 +519,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""832e94b2-73dc-40c2-a2fe-8ba35b0d09e7"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/rightBracket"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -537,6 +546,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Blocking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a71d88b3-a57f-44da-bdf1-b40be65294a4"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HeavyAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1011,6 +1031,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_ProjectileAttack = m_Player.FindAction("ProjectileAttack", throwIfNotFound: true);
         m_Player_GrapplingGun = m_Player.FindAction("GrapplingGun", throwIfNotFound: true);
         m_Player_Blocking = m_Player.FindAction("Blocking", throwIfNotFound: true);
+        m_Player_HeavyAttack = m_Player.FindAction("HeavyAttack", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1096,6 +1117,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ProjectileAttack;
     private readonly InputAction m_Player_GrapplingGun;
     private readonly InputAction m_Player_Blocking;
+    private readonly InputAction m_Player_HeavyAttack;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1114,6 +1136,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @ProjectileAttack => m_Wrapper.m_Player_ProjectileAttack;
         public InputAction @GrapplingGun => m_Wrapper.m_Player_GrapplingGun;
         public InputAction @Blocking => m_Wrapper.m_Player_Blocking;
+        public InputAction @HeavyAttack => m_Wrapper.m_Player_HeavyAttack;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1165,6 +1188,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Blocking.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlocking;
                 @Blocking.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlocking;
                 @Blocking.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlocking;
+                @HeavyAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHeavyAttack;
+                @HeavyAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHeavyAttack;
+                @HeavyAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHeavyAttack;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1211,6 +1237,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Blocking.started += instance.OnBlocking;
                 @Blocking.performed += instance.OnBlocking;
                 @Blocking.canceled += instance.OnBlocking;
+                @HeavyAttack.started += instance.OnHeavyAttack;
+                @HeavyAttack.performed += instance.OnHeavyAttack;
+                @HeavyAttack.canceled += instance.OnHeavyAttack;
             }
         }
     }
@@ -1354,6 +1383,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnProjectileAttack(InputAction.CallbackContext context);
         void OnGrapplingGun(InputAction.CallbackContext context);
         void OnBlocking(InputAction.CallbackContext context);
+        void OnHeavyAttack(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

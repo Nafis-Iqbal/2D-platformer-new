@@ -18,6 +18,7 @@ public class PlayerInputManager : MonoBehaviour {
     private PlayerProjectileAttack playerProjectileAttack;
     private PlayerGrapplingGun playerGrapplingGun;
     private PlayerBlockDefense playerBlockDefense;
+    private PlayerHeavyAttack playerHeavyAttack;
 
     private void Awake() {
         if (Instance == null) {
@@ -38,6 +39,7 @@ public class PlayerInputManager : MonoBehaviour {
         playerProjectileAttack = playerTransform.GetComponent<PlayerProjectileAttack>();
         playerGrapplingGun = playerTransform.GetComponent<PlayerGrapplingGun>();
         playerBlockDefense = playerTransform.GetComponent<PlayerBlockDefense>();
+        playerHeavyAttack = playerTransform.GetComponent<PlayerHeavyAttack>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
@@ -92,6 +94,15 @@ public class PlayerInputManager : MonoBehaviour {
         // player blocking defense
         playerInputActions.Player.Blocking.started += OnBlockingDefense;
         playerInputActions.Player.Blocking.canceled += OnBlockingDefense;
+
+        // player heavy attack
+        playerInputActions.Player.HeavyAttack.started += OnHeavyAttack;
+        playerInputActions.Player.HeavyAttack.canceled += OnHeavyAttack;
+    }
+
+    private void OnHeavyAttack(InputAction.CallbackContext context)
+    {
+        playerHeavyAttack.OnHeavyAttack(context);
     }
 
     private void OnBlockingDefense(InputAction.CallbackContext context)

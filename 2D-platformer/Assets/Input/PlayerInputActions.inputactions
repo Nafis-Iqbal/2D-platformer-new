@@ -130,6 +130,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "HeavyAttack",
+                    "type": "Button",
+                    "id": "75ecfe7e-2f9d-4060-91b6-a48eb6174726",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -488,7 +497,7 @@
                 {
                     "name": "",
                     "id": "832e94b2-73dc-40c2-a2fe-8ba35b0d09e7",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/rightBracket",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -515,6 +524,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Blocking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a71d88b3-a57f-44da-bdf1-b40be65294a4",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "HeavyAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
