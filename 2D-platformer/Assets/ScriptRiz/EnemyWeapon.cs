@@ -4,28 +4,25 @@ using UnityEngine;
 
 public class EnemyWeapon : MonoBehaviour
 {
-    private bool isBlockable;
+    public bool isBlockable;
     public int id;
-    healthofPlayer playerScript;
+    // healthofPlayer playerScript;
+    PlayerCombatManager playerCombatManager;
 
     private void Start() {
-        playerScript = EnemyManager.Instance.player.GetComponent <healthofPlayer>();
+        playerCombatManager = EnemyManager.Instance.player.GetComponent <PlayerCombatManager>();
     }
 
     // private void OnEnable() {
     //     playerScript = EnemyManager.Instance.player.GetComponent <healthofPlayer>();
     // }
-    public void SetIfBlockable(bool temp){
-        isBlockable = temp;
-    }
-
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Player")){
             if(id == 0){
-                playerScript.takeDamage(30);
+                playerCombatManager.TakeDamage(30 , isBlockable);
             }else{
-                playerScript.takeDamage(60);
+                playerCombatManager.TakeDamage(60 , isBlockable);
             }
 
             gameObject.SetActive(false);

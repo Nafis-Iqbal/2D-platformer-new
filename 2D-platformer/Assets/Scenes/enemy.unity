@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2de0c53f1f041b48bd9acd7b9a22e60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBlockable: 1
   id: 1
 --- !u!1971053207 &4580269
 SpriteShapeRenderer:
@@ -490,6 +491,7 @@ MonoBehaviour:
   platformChecker: {fileID: 1878328542}
   botGroundCheck: {fileID: 1391831441}
   knife: {fileID: 0}
+  UnblockableKnife: {fileID: 0}
   environmentMask:
     serializedVersion: 2
     m_Bits: 256
@@ -668,7 +670,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1400936489}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &382277994
 GameObject:
@@ -864,6 +866,126 @@ Transform:
   m_Children: []
   m_Father: {fileID: 239158115}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &873415698
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 873415702}
+  - component: {fileID: 873415701}
+  - component: {fileID: 873415700}
+  - component: {fileID: 873415699}
+  m_Layer: 0
+  m_Name: knife Unblockable
+  m_TagString: HeavyKnife
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!61 &873415699
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873415698}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 1.32742, y: -0.00000023841858}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6.6548324, y: 4}
+  m_EdgeRadius: 0
+--- !u!114 &873415700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873415698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2de0c53f1f041b48bd9acd7b9a22e60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBlockable: 0
+  id: 1
+--- !u!1971053207 &873415701
+SpriteShapeRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873415698}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_MaskInteraction: 0
+  m_ShapeTexture: {fileID: 0}
+  m_Sprites: []
+  m_LocalAABB:
+    m_Center: {x: 0, y: -0.00000023841858, z: 0}
+    m_Extent: {x: 2.0000002, y: 2, z: 0}
+--- !u!4 &873415702
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873415698}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.29, y: -0.193, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.03, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1400936489}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1053437218
 GameObject:
@@ -4223,6 +4345,7 @@ MonoBehaviour:
   platformChecker: {fileID: 1772027884}
   botGroundCheck: {fileID: 309467133}
   knife: {fileID: 4580266}
+  UnblockableKnife: {fileID: 873415698}
   environmentMask:
     serializedVersion: 2
     m_Bits: 256
@@ -4304,6 +4427,7 @@ Transform:
   m_Children:
   - {fileID: 1943621394}
   - {fileID: 4580270}
+  - {fileID: 873415702}
   - {fileID: 1772027884}
   - {fileID: 309467133}
   m_Father: {fileID: 0}
@@ -6369,7 +6493,7 @@ Transform:
   m_LocalScale: {x: -0.04, y: 0.08, z: 1}
   m_Children: []
   m_Father: {fileID: 1400936489}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1772027885
 MonoBehaviour:
@@ -7727,6 +7851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2de0c53f1f041b48bd9acd7b9a22e60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBlockable: 0
   id: 0
 --- !u!4 &3137284496791674960
 Transform:
@@ -7886,6 +8011,7 @@ MonoBehaviour:
   platformChecker: {fileID: 3137284496254239383}
   botGroundCheck: {fileID: 173912025}
   knife: {fileID: 3137284496269605063}
+  UnblockableKnife: {fileID: 0}
   environmentMask:
     serializedVersion: 2
     m_Bits: 256

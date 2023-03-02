@@ -64,7 +64,7 @@ public class PlayerCombatManager : MonoBehaviour {
         }
     }
 
-    public void TakeDamage(int damageAmount) {
+    public void TakeDamage(int damageAmount , bool blockable) {
         health -= damageAmount;
         normalizedHealth = (float)health / (float)maxHealth;
         DOTween.To(() => playerHealthSlider.value, x => playerHealthSlider.value = x, normalizedHealth, healthUIUpdateDuration);

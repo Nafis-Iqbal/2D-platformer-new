@@ -5,7 +5,6 @@ using Pathfinding;
 
 public class EnemyBase : MonoBehaviour
 {
-    EnemyWeapon weaponScript;
     //reposition 
     public bool inTarget = false;
     public bool isReadyToClimp = false;
@@ -28,6 +27,8 @@ public class EnemyBase : MonoBehaviour
     private Transform groundChecker , platformChecker , botGroundCheck;
     [SerializeField]
     public GameObject knife;
+    [SerializeField]
+    public GameObject UnblockableKnife;
     [SerializeField]
     public LayerMask environmentMask;
     [HideInInspector]
@@ -91,7 +92,6 @@ public class EnemyBase : MonoBehaviour
     }
 
     public void startNesesarries(){
-        weaponScript = GetComponent<EnemyWeapon>();
         comboMode = false;
         inRepositioningPhase = false;
         isActivated = false;
@@ -460,12 +460,16 @@ public class EnemyBase : MonoBehaviour
         canHit = true;
     }
 
-    public void DamagePlayerStart(bool blockable){
-        weaponScript.SetIfBlockable(blockable);
+    public void DamagePlayerStartBlockable(){
         knife.SetActive(true);
+    }
+
+    public void DamagePlayerStartUnBlockable(){
+        UnblockableKnife.SetActive(true);
     }
     public void DamagePlayerEnd(){
         knife.SetActive(false);
+        UnblockableKnife.SetActive(false);
     }
     
 }

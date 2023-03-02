@@ -47,7 +47,8 @@ public class healthofPlayer : MonoBehaviour
         StartCoroutine(change());
     }
 
-    public void takeDamage(int val){
+    public void takeDamage(int val , bool blockable){
+        
         health -= val;
         Debug.Log(health);
     }
