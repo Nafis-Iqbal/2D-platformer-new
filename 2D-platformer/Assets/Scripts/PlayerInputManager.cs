@@ -59,7 +59,7 @@ public class PlayerInputManager : MonoBehaviour {
         playerInputActions.Player.Jump.canceled += OnJump;
 
         // player roll
-        playerInputActions.Player.Roll.performed += OnRoll;
+        playerInputActions.Player.Roll.started += OnRoll;
 
         // player dash
         playerInputActions.Player.Dash.performed += OnDash;

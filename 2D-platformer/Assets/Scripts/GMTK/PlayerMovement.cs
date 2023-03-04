@@ -66,18 +66,11 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     public void moveLeft() {
-        directionX = -0.001f;
-        StartCoroutine(IdleMovementRoutine(0.00001f));
+        Debug.Log("move left");
     }
 
     public void moveRight() {
-        directionX = 0.001f;
-        StartCoroutine(IdleMovementRoutine(0.00001f));
-    }
-
-    IEnumerator IdleMovementRoutine(float duration) {
-        yield return new WaitForSeconds(duration);
-        directionX = 0f;
+        Debug.Log("move right");
     }
 
     public void OnMovement(InputAction.CallbackContext context) {

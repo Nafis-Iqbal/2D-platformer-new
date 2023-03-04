@@ -42,10 +42,10 @@ public class WorldReverse : MonoBehaviour {
     void Update() {
         normalizedSavedTime = (float)savedTime / (float)recordTime;
         DOTween.To(() => worldReverseSlider.value, x => worldReverseSlider.value = x, normalizedSavedTime, savedTimeUIUpdateDuration);
-        if (Input.GetKeyDown(KeyCode.Q)) {
+        if (Input.GetKeyDown(KeyCode.T)) {
             StartRewind();
         }
-        if (Input.GetKeyUp(KeyCode.Q)) {
+        if (Input.GetKeyUp(KeyCode.T)) {
             StopRewind();
         }
     }

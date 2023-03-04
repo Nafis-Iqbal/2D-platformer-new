@@ -12,14 +12,16 @@ public class PlayerHeavyAttack : MonoBehaviour {
     public int failedAttackDamage = 12;
     [HideInInspector] public int attackDamage;
     private bool isKeyPressed = false;
-    public float timeElapsedSinceAttack = 0f;
-    [HideInInspector] public float attackCooldownTime = 1f;
 
+    [HideInInspector] public float attackCooldownTime = 1f;
     [HideInInspector] public float attackDamageMultiplier = 1f;
-    private Animator playerAnimator;
+    [Header("Debug fields")]
+    [SerializeField] private float timeElapsedSinceAttack = 0f;
     [SerializeField] private bool canAttack = true;
     [SerializeField] private bool attackDone = true;
     public bool isExecuting;
+
+    private Animator playerAnimator;
 
     private void Awake() {
         playerAnimator = GameManager.Instance.playerAnimator;

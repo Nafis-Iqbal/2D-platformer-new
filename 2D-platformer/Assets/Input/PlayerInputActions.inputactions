@@ -254,28 +254,6 @@
                 },
                 {
                     "name": "",
-                    "id": "5e116ea9-a4e5-40be-a5ce-f37c77834c16",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Roll",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "320932b7-3a16-4906-a7c1-2185b85bcb34",
-                    "path": "<HID:: USB Gamepad          >/button7",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Roll",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "c921aa3d-788b-4f87-8623-b0f117811282",
                     "path": "<Keyboard>/k",
                     "interactions": "",
@@ -497,7 +475,7 @@
                 {
                     "name": "",
                     "id": "d75c09c0-e1d0-4907-bf81-98312ceb322d",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -526,6 +504,39 @@
                     "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "QE",
+                    "id": "56f81ff9-8e83-4031-8419-7a9f364fbded",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "e07db6e9-65e2-45d6-bcef-c550f2c6a59b",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "4718eb8c-a2d0-4a77-846e-a17b58c7071d",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },
