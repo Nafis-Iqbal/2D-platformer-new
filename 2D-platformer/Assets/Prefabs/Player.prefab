@@ -10993,6 +10993,9 @@ MonoBehaviour:
   playerAnimator: {fileID: 6825991441445998724}
   rollForce: 9
   rollDuration: 0.5
+  rollCooldownDuration: 1
+  timeElapsedSinceLastRoll: 0
+  canRoll: 1
   isRolling: 0
 --- !u!114 &6825991441321897620
 MonoBehaviour:
@@ -11203,13 +11206,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGround: 0
   PlatChanged: 0
-  environmentMask:
-    serializedVersion: 2
-    m_Bits: 256
   leftBox: {x: 0, y: 0}
   rightBox: {x: 0, y: 0}
-  rayThrowerLeft: {fileID: 1388108657}
-  rayThrowerRight: {fileID: 94268120}
 --- !u!114 &1469127394
 MonoBehaviour:
   m_ObjectHideFlags: 0

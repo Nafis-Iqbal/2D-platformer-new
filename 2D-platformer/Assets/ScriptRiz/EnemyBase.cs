@@ -28,6 +28,8 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]
     public GameObject knife;
     [SerializeField]
+    public GameObject UnblockableKnife;
+    [SerializeField]
     public LayerMask environmentMask;
     [HideInInspector]
     private bool turn, turn1 , isInRepositionPoint;
@@ -80,11 +82,17 @@ public class EnemyBase : MonoBehaviour
 
     [SerializeField]
     public float walkSpeed;
+
+    //Combo Attack Things
+    public bool comboMode = false;
+    public float comboAttackTime = 2f;
+
     public virtual void Start(){
         startNesesarries();
     }
 
     public void startNesesarries(){
+        comboMode = false;
         inRepositioningPhase = false;
         isActivated = false;
         seeker = GetComponent<Seeker>();
@@ -97,10 +105,18 @@ public class EnemyBase : MonoBehaviour
     }
 
     void Update(){
+        if(player == null){
+            turn = !Physics2D.OverlapCircle(groundChecker.position, foodRadius, environmentMask);
+            turn1 = Physics2D.OverlapCircle(platformChecker.position, foodRadius, environmentMask);
+            Patrol();
+            return;
+            // notPatrolling = true;
+        }
 
         if(Input.GetKeyDown("space")){
             Debug.Log("slow");
-            slowMotionstate(.5f, 4f);
+            comboMode = true;
+            // slowMotionstate(.5f, 4f);
         }
 
         if(playerScript.PlatChanged){
@@ -121,10 +137,7 @@ public class EnemyBase : MonoBehaviour
             }
         }
 
-        if(player == null){
-            playerDistance = 100f;
-            notPatrolling = true;
-        }
+        
         turn = !Physics2D.OverlapCircle(groundChecker.position, foodRadius, environmentMask);
         turn1 = Physics2D.OverlapCircle(platformChecker.position, foodRadius, environmentMask);
 
@@ -145,9 +158,13 @@ public class EnemyBase : MonoBehaviour
             }
         }
     }
+
     Vector2 preTarget;
     public bool notInRepositioningPhase;
     private void FixedUpdate() {
+        if(player == null){
+            return;
+        }
         isGrounded = Physics2D.OverlapCircle(botGroundCheck.position, foodRadius, environmentMask);
         bool atJumpPoint = Physics2D.OverlapCircle(platformChecker.position, foodRadius, environmentMask);
         Vector2 targetPoint = closestRepoPoint();
@@ -327,6 +344,12 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void attack(){
         rb.velocity = Vector3.zero;
+
+        if(comboMode){
+            StartCoroutine(comboAttack(0));
+            return;
+        }
+
         if (canHit){
             farAnimationPlayed = false;
             StartCoroutine(hit());
@@ -421,4 +444,32 @@ public class EnemyBase : MonoBehaviour
         animator.speed = prevSpeed;
         Debug.Log("pre");
     }
+
+    public virtual IEnumerator comboAttack(int type){
+        comboMode = false;
+        canHit = false;
+        string preAnim , atkAnim;
+        if(type == 0){
+            atkAnim = "ComboAttackType0";
+        }
+        else{
+            atkAnim = "ComboAttacktype1";
+        }
+        animator.Play(atkAnim);
+        yield return new WaitForSeconds(comboAttackTime);
+        canHit = true;
+    }
+
+    public void DamagePlayerStartBlockable(){
+        knife.SetActive(true);
+    }
+
+    public void DamagePlayerStartUnBlockable(){
+        UnblockableKnife.SetActive(true);
+    }
+    public void DamagePlayerEnd(){
+        knife.SetActive(false);
+        UnblockableKnife.SetActive(false);
+    }
+    
 }
