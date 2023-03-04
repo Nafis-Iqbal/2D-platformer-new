@@ -13,10 +13,6 @@ public class EnemyWeapon : MonoBehaviour
         playerCombatManager = EnemyManager.Instance.player.GetComponent <PlayerCombatManager>();
     }
 
-    // private void OnEnable() {
-    //     playerScript = EnemyManager.Instance.player.GetComponent <healthofPlayer>();
-    // }
-
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Player")){
             if(id == 0){

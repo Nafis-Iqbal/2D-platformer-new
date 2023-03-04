@@ -68,6 +68,7 @@ public class PlayerCombatManager : MonoBehaviour {
         health -= damageAmount;
         normalizedHealth = (float)health / (float)maxHealth;
         DOTween.To(() => playerHealthSlider.value, x => playerHealthSlider.value = x, normalizedHealth, healthUIUpdateDuration);
+        
         if (health <= 0) {
             health = 0;
             normalizedHealth = 0;
