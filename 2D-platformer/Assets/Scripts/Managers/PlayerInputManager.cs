@@ -59,10 +59,12 @@ public class PlayerInputManager : MonoBehaviour {
         playerInputActions.Player.Jump.canceled += OnJump;
 
         // player roll
-        playerInputActions.Player.Roll.started += OnRoll;
+        playerInputActions.Player.Roll.performed += OnRoll;
 
         // player dash
+        // playerInputActions.Player.Dash.started += OnDash;
         playerInputActions.Player.Dash.performed += OnDash;
+        // playerInputActions.Player.Dash.canceled += OnDash;
 
         // player column ledge grab
         playerInputActions.Player.ColumnLedgeGrab.performed += OnColumnGrab;
@@ -171,10 +173,12 @@ public class PlayerInputManager : MonoBehaviour {
     }
 
     private void OnDash(InputAction.CallbackContext context) {
-        playerDash.OnDash(context);
+        Debug.Log($"d context: {context.phase}");
+        // playerDash.OnDash(context);
     }
 
     private void OnRoll(InputAction.CallbackContext context) {
+        Debug.Log($"r context: {context.phase}");
         playerRoll.OnRoll(context);
     }
 

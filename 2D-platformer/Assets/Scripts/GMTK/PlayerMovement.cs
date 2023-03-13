@@ -65,12 +65,12 @@ public class PlayerMovement : MonoBehaviour {
         playerGrapplingGun = GetComponent<PlayerGrapplingGun>();
     }
 
-    public void moveLeft() {
-        Debug.Log("move left");
+    public void rotateLeft() {
+        transform.localScale = new Vector3(-1, 1, 1);
     }
 
-    public void moveRight() {
-        Debug.Log("move right");
+    public void rotateRight() {
+        transform.localScale = new Vector3(1, 1, 1);
     }
 
     public void OnMovement(InputAction.CallbackContext context) {

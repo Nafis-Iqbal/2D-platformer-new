@@ -79,6 +79,10 @@ public class PlayerCombatManager : MonoBehaviour {
     /// <param name="damageAmount">The amount of damage to apply to the player</param>
     /// <param name="isBlockableAttack">Is the attack blockable or not.</param>
     public void TakeDamage(int damageAmount, bool isBlockableAttack) {
+        if (PlayerInvulnerability.isInvulnerable) {
+            return;
+        }
+
         if (!isBlocking) {
             // !blocking
             health -= damageAmount;

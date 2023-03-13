@@ -86,7 +86,6 @@ public class PlayerJump : MonoBehaviour {
         if (MovementLimiter.instance.playerCanMove) {
             //When we press the jump button, tell the script that we desire a jump.
             //Also, use the started and canceled contexts to know if we're currently holding the button
-            Debug.Log("jump pressed....");
             if (context.started) {
                 StartJump();
             }

@@ -48,12 +48,11 @@ public class PlayerRoll : MonoBehaviour {
 
     public void OnRoll(InputAction.CallbackContext context) {
         if (onGround && canRoll) {
-            Debug.Log($"val: {context.ReadValue<float>()}");
             isRolling = true;
             if (context.ReadValue<float>() > 0f) {
-                playerMovement.moveRight();
+                playerMovement.rotateRight();
             } else {
-                playerMovement.moveLeft();
+                playerMovement.rotateLeft();
             }
             StartCoroutine(RollRoutine(0.0001f));
         }
