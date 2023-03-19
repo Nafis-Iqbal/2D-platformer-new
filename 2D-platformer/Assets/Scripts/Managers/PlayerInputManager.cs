@@ -16,7 +16,6 @@ public class PlayerInputManager : MonoBehaviour {
     private PlayerSwordAttack playerSwordAttack;
     private PlayerShurikenAttack playerShurikenAttack;
     private PlayerProjectileAttack playerProjectileAttack;
-    private PlayerGrapplingGun playerGrapplingGun;
     private PlayerBlockDefense playerBlockDefense;
     private PlayerHeavyAttack playerHeavyAttack;
 
@@ -37,7 +36,6 @@ public class PlayerInputManager : MonoBehaviour {
         playerSwordAttack = playerTransform.GetComponent<PlayerSwordAttack>();
         playerShurikenAttack = playerTransform.GetComponent<PlayerShurikenAttack>();
         playerProjectileAttack = playerTransform.GetComponent<PlayerProjectileAttack>();
-        playerGrapplingGun = playerTransform.GetComponent<PlayerGrapplingGun>();
         playerBlockDefense = playerTransform.GetComponent<PlayerBlockDefense>();
         playerHeavyAttack = playerTransform.GetComponent<PlayerHeavyAttack>();
 
@@ -90,9 +88,6 @@ public class PlayerInputManager : MonoBehaviour {
         // player projectile attack
         playerInputActions.Player.ProjectileAttack.started += OnProjectileAttack;
 
-        // player grappling gun
-        playerInputActions.Player.GrapplingGun.started += OnGrapplingGun;
-
         // player blocking defense
         playerInputActions.Player.Blocking.started += OnBlockingDefense;
         playerInputActions.Player.Blocking.canceled += OnBlockingDefense;
@@ -136,10 +131,6 @@ public class PlayerInputManager : MonoBehaviour {
         playerBlockDefense.OnBlockDefense(context);
     }
 
-    private void OnGrapplingGun(InputAction.CallbackContext context) {
-        playerGrapplingGun.OnGrapplingGun(context);
-    }
-
     private void OnProjectileAttack(InputAction.CallbackContext context) {
         playerProjectileAttack.OnProjectileAttack(context);
     }
@@ -173,12 +164,10 @@ public class PlayerInputManager : MonoBehaviour {
     }
 
     private void OnDash(InputAction.CallbackContext context) {
-        Debug.Log($"d context: {context.phase}");
-        // playerDash.OnDash(context);
+        playerDash.OnDash(context);
     }
 
     private void OnRoll(InputAction.CallbackContext context) {
-        Debug.Log($"r context: {context.phase}");
         playerRoll.OnRoll(context);
     }
 

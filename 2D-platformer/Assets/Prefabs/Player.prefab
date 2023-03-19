@@ -10916,19 +10916,20 @@ MonoBehaviour:
   upwardMovementMultiplier: 1
   downwardMovementMultiplier: 1
   maxAirJumps: 0
-  variablejumpHeight: 1
+  variableJumpHeight: 0
   jumpCutOff: 5.25
   speedLimit: 20
   coyoteTime: 0.01
   jumpBuffer: 0.08
   jumpSpeed: 15.789474
   defaultGravityScale: 1
-  gravMultiplier: 1
+  gravityMultiplier: 1
   canJumpAgain: 0
   desiredJump: 0
   pressingJump: 0
   currentlyJumping: 0
   onGround: 1
+  grapplingRope: {fileID: 1483264960912161135}
 --- !u!114 &6825991441321897641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11123,7 +11124,7 @@ MonoBehaviour:
   launchSpeed: 3
   autoConfigureDistance: 0
   targetDistance: 3
-  targetFrequncy: 1.5
+  targetFrequency: 1
   grapplePoint: {x: 0, y: 0}
   grappleDistanceVector: {x: 0, y: 0}
   canGrapple: 0

@@ -49,5 +49,6 @@ public class GrappleCollider : MonoBehaviour {
         grappleActive = true;
         playerGrapplingGun.UpdateGrappleTargetPosition(transform.position);
         playerGrapplingGun.canGrapple = true;
+        playerGrapplingGun.ActivateGrappling();
     }
 }

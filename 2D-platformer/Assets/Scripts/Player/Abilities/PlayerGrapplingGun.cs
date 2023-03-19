@@ -38,7 +38,7 @@ public class PlayerGrapplingGun : MonoBehaviour {
     [Header("No Launch To Point")]
     [SerializeField] private bool autoConfigureDistance = false;
     [SerializeField] private float targetDistance = 3;
-    [SerializeField] private float targetFrequncy = 1;
+    [SerializeField] private float targetFrequency = 1;
 
     [HideInInspector] public Vector2 grapplePoint;
     [HideInInspector] public Vector2 grappleDistanceVector;
@@ -52,24 +52,25 @@ public class PlayerGrapplingGun : MonoBehaviour {
         playerJump = GetComponent<PlayerJump>();
     }
 
-    public void OnGrapplingGun(InputAction.CallbackContext context) {
-        var playerAnimator = GameManager.Instance.playerAnimator;
+    public void DisableGrappling() {
+        GameManager.Instance.playerAnimator.SetBool("grapplingHookThrew", false);
+        grapplingRope.enabled = false;
+        m_springJoint2D.enabled = false;
+        m_rigidbody.AddForce(new Vector2(
+            m_rigidbody.velocity.x * releaseForceMultiplierX,
+            m_rigidbody.velocity.y * releaseForceMultiplierY),
+            ForceMode2D.Impulse);
+        EnableOtherInputs();
+    }
+
+    public void ActivateGrappling() {
         if (!grapplingRope.isGrappling) {
             if (canGrapple) {
                 playerJump.Jump(jumpButtonHoldTime);
-                playerAnimator.SetBool("grapplingHookThrew", true);
+                GameManager.Instance.playerAnimator.SetBool("grapplingHookThrew", true);
                 SetGrapplePoint();
                 DisableOtherInputs();
             }
-        } else {
-            playerAnimator.SetBool("grapplingHookThrew", false);
-            grapplingRope.enabled = false;
-            m_springJoint2D.enabled = false;
-            m_rigidbody.AddForce(new Vector2(
-                m_rigidbody.velocity.x * releaseForceMultiplierX,
-                m_rigidbody.velocity.y * releaseForceMultiplierY),
-                ForceMode2D.Impulse);
-            EnableOtherInputs();
         }
     }
 
@@ -112,7 +113,7 @@ public class PlayerGrapplingGun : MonoBehaviour {
         m_springJoint2D.autoConfigureDistance = false;
         if (!launchToPoint && !autoConfigureDistance) {
             m_springJoint2D.distance = targetDistance;
-            m_springJoint2D.frequency = targetFrequncy;
+            m_springJoint2D.frequency = targetFrequency;
         }
         if (!launchToPoint) {
             if (autoConfigureDistance) {

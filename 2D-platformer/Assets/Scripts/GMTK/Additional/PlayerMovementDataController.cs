@@ -43,7 +43,7 @@ public class PlayerMovementDataController : MonoBehaviour {
         _jumpScript.downwardMovementMultiplier = _preset.DownwardMovementMultiplier;
         _jumpScript.jumpCutOff = _preset.JumpCutoff;
         _jumpScript.maxAirJumps = _preset.DoubleJump;
-        _jumpScript.variablejumpHeight = _preset.VariableJumpHeight;
+        _jumpScript.variableJumpHeight = _preset.VariableJumpHeight;
         _moveScript.maxAirTurnSpeed = _preset.AirControlActual;
 
         _installedPreset = _preset;

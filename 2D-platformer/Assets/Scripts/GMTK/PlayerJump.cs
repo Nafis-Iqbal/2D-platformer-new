@@ -28,7 +28,7 @@ public class PlayerJump : MonoBehaviour {
     [SerializeField, Range(0, 1)][Tooltip("How many times can you jump in the air?")] public int maxAirJumps = 0;
 
     [Header("Options")]
-    [Tooltip("Should the character drop when you let go of jump?")] public bool variablejumpHeight;
+    [Tooltip("Should the character drop when you let go of jump?")] public bool variableJumpHeight;
     [SerializeField, Range(1f, 10f)][Tooltip("Gravity multiplier when you let go of jump")] public float jumpCutOff;
     [SerializeField][Tooltip("The fastest speed the character can fall")] public float speedLimit;
     [SerializeField, Range(0f, 0.3f)][Tooltip("How long should coyote time last?")] public float coyoteTime = 0.15f;
@@ -37,7 +37,7 @@ public class PlayerJump : MonoBehaviour {
     [Header("Calculations")]
     public float jumpSpeed;
     public float defaultGravityScale;
-    public float gravMultiplier;
+    public float gravityMultiplier;
 
     [Header("Current State")]
     public bool canJumpAgain = false;
@@ -47,6 +47,7 @@ public class PlayerJump : MonoBehaviour {
     public bool onGround;
     private float jumpBufferCounter;
     private float coyoteTimeCounter = 0;
+    [SerializeField] private GrapplingRope grapplingRope;
 
     void Awake() {
         playerMovement = GetComponent<PlayerMovement>();
@@ -58,6 +59,7 @@ public class PlayerJump : MonoBehaviour {
         playerDash = GetComponent<PlayerDash>();
         playerEffect = GetComponentInChildren<PlayerEffect>();
         playerGrapplingGun = GetComponent<PlayerGrapplingGun>();
+
         defaultGravityScale = 1f;
     }
 
@@ -81,6 +83,9 @@ public class PlayerJump : MonoBehaviour {
     }
 
     public void OnJump(InputAction.CallbackContext context) {
+        if (grapplingRope.isGrappling) {
+            playerGrapplingGun.DisableGrappling();
+        }
         //This function is called when one of the jump buttons (like space or the A button) is pressed.
 
         if (MovementLimiter.instance.playerCanMove) {
@@ -134,7 +139,7 @@ public class PlayerJump : MonoBehaviour {
     private void setPhysics() {
         //Determine the character's gravity scale, using the stats provided. Multiply it by a gravMultiplier, used later
         Vector2 newGravity = new Vector2(0, (-2 * jumpHeight) / (timeToJumpApex * timeToJumpApex));
-        body.gravityScale = (newGravity.y / Physics2D.gravity.y) * gravMultiplier;
+        body.gravityScale = (newGravity.y / Physics2D.gravity.y) * gravityMultiplier;
     }
 
     private void FixedUpdate() {
@@ -167,20 +172,20 @@ public class PlayerJump : MonoBehaviour {
         if (body.velocity.y > 0.01f) {
             if (onGround) {
                 //Don't change it if Kit is stood on something (such as a moving platform)
-                gravMultiplier = defaultGravityScale;
+                gravityMultiplier = defaultGravityScale;
             } else {
                 //If we're using variable jump height...)
-                if (variablejumpHeight) {
+                if (variableJumpHeight) {
                     //Apply upward multiplier if player is rising and holding jump
                     if (pressingJump && currentlyJumping) {
-                        gravMultiplier = upwardMovementMultiplier;
+                        gravityMultiplier = upwardMovementMultiplier;
                     }
                     //But apply a special downward multiplier if the player lets go of jump
                     else {
-                        gravMultiplier = jumpCutOff;
+                        gravityMultiplier = jumpCutOff;
                     }
                 } else {
-                    gravMultiplier = upwardMovementMultiplier;
+                    gravityMultiplier = upwardMovementMultiplier;
                 }
             }
         }
@@ -191,10 +196,10 @@ public class PlayerJump : MonoBehaviour {
             if (onGround)
             //Don't change it if Kit is stood on something (such as a moving platform)
             {
-                gravMultiplier = defaultGravityScale;
+                gravityMultiplier = defaultGravityScale;
             } else {
                 //Otherwise, apply the downward gravity multiplier as Kit comes back to Earth
-                gravMultiplier = downwardMovementMultiplier;
+                gravityMultiplier = downwardMovementMultiplier;
             }
 
         }
@@ -204,7 +209,7 @@ public class PlayerJump : MonoBehaviour {
                 currentlyJumping = false;
             }
 
-            gravMultiplier = defaultGravityScale;
+            gravityMultiplier = defaultGravityScale;
         }
 
         //Set the character's Rigidbody's velocity

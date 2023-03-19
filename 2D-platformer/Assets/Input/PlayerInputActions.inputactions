@@ -496,39 +496,6 @@
                 },
                 {
                     "name": "QE",
-                    "id": "0d193739-789b-4630-a2ac-de29b6050f80",
-                    "path": "1DAxis",
-                    "interactions": "MultiTap(tapTime=0.2,tapDelay=0.75,pressPoint=0.5)",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Dash",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "70e93070-dd5c-467f-b3ef-cc0c9a08d202",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Dash",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "a488a5fe-2b7a-4cb4-83da-e203c1034862",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Dash",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "QE",
                     "id": "56f81ff9-8e83-4031-8419-7a9f364fbded",
                     "path": "1DAxis",
                     "interactions": "",
@@ -559,6 +526,28 @@
                     "action": "Roll",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "ea7694a9-fbb2-43d8-b832-7788ac58d167",
+                    "path": "<Keyboard>/a",
+                    "interactions": "MultiTap",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f9fa9865-ca97-43a8-8d02-2b8ac14e080d",
+                    "path": "<Keyboard>/d",
+                    "interactions": "MultiTap",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

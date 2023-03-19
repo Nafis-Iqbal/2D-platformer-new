@@ -1488,12 +1488,12 @@ PrefabInstance:
     - target: {fileID: 8269280305164374331, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
       propertyPath: m_Size.x
-      value: 10.74025
+      value: 6.271558
       objectReference: {fileID: 0}
     - target: {fileID: 8269280305164374331, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
       propertyPath: m_Size.y
-      value: 5.2791834
+      value: 4.559394
       objectReference: {fileID: 0}
     - target: {fileID: 8269280305164374331, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
@@ -1503,12 +1503,12 @@ PrefabInstance:
     - target: {fileID: 8269280305164374331, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
       propertyPath: m_Offset.x
-      value: -0.6235132
+      value: -0.33859777
       objectReference: {fileID: 0}
     - target: {fileID: 8269280305164374331, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
       propertyPath: m_Offset.y
-      value: -4.1174474
+      value: -3.7575526
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae253e8342d257e40aed801b4c4b8a3e, type: 3}
@@ -1603,6 +1603,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Offset.x
       value: -1.5645978
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269280305195676251, guid: ae253e8342d257e40aed801b4c4b8a3e,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269280305195676251, guid: ae253e8342d257e40aed801b4c4b8a3e,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269280305195676251, guid: ae253e8342d257e40aed801b4c4b8a3e,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae253e8342d257e40aed801b4c4b8a3e, type: 3}
@@ -131585,6 +131600,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 271481128, guid: bb13fab5dd26c4e41bf911441a210393, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1135155772, guid: bb13fab5dd26c4e41bf911441a210393, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1135155772, guid: bb13fab5dd26c4e41bf911441a210393, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1797160491, guid: bb13fab5dd26c4e41bf911441a210393, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2132478965, guid: bb13fab5dd26c4e41bf911441a210393, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2132478965, guid: bb13fab5dd26c4e41bf911441a210393, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1977151807998637056, guid: bb13fab5dd26c4e41bf911441a210393,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -131758,9 +131797,9 @@ PrefabInstance:
         walk = SHIFT+A,D
 
         dash
-        = W\t\tclimb = K
+        = AA,DD\t\tclimb = K
 
-        grapple = O\t\tblock = R
+        block = R
 
         roll = Q,E
 
@@ -131808,12 +131847,12 @@ PrefabInstance:
     - target: {fileID: 2357010801589351228, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.06
+      value: -1.27
       objectReference: {fileID: 0}
     - target: {fileID: 2357010801589351228, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.88
+      value: 4.0699997
       objectReference: {fileID: 0}
     - target: {fileID: 2357010801589351228, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
@@ -131888,12 +131927,12 @@ PrefabInstance:
     - target: {fileID: 2357010803148860646, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.06
+      value: -1.27
       objectReference: {fileID: 0}
     - target: {fileID: 2357010803148860646, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.88
+      value: 4.0699997
       objectReference: {fileID: 0}
     - target: {fileID: 2357010803148860646, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
@@ -131982,6 +132021,11 @@ PrefabInstance:
       propertyPath: playerStaminaSlider
       value: 
       objectReference: {fileID: 271481129}
+    - target: {fileID: 1626359948032388215, guid: a5ab13beee15b1443a1aefec1b01a6b0,
+        type: 3}
+      propertyPath: m_Distance
+      value: 2.8666706
+      objectReference: {fileID: 0}
     - target: {fileID: 6825991441321897621, guid: a5ab13beee15b1443a1aefec1b01a6b0,
         type: 3}
       propertyPath: rollCooldownDuration
@@ -132000,12 +132044,12 @@ PrefabInstance:
     - target: {fileID: 6825991441321897644, guid: a5ab13beee15b1443a1aefec1b01a6b0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.06
+      value: -1.27
       objectReference: {fileID: 0}
     - target: {fileID: 6825991441321897644, guid: a5ab13beee15b1443a1aefec1b01a6b0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.38
+      value: 2.57
       objectReference: {fileID: 0}
     - target: {fileID: 6825991441321897644, guid: a5ab13beee15b1443a1aefec1b01a6b0,
         type: 3}
