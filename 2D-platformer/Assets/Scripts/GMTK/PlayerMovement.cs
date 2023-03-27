@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour {
     private float acceleration;
     private float deceleration;
     private float turnSpeed;
-    private bool isWalking;
+    public bool isWalking;
 
 
     private float delta;

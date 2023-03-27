@@ -30,6 +30,7 @@ public class PlayerSwordAttack : MonoBehaviour {
         if (!isAttacking && !playerColumn.hasGrabbedColumn) {
             isAttacking = true;
             playerAnimator.Play("sword attack");
+            GameManager.Instance.playerSpineAnimator.Play("sword attack");
         }
     }
 }

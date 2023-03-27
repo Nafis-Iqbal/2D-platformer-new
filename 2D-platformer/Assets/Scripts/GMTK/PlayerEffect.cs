@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Spine.Unity;
 using UnityEngine;
-
 
 //This script handles purely aesthetic things like particles, squash & stretch, and tilt
 
 public class PlayerEffect : MonoBehaviour {
     [Header("Components")]
+    private Animator playerSpineAnimator;
     PlayerMovement moveScript;
     PlayerJump jumpScript;
     [SerializeField] Animator playerAnimator;
@@ -29,7 +30,7 @@ public class PlayerEffect : MonoBehaviour {
     [SerializeField, Tooltip("How fast should the character tilt?")] public float tiltSpeed;
 
     [Header("Calculations")]
-    public float runningSpeed;
+    public float moveSpeed;
     public float maxSpeed;
 
     [Header("Current State")]
@@ -41,6 +42,10 @@ public class PlayerEffect : MonoBehaviour {
     [Header("Platformer Toolkit Stuff")]
     public bool cameraFalling = false;
 
+    private void Awake() {
+        playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
+    }
+
     void Start() {
         moveScript = GetComponent<PlayerMovement>();
         jumpScript = GetComponent<PlayerJump>();
@@ -50,8 +55,18 @@ public class PlayerEffect : MonoBehaviour {
         TiltPlayer();
 
         //We need to change the character's running animation to suit their current speed
-        runningSpeed = Mathf.Clamp(Mathf.Abs(moveScript.velocity.x), 0, maxSpeed);
-        playerAnimator.SetFloat("runSpeed", runningSpeed);
+        moveSpeed = Mathf.Clamp(Mathf.Abs(moveScript.velocity.x), 0, maxSpeed);
+        if (!moveScript.isWalking) {
+            playerAnimator.SetFloat("runSpeed", moveSpeed);
+            playerSpineAnimator.SetFloat("runSpeed", moveSpeed);
+            playerAnimator.SetFloat("walkSpeed", 0f);
+            playerSpineAnimator.SetFloat("walkSpeed", 0f);
+        } else {
+            playerAnimator.SetFloat("walkSpeed", moveSpeed);
+            playerSpineAnimator.SetFloat("walkSpeed", moveSpeed);
+            playerAnimator.SetFloat("runSpeed", 0f);
+            playerSpineAnimator.SetFloat("runSpeed", 0f);
+        }
 
         checkForLanding();
     }
@@ -79,6 +94,7 @@ public class PlayerEffect : MonoBehaviour {
             //Play an animation, some particles, and a sound effect when the player lands
             // playerAnimator.SetTrigger("Landed");
             playerAnimator.Play("idle");
+            GameManager.Instance.playerSpineAnimator.Play("idle");
             landParticles.Play();
 
             AudioManager.Instance.PlayLandSFX();
@@ -100,7 +116,9 @@ public class PlayerEffect : MonoBehaviour {
     public void jumpEffects() {
         //Play these effects when the player jumps, courtesy of jump script
         playerAnimator.ResetTrigger("Landed");
+        playerSpineAnimator.ResetTrigger("Landed");
         playerAnimator.SetTrigger("Jump");
+        playerSpineAnimator.SetTrigger("Jump");
 
         AudioManager.Instance.PlayJumpSFX();
 

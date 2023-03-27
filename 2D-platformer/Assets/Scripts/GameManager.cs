@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
     public Transform playerTransform;
     public CinemachineVirtualCamera virtualCamera;
     public Animator playerAnimator;
+    public Animator playerSpineAnimator;
     public static GameManager Instance;
 
     private void Start() {
@@ -18,6 +19,10 @@ public class GameManager : MonoBehaviour {
         }
         if (playerAnimator == null) {
             Debug.LogError("playerAnimator is required. Drag and drop player sprite animator.");
+
+        }
+        if (playerSpineAnimator == null) {
+            Debug.LogError("playerSpineAnimator is required. Drag and drop player spine animator.");
 
         }
     }

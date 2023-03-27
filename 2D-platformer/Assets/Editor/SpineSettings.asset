@@ -18,7 +18,6 @@ MonoBehaviour:
   defaultZSpacing: 0
   defaultInstantiateLoop: 1
   showHierarchyIcons: 1
-  reloadAfterPlayMode: 1
   setTextureImporterSettings: 1
   textureSettingsReference: 
   blendModeMaterialMultiply: {fileID: 0}
@@ -27,7 +26,6 @@ MonoBehaviour:
   atlasTxtImportWarning: 1
   textureImporterWarning: 1
   componentMaterialWarning: 1
-  skeletonDataAssetNoFileError: 1
   autoReloadSceneSkeletons: 1
   handleScale: 1
   mecanimEventIncludeFolderName: 1

@@ -57,6 +57,7 @@ public class PlayerHeavyAttack : MonoBehaviour {
     private void ChargeForAttack() {
         currentCharge += Time.deltaTime * chargeFillRate;
         playerAnimator.SetBool("isCharging", true);
+        GameManager.Instance.playerSpineAnimator.SetBool("isCharging", true);
     }
 
     private void ExecuteHighPoweredAttack() {
@@ -65,7 +66,8 @@ public class PlayerHeavyAttack : MonoBehaviour {
         isKeyPressed = false;
         currentCharge = 0f;
         playerAnimator.SetBool("isCharging", false);
-        playerAnimator.Play("heavy attack");
+        GameManager.Instance.playerSpineAnimator.SetBool("isCharging", false);
+        // playerAnimator.Play("heavy attack");
         timeElapsedSinceAttack = 0f;
         attackDone = true;
     }
@@ -96,6 +98,7 @@ public class PlayerHeavyAttack : MonoBehaviour {
         currentCharge = 0f;
         isKeyPressed = false;
         playerAnimator.SetBool("isCharging", false);
+        GameManager.Instance.playerSpineAnimator.SetBool("isCharging", false);
         playerAnimator.Play("heavy attack");
         timeElapsedSinceAttack = 0f;
         attackDone = true;
