@@ -104,6 +104,7 @@ public class PlayerInputManager : MonoBehaviour {
         // handle input interference
 
         if (playerBlockDefense.isExecuting ||
+            playerSwordAttack.isExecuting ||
             playerHeavyAttack.isExecuting ||
             playerColumn.isExecuting) {
             playerInputActions.Player.Run.Disable();

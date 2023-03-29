@@ -8,7 +8,7 @@ public class PlayerSwordAttack : MonoBehaviour {
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private float timeElapsedSinceAttack = 0f;
     [HideInInspector] public float attackCooldownTime = 1f;
-    [SerializeField] private bool isAttacking = false;
+    public bool isExecuting = false;
 
     private PlayerColumn playerColumn;
 
@@ -17,18 +17,18 @@ public class PlayerSwordAttack : MonoBehaviour {
     }
 
     private void Update() {
-        if (isAttacking) {
+        if (isExecuting) {
             timeElapsedSinceAttack += Time.deltaTime;
             if (timeElapsedSinceAttack > attackCooldownTime) {
                 timeElapsedSinceAttack = 0f;
-                isAttacking = false;
+                // isAttacking = false;
             }
         }
 
     }
     public void OnSwordAttack(InputAction.CallbackContext context) {
-        if (!isAttacking && !playerColumn.hasGrabbedColumn) {
-            isAttacking = true;
+        if (!isExecuting && !playerColumn.hasGrabbedColumn) {
+            // isAttacking = true;
             playerAnimator.Play("sword attack");
             GameManager.Instance.playerSpineAnimator.Play("sword attack");
         }

@@ -57,14 +57,14 @@ public class PlayerEffect : MonoBehaviour {
         //We need to change the character's running animation to suit their current speed
         moveSpeed = Mathf.Clamp(Mathf.Abs(moveScript.velocity.x), 0, maxSpeed);
         if (!moveScript.isWalking) {
-            playerAnimator.SetFloat("runSpeed", moveSpeed);
+            // playerAnimator.SetFloat("runSpeed", moveSpeed);
             playerSpineAnimator.SetFloat("runSpeed", moveSpeed);
-            playerAnimator.SetFloat("walkSpeed", 0f);
+            // playerAnimator.SetFloat("walkSpeed", 0f);
             playerSpineAnimator.SetFloat("walkSpeed", 0f);
         } else {
-            playerAnimator.SetFloat("walkSpeed", moveSpeed);
+            // playerAnimator.SetFloat("walkSpeed", moveSpeed);
             playerSpineAnimator.SetFloat("walkSpeed", moveSpeed);
-            playerAnimator.SetFloat("runSpeed", 0f);
+            // playerAnimator.SetFloat("runSpeed", 0f);
             playerSpineAnimator.SetFloat("runSpeed", 0f);
         }
 

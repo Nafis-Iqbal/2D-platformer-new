@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAnimationEventHandler : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+public class PlayerAnimationEventHandler : MonoBehaviour {
+    private PlayerSwordAttack playerSwordAttack;
+
+    private void Awake() {
+        playerSwordAttack = GameManager.Instance.playerTransform.GetComponent<PlayerSwordAttack>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void LightAttackStarted() {
+        playerSwordAttack.isExecuting = true;
+        Debug.Log("light attack started...");
+    }
+
+    public void LightAttackEnded() {
+        playerSwordAttack.isExecuting = false;
+        Debug.Log("light attack ended...");
     }
 }
