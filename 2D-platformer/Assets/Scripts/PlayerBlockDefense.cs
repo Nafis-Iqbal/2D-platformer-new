@@ -24,9 +24,11 @@ public class PlayerBlockDefense : MonoBehaviour {
     public bool isBlocking = false;
 
     private Animator playerAnimator;
+    private Animator playerSpineAnimator;
 
     private void Awake() {
         playerAnimator = GameManager.Instance.playerAnimator;
+        playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
         currentStamina = maxStamina;
     }
 
@@ -44,10 +46,14 @@ public class PlayerBlockDefense : MonoBehaviour {
             isBlocking = true;
             blockDefenseObject.SetActive(true);
             playerAnimator.SetBool("isBlocking", true);
+            playerSpineAnimator.SetBool("isBlocking", true);
+            // playerSpineAnimator.SetTrigger("blockTrigger");
         } else {
             isBlocking = false;
             blockDefenseObject.SetActive(false);
             playerAnimator.SetBool("isBlocking", false);
+            playerSpineAnimator.SetBool("isBlocking", false);
+            // playerSpineAnimator.ResetTrigger("blockTrigger");
         }
         isExecuting = isBlocking;
         if (isBlocking) {

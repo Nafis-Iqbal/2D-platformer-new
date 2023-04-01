@@ -54,15 +54,18 @@ public class PlayerGrapplingGun : MonoBehaviour {
 
     public void OnGrapplingGun(InputAction.CallbackContext context) {
         var playerAnimator = GameManager.Instance.playerAnimator;
+        var playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
         if (!grapplingRope.isGrappling) {
             if (canGrapple) {
                 playerJump.Jump(jumpButtonHoldTime);
                 playerAnimator.SetBool("grapplingHookThrew", true);
+                playerSpineAnimator.SetBool("grapplingHookThrew", true);
                 SetGrapplePoint();
                 DisableOtherInputs();
             }
         } else {
             playerAnimator.SetBool("grapplingHookThrew", false);
+            playerSpineAnimator.SetBool("grapplingHookThrew", false);
             grapplingRope.enabled = false;
             m_springJoint2D.enabled = false;
             m_rigidbody.AddForce(new Vector2(

@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
     public Animator playerAnimator;
     public Animator playerSpineAnimator;
     public static GameManager Instance;
+    public GameObject lightAttackHitBox;
 
     private void Start() {
         if (playerTransform == null) {
@@ -24,6 +25,9 @@ public class GameManager : MonoBehaviour {
         if (playerSpineAnimator == null) {
             Debug.LogError("playerSpineAnimator is required. Drag and drop player spine animator.");
 
+        }
+        if (lightAttackHitBox == null) {
+            Debug.LogError("lightAttackHitBox is required. Drag and drop player light hit box.");
         }
     }
 
