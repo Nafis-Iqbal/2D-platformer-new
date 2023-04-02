@@ -92,9 +92,10 @@ public class PlayerEffect : MonoBehaviour {
             cameraFalling = false;
 
             //Play an animation, some particles, and a sound effect when the player lands
-            // playerAnimator.SetTrigger("Landed");
-            playerAnimator.Play("idle");
-            GameManager.Instance.playerSpineAnimator.Play("idle");
+            playerAnimator.SetTrigger("Landed");
+            playerSpineAnimator.SetTrigger("Landed");
+            // playerAnimator.Play("idle");
+            // GameManager.Instance.playerSpineAnimator.Play("idle");
             landParticles.Play();
 
             AudioManager.Instance.PlayLandSFX();

@@ -65,17 +65,28 @@ public class PlayerMovement : MonoBehaviour {
         playerGrapplingGun = GetComponent<PlayerGrapplingGun>();
     }
 
-    public void moveLeft() {
-        Debug.Log("move left");
+    public void rotateLeft() {
+        transform.localScale = new Vector3(-1, 1, 1);
+
     }
 
-    public void moveRight() {
-        Debug.Log("move right");
+    public void rotateRight() {
+        transform.localScale = new Vector3(1, 1, 1);
     }
 
     public void OnMovement(InputAction.CallbackContext context) {
         //This is called when you input a direction on a valid input type, such as arrow keys or analogue stick
         //The value will read -1 when pressing left, 0 when idle, and 1 when pressing right.
+
+        if (playerGrapplingGun.isExecuting) {
+            Debug.Log("adding force...");
+            if (context.ReadValue<float>() > 0f) {
+                rotateRight();
+            } else {
+                rotateLeft();
+            }
+            body.AddForce(Vector2.right * context.ReadValue<float>() * playerGrapplingGun.hangSwingForce);
+        }
 
         float speedMultiplier = 1f;
 

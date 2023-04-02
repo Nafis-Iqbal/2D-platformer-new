@@ -38,7 +38,7 @@ public class PlayerRoll : MonoBehaviour {
         onGround = playerGround.isGrounded;
     }
 
-    IEnumerator deactivateRolling() {
+    IEnumerator DeactivateRolling() {
         yield return new WaitForSeconds(rollDuration);
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), false);
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("EnemyWeapon"), false);
@@ -51,20 +51,16 @@ public class PlayerRoll : MonoBehaviour {
             Debug.Log($"val: {context.ReadValue<float>()}");
             isRolling = true;
             if (context.ReadValue<float>() > 0f) {
-                playerMovement.moveRight();
+                playerMovement.rotateRight();
             } else {
-                playerMovement.moveLeft();
+                playerMovement.rotateLeft();
             }
-            StartCoroutine(RollRoutine(0.0001f));
-        }
-    }
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), true);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("EnemyWeapon"), true);
+            body.velocity = new Vector2(transform.localScale.x, 0) * rollForce;
+            playerAnimator.SetTrigger("Roll");
+            StartCoroutine(DeactivateRolling());
 
-    IEnumerator RollRoutine(float waitDuration) {
-        yield return new WaitForSeconds(waitDuration);
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), true);
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("EnemyWeapon"), true);
-        body.velocity = new Vector2(transform.localScale.x, 0) * rollForce;
-        playerAnimator.SetTrigger("Roll");
-        StartCoroutine(deactivateRolling());
+        }
     }
 }

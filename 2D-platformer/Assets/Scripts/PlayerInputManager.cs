@@ -125,6 +125,24 @@ public class PlayerInputManager : MonoBehaviour {
             playerInputActions.Player.ColumnMove.Disable();
             playerInputActions.Player.ColumnJumpDirection.Disable();
         }
+
+        if (playerGrapplingGun.isExecuting) {
+            playerInputActions.Player.SwordAttack.Disable();
+            playerInputActions.Player.ShurikenAttack.Disable();
+            playerInputActions.Player.Dash.Disable();
+            playerInputActions.Player.ProjectileAttack.Disable();
+            playerInputActions.Player.Jump.Disable();
+            playerInputActions.Player.Roll.Disable();
+            playerInputActions.Player.ColumnLedgeGrab.Disable();
+        } else {
+            playerInputActions.Player.SwordAttack.Enable();
+            playerInputActions.Player.ShurikenAttack.Enable();
+            playerInputActions.Player.Dash.Enable();
+            playerInputActions.Player.ProjectileAttack.Enable();
+            playerInputActions.Player.Jump.Enable();
+            playerInputActions.Player.Roll.Enable();
+            playerInputActions.Player.ColumnLedgeGrab.Enable();
+        }
     }
 
     private void OnHeavyAttack(InputAction.CallbackContext context) {

@@ -132916,7 +132916,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.0035, y: -0.009, z: 0}
   m_LocalScale: {x: 0.0073435614, y: 0.0073435614, z: 0.49936217}
-  m_Children: []
+  m_Children:
+  - {fileID: 2259492708389069221}
   m_Father: {fileID: 1588302100}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -133881,7 +133882,6 @@ Transform:
   - {fileID: 1464497247}
   - {fileID: 1708435779}
   - {fileID: 1363299609}
-  - {fileID: 2259492708389069221}
   - {fileID: 867079112567167811}
   - {fileID: 6825991440606252172}
   m_Father: {fileID: 640968025}
@@ -147594,14 +147594,16 @@ MonoBehaviour:
   launchSpeed: 3
   autoConfigureDistance: 0
   targetDistance: 3
-  targetFrequncy: 1.5
+  targetFrequncy: 2
   grapplePoint: {x: 0, y: 0}
   grappleDistanceVector: {x: 0, y: 0}
   canGrapple: 0
   jumpButtonHoldTime: 0.5
+  hangSwingForce: 30
   releaseForceMultiplierX: 2
   releaseForceMultiplierY: 2
   releaseRopeMovementDisableDuration: 1
+  isExecuting: 0
 --- !u!4 &867079112567167811
 Transform:
   m_ObjectHideFlags: 0
@@ -147615,7 +147617,7 @@ Transform:
   m_Children:
   - {fileID: 7439131291858925630}
   m_Father: {fileID: 1588302100}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1355652590603735309
 Transform:
@@ -148058,11 +148060,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4767629815896777603}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.004705878, y: 0.0008823521, z: 0}
-  m_LocalScale: {x: 0.014705882, y: 0.014705882, z: 1}
+  m_LocalPosition: {x: 0.16420887, y: 1.3457166, z: 0}
+  m_LocalScale: {x: 2.0025547, y: 2.0025547, z: 2.0025547}
   m_Children: []
-  m_Father: {fileID: 1588302100}
-  m_RootOrder: 6
+  m_Father: {fileID: 1473501768}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2357010803519362150
 PrefabInstance:
@@ -148514,7 +148516,7 @@ Transform:
   m_LocalScale: {x: 0.014705882, y: 0.014705882, z: 1}
   m_Children: []
   m_Father: {fileID: 1588302100}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6825991440606252173
 GameObject:
@@ -148797,6 +148799,26 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8269280305195676250, guid: ae253e8342d257e40aed801b4c4b8a3e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269280305195676251, guid: ae253e8342d257e40aed801b4c4b8a3e,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269280305195676251, guid: ae253e8342d257e40aed801b4c4b8a3e,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269280305195676251, guid: ae253e8342d257e40aed801b4c4b8a3e,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae253e8342d257e40aed801b4c4b8a3e, type: 3}
 --- !u!1001 &9104696755718711749
@@ -148821,6 +148843,11 @@ PrefabInstance:
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 640968025}
+    - target: {fileID: 9104696754852275175, guid: b7249cc0056e62041ab263a8ad61b628,
+        type: 3}
+      propertyPath: lightAttackHitBox
+      value: 
+      objectReference: {fileID: 4767629815896777603}
     - target: {fileID: 9104696754852275175, guid: b7249cc0056e62041ab263a8ad61b628,
         type: 3}
       propertyPath: playerSpineAnimator

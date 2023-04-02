@@ -44,9 +44,13 @@ public class PlayerGrapplingGun : MonoBehaviour {
     [HideInInspector] public Vector2 grappleDistanceVector;
     public bool canGrapple = false;
     [SerializeField] private float jumpButtonHoldTime = 0.5f;
+    [Header("Releasing:")]
+    public float hangSwingForce = 10f;
     [SerializeField] private float releaseForceMultiplierX = 1f;
     [SerializeField] private float releaseForceMultiplierY = 1f;
     [SerializeField] private float releaseRopeMovementDisableDuration = 1f;
+
+    public bool isExecuting = false;
 
     private void Awake() {
         playerJump = GetComponent<PlayerJump>();
@@ -61,7 +65,7 @@ public class PlayerGrapplingGun : MonoBehaviour {
                 playerAnimator.SetBool("grapplingHookThrew", true);
                 playerSpineAnimator.SetBool("grapplingHookThrew", true);
                 SetGrapplePoint();
-                DisableOtherInputs();
+                isExecuting = true;
             }
         } else {
             playerAnimator.SetBool("grapplingHookThrew", false);
@@ -72,28 +76,8 @@ public class PlayerGrapplingGun : MonoBehaviour {
                 m_rigidbody.velocity.x * releaseForceMultiplierX,
                 m_rigidbody.velocity.y * releaseForceMultiplierY),
                 ForceMode2D.Impulse);
-            EnableOtherInputs();
+            isExecuting = false;
         }
-    }
-
-    private static void DisableOtherInputs() {
-        PlayerInputManager.Instance.playerInputActions.Player.SwordAttack.Disable();
-        PlayerInputManager.Instance.playerInputActions.Player.ShurikenAttack.Disable();
-        PlayerInputManager.Instance.playerInputActions.Player.Dash.Disable();
-        PlayerInputManager.Instance.playerInputActions.Player.ProjectileAttack.Disable();
-        PlayerInputManager.Instance.playerInputActions.Player.Jump.Disable();
-        PlayerInputManager.Instance.playerInputActions.Player.Roll.Disable();
-        PlayerInputManager.Instance.playerInputActions.Player.ColumnLedgeGrab.Disable();
-    }
-
-    private static void EnableOtherInputs() {
-        PlayerInputManager.Instance.playerInputActions.Player.SwordAttack.Enable();
-        PlayerInputManager.Instance.playerInputActions.Player.ShurikenAttack.Enable();
-        PlayerInputManager.Instance.playerInputActions.Player.Dash.Enable();
-        PlayerInputManager.Instance.playerInputActions.Player.ProjectileAttack.Enable();
-        PlayerInputManager.Instance.playerInputActions.Player.Jump.Enable();
-        PlayerInputManager.Instance.playerInputActions.Player.Roll.Enable();
-        PlayerInputManager.Instance.playerInputActions.Player.ColumnLedgeGrab.Enable();
     }
 
     // private void Update() {
