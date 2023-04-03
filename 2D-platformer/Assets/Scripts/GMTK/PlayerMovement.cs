@@ -79,7 +79,6 @@ public class PlayerMovement : MonoBehaviour {
         //The value will read -1 when pressing left, 0 when idle, and 1 when pressing right.
 
         if (playerGrapplingGun.isExecuting) {
-            Debug.Log("adding force...");
             if (context.ReadValue<float>() > 0f) {
                 rotateRight();
             } else {

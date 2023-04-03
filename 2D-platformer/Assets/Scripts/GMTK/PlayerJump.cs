@@ -47,6 +47,8 @@ public class PlayerJump : MonoBehaviour {
     public bool onGround;
     private float jumpBufferCounter;
     private float coyoteTimeCounter = 0;
+    private Coroutine jumpCoroutine;
+    public float beforeJumpDelay = 0.5f;
 
     void Awake() {
         playerMovement = GetComponent<PlayerMovement>();
@@ -80,19 +82,43 @@ public class PlayerJump : MonoBehaviour {
         StopJump();
     }
 
+    IEnumerator StartJumpRoutine() {
+        Debug.Log("in start routine");
+        playerEffect.jumpEffects();
+        yield return new WaitForSeconds(beforeJumpDelay);
+        StartJump();
+    }
+
+    IEnumerator StopJumpRoutine() {
+        Debug.Log("in stop routine");
+        // if (jumpCoroutine != null) {
+        //     Debug.Log("stopping jump...");
+        //     StopCoroutine(jumpCoroutine);
+        // }
+        jumpCoroutine = null;
+        yield return new WaitForSeconds(beforeJumpDelay);
+        StopJump();
+    }
+
     public void OnJump(InputAction.CallbackContext context) {
         //This function is called when one of the jump buttons (like space or the A button) is pressed.
 
         if (MovementLimiter.instance.playerCanMove) {
             //When we press the jump button, tell the script that we desire a jump.
             //Also, use the started and canceled contexts to know if we're currently holding the button
-            Debug.Log("jump pressed....");
             if (context.started) {
-                StartJump();
+                Debug.Log("context started");
+                if (jumpCoroutine == null) {
+                    jumpCoroutine = StartCoroutine(StartJumpRoutine());
+                }
+                // StartJump();
             }
 
             if (context.canceled) {
-                StopJump();
+                Debug.Log("context end");
+                // if (jumpCoroutine != null) {
+                StartCoroutine(StopJumpRoutine());
+                // }
             }
         }
     }
@@ -239,10 +265,9 @@ public class PlayerJump : MonoBehaviour {
             velocity.y += jumpSpeed;
             currentlyJumping = true;
 
-            if (playerEffect != null) {
-                //Apply the jumping effects on the juice script
-                playerEffect.jumpEffects();
-            }
+            // if (playerEffect != null) {
+            //     playerEffect.jumpEffects();
+            // }
         }
 
         if (jumpBuffer == 0) {

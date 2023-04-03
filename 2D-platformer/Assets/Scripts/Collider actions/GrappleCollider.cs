@@ -18,6 +18,12 @@ public class GrappleCollider : MonoBehaviour {
     //     playerGrapplingGun = GameManager.Instance.playerTransform.GetComponent<PlayerGrapplingGun>();
     // }
 
+    private void OnDrawGizmos() {
+        var collider = GetComponent<Collider2D>();
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireCube(collider.bounds.center, collider.bounds.size);
+    }
+
     private void Update() {
         if (grappleActive) {
             grappleSpriteTransform.localScale = Vector3.Lerp(grappleSpriteTransform.localScale, grappleActiveScale, Time.deltaTime * grappleActiveScaleSpeed);
