@@ -5,9 +5,12 @@ using UnityEngine;
 public class PlayerAnimationEventHandler : MonoBehaviour {
     private PlayerSwordAttack playerSwordAttack;
     private GameObject lightAttackHitBox;
+    private PlayerJump playerJump;
 
     private void Awake() {
-        playerSwordAttack = GameManager.Instance.playerTransform.GetComponent<PlayerSwordAttack>();
+        var playerTransform = GameManager.Instance.playerTransform;
+        playerSwordAttack = playerTransform.GetComponent<PlayerSwordAttack>();
+        playerJump = playerTransform.GetComponent<PlayerJump>();
         lightAttackHitBox = GameManager.Instance.lightAttackHitBox;
     }
 
@@ -26,4 +29,9 @@ public class PlayerAnimationEventHandler : MonoBehaviour {
     public void LightAttackDamageEnded() {
         lightAttackHitBox.SetActive(false);
     }
+
+    public void AddJumpForce() {
+        playerJump.StartJump();
+    }
+
 }

@@ -6383,6 +6383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3928c961806c941d3a53b2a0500a5e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isExecuting: 0
   jumpMovementMultiplier: 1
   jumpMovementMultiplierX: 1
   jumpMovementMultiplierY: 1
@@ -6393,7 +6394,7 @@ MonoBehaviour:
   upwardMovementMultiplier: 1
   downwardMovementMultiplier: 1
   maxAirJumps: 0
-  variablejumpHeight: 1
+  variablejumpHeight: 0
   jumpCutOff: 5.25
   speedLimit: 20
   coyoteTime: 0.01
@@ -6406,7 +6407,6 @@ MonoBehaviour:
   pressingJump: 0
   currentlyJumping: 0
   onGround: 1
-  beforeJumpDelay: 0.2
 --- !u!114 &640968030
 MonoBehaviour:
   m_ObjectHideFlags: 0

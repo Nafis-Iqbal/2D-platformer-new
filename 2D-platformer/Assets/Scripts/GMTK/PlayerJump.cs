@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 //This script handles moving the character on the Y axis, for jumping and gravity
 
 public class PlayerJump : MonoBehaviour {
+    public bool isExecuting = false;
     public float jumpMovementMultiplier = 1f;
     public float jumpMovementMultiplierX = 1f;
     public float jumpMovementMultiplierY = 1f;
@@ -47,8 +48,6 @@ public class PlayerJump : MonoBehaviour {
     public bool onGround;
     private float jumpBufferCounter;
     private float coyoteTimeCounter = 0;
-    private Coroutine jumpCoroutine;
-    public float beforeJumpDelay = 0.5f;
 
     void Awake() {
         playerMovement = GetComponent<PlayerMovement>();
@@ -63,13 +62,16 @@ public class PlayerJump : MonoBehaviour {
         defaultGravityScale = 1f;
     }
 
-    private void StartJump() {
+    public void StartJump() {
         desiredJump = true;
         pressingJump = true;
+        Debug.Log("adding force");
     }
 
     private void StopJump() {
+        Debug.Log("stopped jump");
         pressingJump = false;
+        // isExecuting = false;
     }
 
     public void Jump(float jumpButtonHoldTime) {
@@ -82,44 +84,28 @@ public class PlayerJump : MonoBehaviour {
         StopJump();
     }
 
-    IEnumerator StartJumpRoutine() {
-        Debug.Log("in start routine");
-        playerEffect.jumpEffects();
-        yield return new WaitForSeconds(beforeJumpDelay);
-        StartJump();
-    }
-
-    IEnumerator StopJumpRoutine() {
-        Debug.Log("in stop routine");
-        // if (jumpCoroutine != null) {
-        //     Debug.Log("stopping jump...");
-        //     StopCoroutine(jumpCoroutine);
-        // }
-        jumpCoroutine = null;
-        yield return new WaitForSeconds(beforeJumpDelay);
-        StopJump();
-    }
-
     public void OnJump(InputAction.CallbackContext context) {
         //This function is called when one of the jump buttons (like space or the A button) is pressed.
 
         if (MovementLimiter.instance.playerCanMove) {
             //When we press the jump button, tell the script that we desire a jump.
             //Also, use the started and canceled contexts to know if we're currently holding the button
-            if (context.started) {
-                Debug.Log("context started");
-                if (jumpCoroutine == null) {
-                    jumpCoroutine = StartCoroutine(StartJumpRoutine());
-                }
+            if (context.started && !currentlyJumping) {
                 // StartJump();
+                // isExecuting = true;
+                StartJumpAnimation();
             }
 
             if (context.canceled) {
-                Debug.Log("context end");
-                // if (jumpCoroutine != null) {
-                StartCoroutine(StopJumpRoutine());
-                // }
+                StopJump();
             }
+        }
+    }
+
+    private void StartJumpAnimation() {
+        Debug.Log("jump animation start");
+        if (playerEffect != null) {
+            playerEffect.jumpEffects();
         }
     }
 
