@@ -50,9 +50,9 @@ public class PlayerInputManager : MonoBehaviour {
         playerInputActions.Player.Run.canceled += OnRun;
 
         // player walk
-        playerInputActions.PlayerSecondary.Walk.started += OnWalk;
-        playerInputActions.PlayerSecondary.Walk.performed += OnWalk;
-        playerInputActions.PlayerSecondary.Walk.canceled += OnWalk;
+        playerInputActions.Player.Walk.started += OnWalk;
+        playerInputActions.Player.Walk.performed += OnWalk;
+        playerInputActions.Player.Walk.canceled += OnWalk;
 
         // player jump
         playerInputActions.Player.Jump.started += OnJump;
@@ -110,10 +110,10 @@ public class PlayerInputManager : MonoBehaviour {
             playerHeavyAttack.isExecuting ||
             playerColumn.isExecuting) {
             playerInputActions.Player.Run.Disable();
-            playerInputActions.PlayerSecondary.Walk.Disable();
+            playerInputActions.Player.Walk.Disable();
         } else {
             playerInputActions.Player.Run.Enable();
-            playerInputActions.PlayerSecondary.Walk.Enable();
+            playerInputActions.Player.Walk.Enable();
         }
 
         if (playerBlockDefense.isExecuting ||

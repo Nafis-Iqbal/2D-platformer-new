@@ -255,7 +255,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ed314352-88af-4ba4-a1d1-d51ed3efa04d"",
-                    ""path"": ""<Keyboard>/capsLock"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -989,67 +989,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""PlayerSecondary"",
-            ""id"": ""b431590f-f7f0-4b61-a80a-e29fc6aeef69"",
-            ""actions"": [
-                {
-                    ""name"": ""Walk"",
-                    ""type"": ""Button"",
-                    ""id"": ""ead8dc9d-383a-43bf-a823-a87aa958f13a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""2206fa20-20fd-4734-8b05-9fa505c28b6a"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Walk"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""ba6cf3d1-8e7f-4a63-bd8e-6e8ba0b06e99"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Walk"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""abd959e0-d7d8-472c-8c3b-d68299d030dc"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Walk"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""f540aedd-9050-496b-9168-f4218e4141ba"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Walk"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                }
-            ]
         }
     ],
     ""controlSchemes"": [
@@ -1116,9 +1055,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
-        // PlayerSecondary
-        m_PlayerSecondary = asset.FindActionMap("PlayerSecondary", throwIfNotFound: true);
-        m_PlayerSecondary_Walk = m_PlayerSecondary.FindAction("Walk", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1424,39 +1360,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
-
-    // PlayerSecondary
-    private readonly InputActionMap m_PlayerSecondary;
-    private IPlayerSecondaryActions m_PlayerSecondaryActionsCallbackInterface;
-    private readonly InputAction m_PlayerSecondary_Walk;
-    public struct PlayerSecondaryActions
-    {
-        private @PlayerInputActions m_Wrapper;
-        public PlayerSecondaryActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Walk => m_Wrapper.m_PlayerSecondary_Walk;
-        public InputActionMap Get() { return m_Wrapper.m_PlayerSecondary; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PlayerSecondaryActions set) { return set.Get(); }
-        public void SetCallbacks(IPlayerSecondaryActions instance)
-        {
-            if (m_Wrapper.m_PlayerSecondaryActionsCallbackInterface != null)
-            {
-                @Walk.started -= m_Wrapper.m_PlayerSecondaryActionsCallbackInterface.OnWalk;
-                @Walk.performed -= m_Wrapper.m_PlayerSecondaryActionsCallbackInterface.OnWalk;
-                @Walk.canceled -= m_Wrapper.m_PlayerSecondaryActionsCallbackInterface.OnWalk;
-            }
-            m_Wrapper.m_PlayerSecondaryActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @Walk.started += instance.OnWalk;
-                @Walk.performed += instance.OnWalk;
-                @Walk.canceled += instance.OnWalk;
-            }
-        }
-    }
-    public PlayerSecondaryActions @PlayerSecondary => new PlayerSecondaryActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1505,9 +1408,5 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
-    }
-    public interface IPlayerSecondaryActions
-    {
-        void OnWalk(InputAction.CallbackContext context);
     }
 }
