@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 //This script handles moving the character on the Y axis, for jumping and gravity
 
 public class PlayerJump : MonoBehaviour {
-    public bool isExecuting = false;
     public float jumpMovementMultiplier = 1f;
     public float jumpMovementMultiplierX = 1f;
     public float jumpMovementMultiplierY = 1f;
@@ -45,6 +44,7 @@ public class PlayerJump : MonoBehaviour {
     [SerializeField] private bool desiredJump;
     [SerializeField] private bool pressingJump;
     [SerializeField] private bool currentlyJumping;
+    public bool isCharging = false;
     public bool onGround;
     private float jumpBufferCounter;
     private float coyoteTimeCounter = 0;
@@ -65,12 +65,12 @@ public class PlayerJump : MonoBehaviour {
     public void StartJump() {
         desiredJump = true;
         pressingJump = true;
-        Debug.Log("adding force");
+        isCharging = false;
     }
 
     private void StopJump() {
-        Debug.Log("stopped jump");
         pressingJump = false;
+
         // isExecuting = false;
     }
 
@@ -85,6 +85,7 @@ public class PlayerJump : MonoBehaviour {
     }
 
     public void OnJump(InputAction.CallbackContext context) {
+        Debug.Log("jump context: " + context);
         //This function is called when one of the jump buttons (like space or the A button) is pressed.
 
         if (MovementLimiter.instance.playerCanMove) {
@@ -103,7 +104,7 @@ public class PlayerJump : MonoBehaviour {
     }
 
     private void StartJumpAnimation() {
-        Debug.Log("jump animation start");
+        isCharging = true;
         if (playerEffect != null) {
             playerEffect.jumpEffects();
         }

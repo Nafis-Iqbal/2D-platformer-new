@@ -98,10 +98,13 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     public void OnWalk(InputAction.CallbackContext context) {
+        Debug.Log("walk context: " + context);
         if (context.phase == InputActionPhase.Started) {
             isWalking = true;
+            // Debug.Log("walk true");
         } else if (context.phase == InputActionPhase.Canceled) {
             isWalking = false;
+            // Debug.Log("walk false");
         }
     }
 

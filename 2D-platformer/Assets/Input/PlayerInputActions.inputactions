@@ -233,7 +233,7 @@
                 {
                     "name": "",
                     "id": "ed314352-88af-4ba4-a1d1-d51ed3efa04d",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/capsLock",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -965,6 +965,67 @@
                     "action": "RightClick",
                     "isComposite": false,
                     "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PlayerSecondary",
+            "id": "b431590f-f7f0-4b61-a80a-e29fc6aeef69",
+            "actions": [
+                {
+                    "name": "Walk",
+                    "type": "Button",
+                    "id": "ead8dc9d-383a-43bf-a823-a87aa958f13a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2206fa20-20fd-4734-8b05-9fa505c28b6a",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Walk",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "One Modifier",
+                    "id": "ba6cf3d1-8e7f-4a63-bd8e-6e8ba0b06e99",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Walk",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "abd959e0-d7d8-472c-8c3b-d68299d030dc",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Walk",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "f540aedd-9050-496b-9168-f4218e4141ba",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Walk",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }

@@ -50,8 +50,9 @@ public class PlayerInputManager : MonoBehaviour {
         playerInputActions.Player.Run.canceled += OnRun;
 
         // player walk
-        playerInputActions.Player.Walk.started += OnWalk;
-        playerInputActions.Player.Walk.canceled += OnWalk;
+        playerInputActions.PlayerSecondary.Walk.started += OnWalk;
+        playerInputActions.PlayerSecondary.Walk.performed += OnWalk;
+        playerInputActions.PlayerSecondary.Walk.canceled += OnWalk;
 
         // player jump
         playerInputActions.Player.Jump.started += OnJump;
@@ -103,16 +104,25 @@ public class PlayerInputManager : MonoBehaviour {
     private void Update() {
         // handle input interference
 
-        if (playerBlockDefense.isExecuting ||
+        if (playerJump.isCharging ||
+            playerBlockDefense.isExecuting ||
             playerSwordAttack.isExecuting ||
             playerHeavyAttack.isExecuting ||
             playerColumn.isExecuting) {
             playerInputActions.Player.Run.Disable();
-            playerInputActions.Player.Walk.Disable();
-            playerInputActions.Player.Jump.Disable();
+            playerInputActions.PlayerSecondary.Walk.Disable();
         } else {
             playerInputActions.Player.Run.Enable();
-            playerInputActions.Player.Walk.Enable();
+            playerInputActions.PlayerSecondary.Walk.Enable();
+        }
+
+        if (playerBlockDefense.isExecuting ||
+            playerSwordAttack.isExecuting ||
+            playerHeavyAttack.isExecuting ||
+            playerColumn.isExecuting ||
+            playerGrapplingGun.isExecuting) {
+            playerInputActions.Player.Jump.Disable();
+        } else {
             playerInputActions.Player.Jump.Enable();
         }
 
@@ -131,7 +141,6 @@ public class PlayerInputManager : MonoBehaviour {
             playerInputActions.Player.ShurikenAttack.Disable();
             playerInputActions.Player.Dash.Disable();
             playerInputActions.Player.ProjectileAttack.Disable();
-            playerInputActions.Player.Jump.Disable();
             playerInputActions.Player.Roll.Disable();
             playerInputActions.Player.ColumnLedgeGrab.Disable();
         } else {
@@ -139,7 +148,6 @@ public class PlayerInputManager : MonoBehaviour {
             playerInputActions.Player.ShurikenAttack.Enable();
             playerInputActions.Player.Dash.Enable();
             playerInputActions.Player.ProjectileAttack.Enable();
-            playerInputActions.Player.Jump.Enable();
             playerInputActions.Player.Roll.Enable();
             playerInputActions.Player.ColumnLedgeGrab.Enable();
         }

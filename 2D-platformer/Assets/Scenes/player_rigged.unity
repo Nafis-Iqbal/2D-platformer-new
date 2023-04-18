@@ -6307,7 +6307,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640968022}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.14, y: 2.43, z: 0}
+  m_LocalPosition: {x: -1.15, y: 2.61, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 517184368}
@@ -6383,7 +6383,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3928c961806c941d3a53b2a0500a5e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isExecuting: 0
   jumpMovementMultiplier: 1
   jumpMovementMultiplierX: 1
   jumpMovementMultiplierY: 1
@@ -6406,6 +6405,7 @@ MonoBehaviour:
   desiredJump: 0
   pressingJump: 0
   currentlyJumping: 0
+  isCharging: 0
   onGround: 1
 --- !u!114 &640968030
 MonoBehaviour:
@@ -134928,9 +134928,9 @@ GameObject:
   - component: {fileID: 1110497756}
   - component: {fileID: 1110497755}
   - component: {fileID: 1110497757}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: demo enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135543,6 +135543,7 @@ Transform:
   m_LocalScale: {x: 0.0073435614, y: 0.0073435614, z: 0.49936217}
   m_Children:
   - {fileID: 2259492708389069221}
+  - {fileID: 6825991440606252172}
   m_Father: {fileID: 1588302100}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -136508,7 +136509,6 @@ Transform:
   - {fileID: 1708435779}
   - {fileID: 1363299609}
   - {fileID: 867079112567167811}
-  - {fileID: 6825991440606252172}
   m_Father: {fileID: 640968025}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -149996,12 +149996,12 @@ PrefabInstance:
     - target: {fileID: 2357010801589351228, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.14
+      value: -1.15
       objectReference: {fileID: 0}
     - target: {fileID: 2357010801589351228, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.93
+      value: 4.1099997
       objectReference: {fileID: 0}
     - target: {fileID: 2357010801589351228, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
@@ -150076,12 +150076,12 @@ PrefabInstance:
     - target: {fileID: 2357010803148860646, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.14
+      value: -1.15
       objectReference: {fileID: 0}
     - target: {fileID: 2357010803148860646, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.93
+      value: 4.1099997
       objectReference: {fileID: 0}
     - target: {fileID: 2357010803148860646, guid: fe269a26201a9bb46ad14e115efdad62,
         type: 3}
@@ -150220,7 +150220,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 2.6841202
+  m_Distance: 2.852122
   m_DampingRatio: 1
   m_Frequency: 99
 --- !u!114 &5345586474003640986
@@ -150432,11 +150432,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6825991440606252173}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.004705878, y: 0.0008823521, z: 0}
-  m_LocalScale: {x: 0.014705882, y: 0.014705882, z: 1}
+  m_LocalPosition: {x: 0.16420887, y: 1.3457166, z: 0}
+  m_LocalScale: {x: 2.0025547, y: 2.0025547, z: 2.0025547}
   m_Children: []
-  m_Father: {fileID: 1588302100}
-  m_RootOrder: 7
+  m_Father: {fileID: 1473501768}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6825991440606252173
 GameObject:
@@ -150469,7 +150469,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.070782185, y: 0.010111809}
+  m_Offset: {x: 0.52375585, y: 0.06919533}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -150480,7 +150480,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.1415644, y: 0.9797764}
+  m_Size: {x: 0.9918862, y: 0.956143}
   m_EdgeRadius: 0
 --- !u!114 &6825991440606252175
 MonoBehaviour:
