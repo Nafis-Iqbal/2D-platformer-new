@@ -7,6 +7,7 @@ public class PlayerDash : MonoBehaviour {
     private Rigidbody2D body;
     [Header("Dash")]
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private Animator playerSpineAnimator;
     [SerializeField] public bool isDashing;
     [SerializeField] public float dashingPower = 24f;
     [SerializeField] public float dashingTime = 0.2f;
@@ -18,6 +19,7 @@ public class PlayerDash : MonoBehaviour {
     private void Awake() {
         body = GetComponent<Rigidbody2D>();
         playerMovement = GetComponent<PlayerMovement>();
+        playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
     }
 
     /// <summary>
@@ -44,6 +46,7 @@ public class PlayerDash : MonoBehaviour {
     public void OnDash(InputAction.CallbackContext context) {
         if (canDash) {
             playerAnimator.SetTrigger("Dash");
+            playerSpineAnimator.SetTrigger("Dash");
             StartCoroutine(Dash());
         }
     }

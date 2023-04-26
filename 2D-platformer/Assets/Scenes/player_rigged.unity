@@ -6281,6 +6281,8 @@ MonoBehaviour:
   directionX: 0
   onGround: 1
   pressingKey: 0
+  speedMultiplier: 0
+  movementValue: 0
 --- !u!114 &640968024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150104,7 +150106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   swordDamage: 5
-  swordCooldownTime: 2
+  swordCooldownTime: 0.5
   heavyAttackDamage: 0
   shurikenDamage: 8
   shurikenCooldownTime: 0.5

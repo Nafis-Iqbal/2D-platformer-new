@@ -22,9 +22,11 @@ public class PlayerHeavyAttack : MonoBehaviour {
     public bool isExecuting;
 
     private Animator playerAnimator;
+    private PlayerGround playerGround;
 
     private void Awake() {
         playerAnimator = GameManager.Instance.playerAnimator;
+        playerGround = GameManager.Instance.playerTransform.GetComponent<PlayerGround>();
     }
 
     private void Update() {
@@ -39,9 +41,9 @@ public class PlayerHeavyAttack : MonoBehaviour {
             }
         }
 
-        isExecuting = (isKeyPressed && canAttack);
+        // isExecuting = (isKeyPressed && canAttack);
 
-        if (isKeyPressed && canAttack) {
+        if (isKeyPressed && canAttack && playerGround.isGrounded) {
             ChargeForAttack();
         } else {
             currentCharge = 0f;

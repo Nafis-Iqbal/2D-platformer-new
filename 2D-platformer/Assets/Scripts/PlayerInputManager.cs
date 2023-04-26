@@ -108,7 +108,7 @@ public class PlayerInputManager : MonoBehaviour {
 
         if (playerJump.isCharging ||
             (playerBlockDefense.isExecuting && playerGround.isGrounded) ||
-            playerSwordAttack.isExecuting ||
+            (playerSwordAttack.isExecuting && playerGround.isGrounded) ||
             playerHeavyAttack.isExecuting ||
             playerColumn.isExecuting) {
             playerInputActions.Player.Run.Disable();
