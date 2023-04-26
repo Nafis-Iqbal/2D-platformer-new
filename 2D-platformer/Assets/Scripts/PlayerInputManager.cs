@@ -19,6 +19,7 @@ public class PlayerInputManager : MonoBehaviour {
     private PlayerGrapplingGun playerGrapplingGun;
     private PlayerBlockDefense playerBlockDefense;
     private PlayerHeavyAttack playerHeavyAttack;
+    private PlayerGround playerGround;
 
     private void Awake() {
         if (Instance == null) {
@@ -40,6 +41,7 @@ public class PlayerInputManager : MonoBehaviour {
         playerGrapplingGun = playerTransform.GetComponent<PlayerGrapplingGun>();
         playerBlockDefense = playerTransform.GetComponent<PlayerBlockDefense>();
         playerHeavyAttack = playerTransform.GetComponent<PlayerHeavyAttack>();
+        playerGround = playerTransform.GetComponent<PlayerGround>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
@@ -49,10 +51,10 @@ public class PlayerInputManager : MonoBehaviour {
         playerInputActions.Player.Run.performed += OnRun;
         playerInputActions.Player.Run.canceled += OnRun;
 
-        // player walk
-        playerInputActions.Player.Walk.started += OnWalk;
-        playerInputActions.Player.Walk.performed += OnWalk;
-        playerInputActions.Player.Walk.canceled += OnWalk;
+        // player walk is being maintained by old input system in PlayerMovement
+        // playerInputActions.Player.Walk.started += OnWalk;
+        // playerInputActions.Player.Walk.performed += OnWalk;
+        // playerInputActions.Player.Walk.canceled += OnWalk;
 
         // player jump
         playerInputActions.Player.Jump.started += OnJump;
@@ -105,15 +107,15 @@ public class PlayerInputManager : MonoBehaviour {
         // handle input interference
 
         if (playerJump.isCharging ||
-            playerBlockDefense.isExecuting ||
+            (playerBlockDefense.isExecuting && playerGround.isGrounded) ||
             playerSwordAttack.isExecuting ||
             playerHeavyAttack.isExecuting ||
             playerColumn.isExecuting) {
             playerInputActions.Player.Run.Disable();
-            playerInputActions.Player.Walk.Disable();
+            // playerInputActions.Player.Walk.Disable();
         } else {
             playerInputActions.Player.Run.Enable();
-            playerInputActions.Player.Walk.Enable();
+            // playerInputActions.Player.Walk.Enable();
         }
 
         if (playerBlockDefense.isExecuting ||

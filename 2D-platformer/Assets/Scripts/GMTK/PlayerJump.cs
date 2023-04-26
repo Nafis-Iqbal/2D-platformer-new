@@ -62,10 +62,14 @@ public class PlayerJump : MonoBehaviour {
         defaultGravityScale = 1f;
     }
 
+    public void DisableCharging() {
+        isCharging = false;
+    }
+
     public void StartJump() {
         desiredJump = true;
         pressingJump = true;
-        isCharging = false;
+        // isCharging = false;
     }
 
     private void StopJump() {
@@ -85,7 +89,7 @@ public class PlayerJump : MonoBehaviour {
     }
 
     public void OnJump(InputAction.CallbackContext context) {
-        Debug.Log("jump context: " + context);
+        // Debug.Log("jump context: " + context);
         //This function is called when one of the jump buttons (like space or the A button) is pressed.
 
         if (MovementLimiter.instance.playerCanMove) {

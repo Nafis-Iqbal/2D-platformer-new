@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Walk",
+                    "name": "Walk(isMaintainedByOldInput)",
                     "type": "Button",
                     "id": "12bb4e08-927e-4555-bc24-ddd006ba339b",
                     "expectedControlType": "Button",
@@ -232,23 +232,12 @@
                 },
                 {
                     "name": "",
-                    "id": "ed314352-88af-4ba4-a1d1-d51ed3efa04d",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Walk",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "b8ff550b-16e7-4f75-b1e7-c1d21bf4c135",
                     "path": "<HID:: USB Gamepad          >/button5",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Walk",
+                    "action": "Walk(isMaintainedByOldInput)",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

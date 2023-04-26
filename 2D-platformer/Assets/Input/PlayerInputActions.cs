@@ -46,7 +46,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Walk"",
+                    ""name"": ""Walk(isMaintainedByOldInput)"",
                     ""type"": ""Button"",
                     ""id"": ""12bb4e08-927e-4555-bc24-ddd006ba339b"",
                     ""expectedControlType"": ""Button"",
@@ -254,23 +254,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ed314352-88af-4ba4-a1d1-d51ed3efa04d"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Walk"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""b8ff550b-16e7-4f75-b1e7-c1d21bf4c135"",
                     ""path"": ""<HID:: USB Gamepad          >/button5"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Walk"",
+                    ""action"": ""Walk(isMaintainedByOldInput)"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1030,7 +1019,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Walk = m_Player.FindAction("Walk", throwIfNotFound: true);
+        m_Player_WalkisMaintainedByOldInput = m_Player.FindAction("Walk(isMaintainedByOldInput)", throwIfNotFound: true);
         m_Player_Roll = m_Player.FindAction("Roll", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_ColumnLedgeGrab = m_Player.FindAction("ColumnLedgeGrab", throwIfNotFound: true);
@@ -1116,7 +1105,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Run;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Walk;
+    private readonly InputAction m_Player_WalkisMaintainedByOldInput;
     private readonly InputAction m_Player_Roll;
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_ColumnLedgeGrab;
@@ -1135,7 +1124,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Run => m_Wrapper.m_Player_Run;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Walk => m_Wrapper.m_Player_Walk;
+        public InputAction @WalkisMaintainedByOldInput => m_Wrapper.m_Player_WalkisMaintainedByOldInput;
         public InputAction @Roll => m_Wrapper.m_Player_Roll;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @ColumnLedgeGrab => m_Wrapper.m_Player_ColumnLedgeGrab;
@@ -1163,9 +1152,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Walk.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalk;
-                @Walk.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalk;
-                @Walk.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalk;
+                @WalkisMaintainedByOldInput.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalkisMaintainedByOldInput;
+                @WalkisMaintainedByOldInput.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalkisMaintainedByOldInput;
+                @WalkisMaintainedByOldInput.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalkisMaintainedByOldInput;
                 @Roll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
                 @Roll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
                 @Roll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
@@ -1212,9 +1201,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @Walk.started += instance.OnWalk;
-                @Walk.performed += instance.OnWalk;
-                @Walk.canceled += instance.OnWalk;
+                @WalkisMaintainedByOldInput.started += instance.OnWalkisMaintainedByOldInput;
+                @WalkisMaintainedByOldInput.performed += instance.OnWalkisMaintainedByOldInput;
+                @WalkisMaintainedByOldInput.canceled += instance.OnWalkisMaintainedByOldInput;
                 @Roll.started += instance.OnRoll;
                 @Roll.performed += instance.OnRoll;
                 @Roll.canceled += instance.OnRoll;
@@ -1382,7 +1371,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     {
         void OnRun(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnWalk(InputAction.CallbackContext context);
+        void OnWalkisMaintainedByOldInput(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnColumnLedgeGrab(InputAction.CallbackContext context);

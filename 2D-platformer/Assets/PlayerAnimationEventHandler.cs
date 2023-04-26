@@ -22,16 +22,12 @@ public class PlayerAnimationEventHandler : MonoBehaviour {
         playerSwordAttack.isExecuting = false;
     }
 
-    public void LightAttackDamageStarted() {
-        lightAttackHitBox.SetActive(true);
-    }
-
-    public void LightAttackDamageEnded() {
-        lightAttackHitBox.SetActive(false);
-    }
-
     public void AddJumpForce() {
         playerJump.StartJump();
+    }
+
+    public void DisableCharging() {
+        playerJump.DisableCharging();
     }
 
 }

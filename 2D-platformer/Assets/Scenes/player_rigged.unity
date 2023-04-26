@@ -149486,6 +149486,7 @@ MonoBehaviour:
   timeElapsedSinceAttack: 0
   attackCooldownTime: 0.3
   isExecuting: 0
+  attacked: 0
 --- !u!114 &697051045997849213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149510,7 +149511,7 @@ MonoBehaviour:
   hasMaxDistance: 1
   maxDistnace: 20
   launchToPoint: 0
-  launchType: 1
+  launchType: 0
   launchSpeed: 3
   autoConfigureDistance: 0
   targetDistance: 6
@@ -149520,8 +149521,8 @@ MonoBehaviour:
   canGrapple: 0
   jumpButtonHoldTime: 0.5
   hangSwingForce: 35
-  releaseForceMultiplierX: 2
-  releaseForceMultiplierY: 2
+  releaseForceMultiplierX: 1
+  releaseForceMultiplierY: 1.5
   releaseRopeMovementDisableDuration: 1
   isExecuting: 0
 --- !u!4 &867079112567167811
@@ -150103,7 +150104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   swordDamage: 5
-  swordCooldownTime: 0.3
+  swordCooldownTime: 2
   heavyAttackDamage: 0
   shurikenDamage: 8
   shurikenCooldownTime: 0.5

@@ -53,7 +53,8 @@ public class PlayerMovement : MonoBehaviour {
     [Header("Current State")]
     [SerializeField] private bool onGround;
     [SerializeField] private bool pressingKey;
-
+    [SerializeField] private float speedMultiplier;
+    [SerializeField] private float movementValue;
 
     private void Awake() {
 
@@ -87,28 +88,40 @@ public class PlayerMovement : MonoBehaviour {
             body.AddForce(Vector2.right * context.ReadValue<float>() * playerGrapplingGun.hangSwingForce);
         }
 
-        float speedMultiplier = 1f;
+        // float speedMultiplier = 1f;
 
-        if (isWalking) {
-            speedMultiplier = walkMultiplier;
-        }
+        // if (isWalking) {
+        //     speedMultiplier = walkMultiplier;
+        // }
         if (MovementLimiter.instance.playerCanMove) {
-            directionX = context.ReadValue<float>() * speedMultiplier;
+            movementValue = context.ReadValue<float>();
+            directionX = movementValue * speedMultiplier;
         }
     }
 
     public void OnWalk(InputAction.CallbackContext context) {
         Debug.Log("walk context: " + context);
         if (context.phase == InputActionPhase.Started) {
-            isWalking = true;
+            // isWalking = true;
             // Debug.Log("walk true");
         } else if (context.phase == InputActionPhase.Canceled) {
-            isWalking = false;
+            // isWalking = false;
             // Debug.Log("walk false");
         }
     }
 
     private void Update() {
+
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+            isWalking = true;
+            speedMultiplier = walkMultiplier;
+
+        } else {
+            isWalking = false;
+            speedMultiplier = 1f;
+        }
+        directionX = movementValue * speedMultiplier;
+
         if (playerDash.isDashing || playerRoll.isRolling || playerGrapplingGun.grapplingRope.isGrappling) {
             return;
         }
