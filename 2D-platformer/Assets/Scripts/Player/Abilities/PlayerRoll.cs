@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerRoll : MonoBehaviour {
     [Header("Roll")]
     [SerializeField] private Animator playerAnimator;
+    private Animator playerSpineAnimator;
     [SerializeField] private float rollForce = 25f;
     [SerializeField] private float rollDuration = 0.5f;
     [SerializeField] private float rollCooldownDuration = 0.5f;
@@ -21,6 +22,7 @@ public class PlayerRoll : MonoBehaviour {
         playerGround = GetComponent<PlayerGround>();
         playerMovement = GetComponent<PlayerMovement>();
         body = GetComponent<Rigidbody2D>();
+        playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
     }
 
     private void Update() {
@@ -47,7 +49,7 @@ public class PlayerRoll : MonoBehaviour {
     }
 
     public void OnRoll(InputAction.CallbackContext context) {
-        if (onGround && canRoll) {
+        if (onGround && canRoll && !isRolling) {
             Debug.Log($"val: {context.ReadValue<float>()}");
             isRolling = true;
             if (context.ReadValue<float>() > 0f) {
@@ -59,6 +61,7 @@ public class PlayerRoll : MonoBehaviour {
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("EnemyWeapon"), true);
             body.velocity = new Vector2(transform.localScale.x, 0) * rollForce;
             playerAnimator.SetTrigger("Roll");
+            playerSpineAnimator.SetTrigger("Roll");
             StartCoroutine(DeactivateRolling());
 
         }

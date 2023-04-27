@@ -112,6 +112,10 @@ public class PlayerMovement : MonoBehaviour {
 
     private void Update() {
 
+        if (Input.GetKeyDown(KeyCode.U)) {
+            GameManager.Instance.playerSpineAnimator.SetTrigger("some");
+        }
+
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
             isWalking = true;
             speedMultiplier = walkMultiplier;
