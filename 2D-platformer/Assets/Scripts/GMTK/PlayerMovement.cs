@@ -112,10 +112,6 @@ public class PlayerMovement : MonoBehaviour {
 
     private void Update() {
 
-        if (Input.GetKeyDown(KeyCode.U)) {
-            GameManager.Instance.playerSpineAnimator.SetTrigger("some");
-        }
-
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
             isWalking = true;
             speedMultiplier = walkMultiplier;
@@ -126,7 +122,7 @@ public class PlayerMovement : MonoBehaviour {
         }
         directionX = movementValue * speedMultiplier;
 
-        if (playerDash.isDashing || playerRoll.isRolling || playerGrapplingGun.grapplingRope.isGrappling) {
+        if (playerDash.isExecuting || playerRoll.isExecuting || playerGrapplingGun.grapplingRope.isGrappling) {
             return;
         }
 
@@ -151,8 +147,8 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (playerDash.isDashing ||
-            playerRoll.isRolling ||
+        if (playerDash.isExecuting ||
+            playerRoll.isExecuting ||
             playerGrapplingGun.grapplingRope.isGrappling ||
             (playerGrapplingGun.playerIsOnAir && !playerGround.isGrounded)) {
             return;

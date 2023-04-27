@@ -118,7 +118,7 @@ public class PlayerJump : MonoBehaviour {
         //Check if we're on ground, using Kit's Ground script
         onGround = playerGround.isGrounded;
 
-        if (playerDash.isDashing || playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling) {
+        if (playerDash.isExecuting || playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling) {
             return;
         }
         setPhysics();
@@ -159,7 +159,7 @@ public class PlayerJump : MonoBehaviour {
         if (playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling) {
             currentlyJumping = false;
         }
-        if (playerDash.isDashing || playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling) {
+        if (playerDash.isExecuting || playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling) {
             return;
         }
         //Get velocity from Kit's Rigidbody 

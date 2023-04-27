@@ -106,53 +106,157 @@ public class PlayerInputManager : MonoBehaviour {
     private void Update() {
         // handle input interference
 
+        // run
         if (playerJump.isCharging ||
             (playerBlockDefense.isExecuting && playerGround.isGrounded) ||
             (playerSwordAttack.isExecuting && playerGround.isGrounded) ||
             playerHeavyAttack.isExecuting ||
             playerColumn.isExecuting) {
             playerInputActions.Player.Run.Disable();
-            // playerInputActions.Player.Walk.Disable();
         } else {
             playerInputActions.Player.Run.Enable();
-            // playerInputActions.Player.Walk.Enable();
         }
 
-        if (playerBlockDefense.isExecuting ||
+        // jump
+        if (playerRoll.isExecuting ||
+            playerDash.isExecuting ||
+            playerColumn.isExecuting ||
             playerSwordAttack.isExecuting ||
             playerHeavyAttack.isExecuting ||
-            playerColumn.isExecuting ||
-            playerGrapplingGun.isExecuting) {
+            playerGrapplingGun.isExecuting ||
+            playerBlockDefense.isExecuting) {
             playerInputActions.Player.Jump.Disable();
         } else {
             playerInputActions.Player.Jump.Enable();
         }
 
-        if (playerColumn.isExecuting) {
-            playerInputActions.Player.ColumnJump.Enable();
-            playerInputActions.Player.ColumnMove.Enable();
-            playerInputActions.Player.ColumnJumpDirection.Enable();
+        // roll
+        if (!playerGround.isGrounded ||
+            playerJump.isCharging ||
+            playerDash.isExecuting ||
+            playerSwordAttack.isExecuting ||
+            playerHeavyAttack.isExecuting ||
+            playerGrapplingGun.isExecuting ||
+            playerBlockDefense.isExecuting) {
+            playerInputActions.Player.Roll.Disable();
         } else {
-            playerInputActions.Player.ColumnJump.Disable();
-            playerInputActions.Player.ColumnMove.Disable();
-            playerInputActions.Player.ColumnJumpDirection.Disable();
+            playerInputActions.Player.Roll.Enable();
         }
 
-        if (playerGrapplingGun.isExecuting) {
-            playerInputActions.Player.SwordAttack.Disable();
-            playerInputActions.Player.ShurikenAttack.Disable();
+        // dash
+        if (playerSwordAttack.isExecuting ||
+            playerHeavyAttack.isExecuting ||
+            playerRoll.isExecuting ||
+            playerGrapplingGun.isExecuting ||
+            playerBlockDefense.isExecuting) {
             playerInputActions.Player.Dash.Disable();
-            playerInputActions.Player.ProjectileAttack.Disable();
-            playerInputActions.Player.Roll.Disable();
-            playerInputActions.Player.ColumnLedgeGrab.Disable();
+        } else {
+            playerInputActions.Player.Dash.Enable();
+        }
+
+        // column ledge grab
+
+        // column jump
+
+        // column jump direction
+
+        // column move
+
+        // light attack
+        if (playerRoll.isExecuting ||
+            playerDash.isExecuting ||
+            playerHeavyAttack.isExecuting ||
+            playerGrapplingGun.isExecuting ||
+            playerBlockDefense.isExecuting) {
+            playerInputActions.Player.SwordAttack.Disable();
         } else {
             playerInputActions.Player.SwordAttack.Enable();
-            playerInputActions.Player.ShurikenAttack.Enable();
-            playerInputActions.Player.Dash.Enable();
-            playerInputActions.Player.ProjectileAttack.Enable();
-            playerInputActions.Player.Roll.Enable();
-            playerInputActions.Player.ColumnLedgeGrab.Enable();
         }
+
+        // heavy attack
+        if (!playerGround.isGrounded ||
+            playerRoll.isExecuting ||
+            playerDash.isExecuting ||
+            playerSwordAttack.isExecuting ||
+            playerGrapplingGun.isExecuting ||
+            playerBlockDefense.isExecuting) {
+            playerInputActions.Player.HeavyAttack.Disable();
+        } else {
+            playerInputActions.Player.HeavyAttack.Enable();
+        }
+
+        // shuriken attack
+        if (playerRoll.isExecuting ||
+            playerDash.isExecuting ||
+            playerHeavyAttack.isExecuting ||
+            playerSwordAttack.isExecuting ||
+            playerGrapplingGun.isExecuting ||
+            playerBlockDefense.isExecuting) {
+            playerInputActions.Player.ShurikenAttack.Disable();
+        } else {
+            playerInputActions.Player.ShurikenAttack.Enable();
+        }
+
+        // projectile attack
+        if (playerRoll.isExecuting ||
+            playerDash.isExecuting ||
+            playerHeavyAttack.isExecuting ||
+            playerSwordAttack.isExecuting ||
+            playerGrapplingGun.isExecuting ||
+            playerBlockDefense.isExecuting) {
+            playerInputActions.Player.ProjectileAttack.Disable();
+        } else {
+            playerInputActions.Player.ProjectileAttack.Enable();
+        }
+
+        // grappling gun
+        if (playerRoll.isExecuting ||
+            playerDash.isExecuting ||
+            playerHeavyAttack.isExecuting ||
+            playerSwordAttack.isExecuting ||
+            playerGrapplingGun.isExecuting ||
+            playerBlockDefense.isExecuting) {
+            playerInputActions.Player.GrapplingGun.Disable();
+        } else {
+            playerInputActions.Player.GrapplingGun.Enable();
+        }
+
+        // blocking
+        if (playerRoll.isExecuting ||
+            playerDash.isExecuting ||
+            playerHeavyAttack.isExecuting ||
+            playerSwordAttack.isExecuting ||
+            playerGrapplingGun.isExecuting) {
+            playerInputActions.Player.Blocking.Disable();
+        } else {
+            playerInputActions.Player.Blocking.Enable();
+        }
+
+        // if (playerColumn.isExecuting) {
+        //     playerInputActions.Player.ColumnJump.Enable();
+        //     playerInputActions.Player.ColumnMove.Enable();
+        //     playerInputActions.Player.ColumnJumpDirection.Enable();
+        // } else {
+        //     playerInputActions.Player.ColumnJump.Disable();
+        //     playerInputActions.Player.ColumnMove.Disable();
+        //     playerInputActions.Player.ColumnJumpDirection.Disable();
+        // }
+
+        // if (playerGrapplingGun.isExecuting) {
+        //     playerInputActions.Player.SwordAttack.Disable();
+        //     playerInputActions.Player.ShurikenAttack.Disable();
+        //     playerInputActions.Player.Dash.Disable();
+        //     playerInputActions.Player.ProjectileAttack.Disable();
+        //     // playerInputActions.Player.Roll.Disable();
+        //     playerInputActions.Player.ColumnLedgeGrab.Disable();
+        // } else {
+        //     playerInputActions.Player.SwordAttack.Enable();
+        //     playerInputActions.Player.ShurikenAttack.Enable();
+        //     playerInputActions.Player.Dash.Enable();
+        //     playerInputActions.Player.ProjectileAttack.Enable();
+        //     // playerInputActions.Player.Roll.Enable();
+        //     playerInputActions.Player.ColumnLedgeGrab.Enable();
+        // }
     }
 
     private void OnHeavyAttack(InputAction.CallbackContext context) {

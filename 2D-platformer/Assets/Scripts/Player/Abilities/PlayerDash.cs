@@ -8,7 +8,7 @@ public class PlayerDash : MonoBehaviour {
     [Header("Dash")]
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private Animator playerSpineAnimator;
-    [SerializeField] public bool isDashing;
+    [SerializeField] public bool isExecuting;
     [SerializeField] public float dashingPower = 24f;
     [SerializeField] public float dashingTime = 0.2f;
     [SerializeField] public float dashingCooldown = 1f;
@@ -28,13 +28,13 @@ public class PlayerDash : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator Dash() {
         canDash = false;
-        isDashing = true;
+        isExecuting = true;
         float originalGravity = body.gravityScale;
         body.gravityScale = 0f;
         body.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
         yield return new WaitForSeconds(dashingTime);
         body.gravityScale = originalGravity;
-        isDashing = false;
+        isExecuting = false;
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }

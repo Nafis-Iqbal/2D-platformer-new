@@ -12,7 +12,7 @@ public class PlayerRoll : MonoBehaviour {
     [SerializeField] private float rollCooldownDuration = 0.5f;
     [SerializeField] private float timeElapsedSinceLastRoll;
     [SerializeField] private bool canRoll = true;
-    public bool isRolling = false;
+    public bool isExecuting = false;
     private Rigidbody2D body;
     private PlayerGround playerGround;
     private PlayerMovement playerMovement;
@@ -26,7 +26,7 @@ public class PlayerRoll : MonoBehaviour {
     }
 
     private void Update() {
-        if (!isRolling) {
+        if (!isExecuting) {
             timeElapsedSinceLastRoll += Time.deltaTime;
             if (timeElapsedSinceLastRoll > rollCooldownDuration) {
                 canRoll = true;
@@ -44,14 +44,14 @@ public class PlayerRoll : MonoBehaviour {
         yield return new WaitForSeconds(rollDuration);
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), false);
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("EnemyWeapon"), false);
-        isRolling = false;
+        isExecuting = false;
         timeElapsedSinceLastRoll = 0f;
     }
 
     public void OnRoll(InputAction.CallbackContext context) {
-        if (onGround && canRoll && !isRolling) {
+        if (onGround && canRoll && !isExecuting) {
             Debug.Log($"val: {context.ReadValue<float>()}");
-            isRolling = true;
+            isExecuting = true;
             if (context.ReadValue<float>() > 0f) {
                 playerMovement.rotateRight();
             } else {

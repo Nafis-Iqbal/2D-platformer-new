@@ -67,6 +67,7 @@ public class PlayerBlockDefense : MonoBehaviour {
     }
 
     public void OnBlockDefense(InputAction.CallbackContext context) {
+        Debug.Log($"block: {context}");
         if (context.phase == InputActionPhase.Started) {
             isBlockingRequested = true;
         } else if (context.phase == InputActionPhase.Canceled) {

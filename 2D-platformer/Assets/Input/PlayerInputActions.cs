@@ -56,12 +56,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Roll"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""8888ae09-25c7-4f71-b52b-f26dff448124"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Dash"",
@@ -146,21 +146,21 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Blocking"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""756b96ad-6285-49e9-bf5a-55ad04765ca2"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""HeavyAttack"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""75ecfe7e-2f9d-4060-91b6-a48eb6174726"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
