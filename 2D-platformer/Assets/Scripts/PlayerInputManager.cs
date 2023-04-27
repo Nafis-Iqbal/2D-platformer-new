@@ -161,6 +161,15 @@ public class PlayerInputManager : MonoBehaviour {
         // column jump direction
 
         // column move
+        if (playerColumn.isExecuting) {
+            playerInputActions.Player.ColumnJump.Enable();
+            playerInputActions.Player.ColumnMove.Enable();
+            playerInputActions.Player.ColumnJumpDirection.Enable();
+        } else {
+            playerInputActions.Player.ColumnJump.Disable();
+            playerInputActions.Player.ColumnMove.Disable();
+            playerInputActions.Player.ColumnJumpDirection.Disable();
+        }
 
         // light attack
         if (playerRoll.isExecuting ||
@@ -214,7 +223,6 @@ public class PlayerInputManager : MonoBehaviour {
             playerDash.isExecuting ||
             playerHeavyAttack.isExecuting ||
             playerSwordAttack.isExecuting ||
-            playerGrapplingGun.isExecuting ||
             playerBlockDefense.isExecuting) {
             playerInputActions.Player.GrapplingGun.Disable();
         } else {
@@ -232,15 +240,7 @@ public class PlayerInputManager : MonoBehaviour {
             playerInputActions.Player.Blocking.Enable();
         }
 
-        // if (playerColumn.isExecuting) {
-        //     playerInputActions.Player.ColumnJump.Enable();
-        //     playerInputActions.Player.ColumnMove.Enable();
-        //     playerInputActions.Player.ColumnJumpDirection.Enable();
-        // } else {
-        //     playerInputActions.Player.ColumnJump.Disable();
-        //     playerInputActions.Player.ColumnMove.Disable();
-        //     playerInputActions.Player.ColumnJumpDirection.Disable();
-        // }
+
 
         // if (playerGrapplingGun.isExecuting) {
         //     playerInputActions.Player.SwordAttack.Disable();
