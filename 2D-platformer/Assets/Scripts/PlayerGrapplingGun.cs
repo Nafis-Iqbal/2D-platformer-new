@@ -51,9 +51,11 @@ public class PlayerGrapplingGun : MonoBehaviour {
     [SerializeField] private float releaseRopeMovementDisableDuration = 1f;
 
     public bool isExecuting = false;
+    private PlayerMovement playerMovement;
 
     private void Awake() {
         playerJump = GetComponent<PlayerJump>();
+        playerMovement = GameManager.Instance.playerTransform.GetComponent<PlayerMovement>();
     }
 
     public void OnGrapplingGun(InputAction.CallbackContext context) {
@@ -76,6 +78,11 @@ public class PlayerGrapplingGun : MonoBehaviour {
                 m_rigidbody.velocity.x * releaseForceMultiplierX,
                 m_rigidbody.velocity.y * releaseForceMultiplierY),
                 ForceMode2D.Impulse);
+            if (m_rigidbody.velocity.x > 0f) {
+                playerMovement.rotateRight();
+            } else if (m_rigidbody.velocity.x < 0f) {
+                playerMovement.rotateLeft();
+            }
             isExecuting = false;
         }
     }

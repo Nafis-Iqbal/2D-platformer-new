@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour {
         if (playerGrapplingGun.isExecuting) {
             if (context.ReadValue<float>() > 0f) {
                 rotateRight();
-            } else {
+            } else if (context.ReadValue<float>() < 0f) {
                 rotateLeft();
             }
             body.AddForce(Vector2.right * context.ReadValue<float>() * playerGrapplingGun.hangSwingForce);

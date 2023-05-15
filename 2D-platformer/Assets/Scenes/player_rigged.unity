@@ -7081,27 +7081,22 @@ PrefabInstance:
     - target: {fileID: 8269280305164374331, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
       propertyPath: m_Size.x
-      value: 12.667227
+      value: 13.163597
       objectReference: {fileID: 0}
     - target: {fileID: 8269280305164374331, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
       propertyPath: m_Size.y
-      value: 5.969001
-      objectReference: {fileID: 0}
-    - target: {fileID: 8269280305164374331, guid: ae253e8342d257e40aed801b4c4b8a3e,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      value: 6.791915
       objectReference: {fileID: 0}
     - target: {fileID: 8269280305164374331, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
       propertyPath: m_Offset.x
-      value: 0.013086319
+      value: -0.18198323
       objectReference: {fileID: 0}
     - target: {fileID: 8269280305164374331, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
       propertyPath: m_Offset.y
-      value: -4.462356
+      value: -4.873813
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae253e8342d257e40aed801b4c4b8a3e, type: 3}
@@ -149831,12 +149826,12 @@ MonoBehaviour:
   m_springJoint2D: {fileID: 5200310450948532098}
   m_rigidbody: {fileID: 640968027}
   hasMaxDistance: 1
-  maxDistnace: 20
+  maxDistnace: 8
   launchToPoint: 0
   launchType: 0
   launchSpeed: 3
   autoConfigureDistance: 0
-  targetDistance: 6
+  targetDistance: 8
   targetFrequncy: 2
   grapplePoint: {x: 0, y: 0}
   grappleDistanceVector: {x: 0, y: 0}
@@ -151066,7 +151061,7 @@ PrefabInstance:
     - target: {fileID: 8269280305195676250, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 8269280305195676251, guid: ae253e8342d257e40aed801b4c4b8a3e,
         type: 3}
