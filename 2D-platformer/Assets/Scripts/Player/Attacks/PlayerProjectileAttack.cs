@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerProjectileAttack : MonoBehaviour {
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private Animator playerSpineAnimator;
     [SerializeField] private float timeElapsedSinceAttack = 0f;
     [HideInInspector] public float attackCooldownTime = 0.3f;
     [SerializeField] private bool isAttacking = false;
@@ -30,6 +31,7 @@ public class PlayerProjectileAttack : MonoBehaviour {
     internal void OnProjectileAttack(InputAction.CallbackContext context) {
         if (!isAttacking && !playerColumn.hasGrabbedColumn) {
             playerAnimator.Play("projectile throw");
+            playerSpineAnimator.Play("projectile throw");
             var projectile = ObjectPooler.Instance.SpawnFromPool("PlayerProjectile", transform.position, Quaternion.identity);
             projectile.GetComponent<PlayerProjectile>().Deploy(Vector2.right * transform.localScale.x);
         }

@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerShurikenAttack : MonoBehaviour {
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private Animator playerSpineAnimator;
     [SerializeField] private float timeElapsedSinceAttack = 0f;
     [HideInInspector] public float attackCooldownTime = 1f;
     [SerializeField] private bool isAttacking = false;
@@ -30,6 +31,7 @@ public class PlayerShurikenAttack : MonoBehaviour {
     public void OnShurikenAttack(InputAction.CallbackContext context) {
         if (!isAttacking && !playerColumn.hasGrabbedColumn) {
             playerAnimator.Play("shuriken throw");
+            playerSpineAnimator.Play("shuriken throw");
             var shuriken = ObjectPooler.Instance.SpawnFromPool("PlayerShuriken", transform.position, Quaternion.identity);
             shuriken.GetComponent<PlayerShuriken>().Deploy(Vector2.right * transform.localScale.x);
         }

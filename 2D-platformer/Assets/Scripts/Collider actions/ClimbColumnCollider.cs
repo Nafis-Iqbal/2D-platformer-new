@@ -38,6 +38,7 @@ public class ClimbColumnCollider : MonoBehaviour {
         originalGravityScale = playerRigidbody.gravityScale;
         playerRigidbody.gravityScale = 0f;
         GameManager.Instance.playerAnimator.Play("column crawl");
+        GameManager.Instance.playerSpineAnimator.Play("column crawl");
         yield return new WaitForSeconds(0.3f);
         playerTransform.position = transform.position;
         playerRigidbody.gravityScale = originalGravityScale;

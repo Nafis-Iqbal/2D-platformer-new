@@ -10,6 +10,7 @@ public class PlayerSlowMotion : MonoBehaviour {
     [SerializeField, Range(0f, 4f)] private float slowMotionDuration = 0.5f;
 
     private Animator playerAnimator;
+    private Animator playerSpineAnimator;
     private PlayerMovement playerMovement;
     private PlayerJump playerJump;
 
@@ -30,6 +31,7 @@ public class PlayerSlowMotion : MonoBehaviour {
 
     private void Awake() {
         playerAnimator = GameManager.Instance.playerAnimator;
+        playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
         playerMovement = GameManager.Instance.playerTransform.GetComponent<PlayerMovement>();
         playerJump = GameManager.Instance.playerTransform.GetComponent<PlayerJump>();
 
@@ -65,6 +67,7 @@ public class PlayerSlowMotion : MonoBehaviour {
     IEnumerator EnterSlowMotionRoutine() {
         Debug.Log("Slow motion started for player");
         playerAnimator.speed = animationSlowMotionMultiplier;
+        playerSpineAnimator.speed = animationSlowMotionMultiplier;
 
         playerMovement.maxSpeed = originalMovementMaxSpeed * playerMovementSpeedMultiplier;
         playerMovement.maxAcceleration = originalMovementMaxAcceleration * playerMovementSpeedMultiplier;
@@ -85,6 +88,7 @@ public class PlayerSlowMotion : MonoBehaviour {
         Debug.Log("Slow motion ended for player");
 
         playerAnimator.speed = 1f;
+        playerSpineAnimator.speed = 1f;
 
         playerMovement.maxSpeed = originalMovementMaxSpeed;
         playerMovement.maxAcceleration = originalMovementMaxAcceleration;

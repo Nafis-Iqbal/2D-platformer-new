@@ -16,6 +16,7 @@ public class PlayerWorldSlowDown : MonoBehaviour {
     private PlayerEffect playerEffect;
     private PlayerJump playerJump;
     private Animator playerAnimator;
+    private Animator playerSpineAnimator;
 
     private Vector3 originalJumpSquashSettings;
     private Vector3 originalLandSquashSettings;
@@ -33,13 +34,15 @@ public class PlayerWorldSlowDown : MonoBehaviour {
         playerEffect = GameManager.Instance.playerTransform.GetComponent<PlayerEffect>();
         playerJump = GameManager.Instance.playerTransform.GetComponent<PlayerJump>();
         playerAnimator = GameManager.Instance.playerAnimator;
+        playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
 
         originalTempSpeedWithoutAccel = playerMovement.tempSpeedWithoutAccel;
         originalTempSpeedAccel = playerMovement.tempSpeedAccel;
         originalTempSpeedTurn = playerMovement.tempSpeedTurn;
         originalJumpSquashSettings = playerEffect.jumpSquashSettings;
         originalLandSquashSettings = playerEffect.landSquashSettings;
-        originalPlayerAnimatorSpeed = playerAnimator.speed;
+        // originalPlayerAnimatorSpeed = playerAnimator.speed;
+        originalPlayerAnimatorSpeed = playerSpineAnimator.speed;
         originalTimeToJumpApex = playerJump.timeToJumpApex;
         originalSwordCooldownTime = PlayerCombatManager.Instance.swordCooldownTime;
         originalShurikenCooldownTime = PlayerCombatManager.Instance.shurikenCooldownTime;
@@ -84,6 +87,7 @@ public class PlayerWorldSlowDown : MonoBehaviour {
         playerEffect.landSquashSettings = new Vector3(originalLandSquashSettings.x, originalLandSquashSettings.y, originalLandSquashSettings.z * speed);
 
         playerAnimator.speed = originalPlayerAnimatorSpeed / speed;
+        playerSpineAnimator.speed = originalPlayerAnimatorSpeed / speed;
 
         playerJump.timeToJumpApex = originalTimeToJumpApex * speed;
 

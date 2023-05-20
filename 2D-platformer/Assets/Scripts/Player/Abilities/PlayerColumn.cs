@@ -27,6 +27,7 @@ public class PlayerColumn : MonoBehaviour {
 
     [Header("Column Grab")]
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private Animator playerSpineAnimator;
     [SerializeField] private Vector3 columnColliderOffset;
     [SerializeField] private float columnWalkSpeed = 2f;
     [SerializeField] private float columnLength = 2f;
@@ -91,8 +92,10 @@ public class PlayerColumn : MonoBehaviour {
 
             if (columnMoveDirection > 0.1f || columnMoveDirection < -0.1f) {
                 playerAnimator.SetFloat("columnWalkSpeed", columnWalkSpeed);
+                playerSpineAnimator.SetFloat("columnWalkSpeed", columnWalkSpeed);
             } else {
                 playerAnimator.SetFloat("columnWalkSpeed", 0);
+                playerSpineAnimator.SetFloat("columnWalkSpeed", 0);
             }
         } else {
             hasResetVelocity = false;
@@ -128,6 +131,7 @@ public class PlayerColumn : MonoBehaviour {
     /// </summary>
     private void enableTiredMechanics() {
         playerAnimator.Play("column grab tired");
+        playerSpineAnimator.Play("column grab tired");
         PlayerInputManager.Instance.playerInputActions.Player.ColumnMove.Disable();
     }
 
@@ -168,6 +172,7 @@ public class PlayerColumn : MonoBehaviour {
     public void OnColumnJump(InputAction.CallbackContext context) {
         if (hasGrabbedColumn) {
             playerAnimator.SetTrigger("Jump");
+            playerSpineAnimator.SetTrigger("Jump");
             body.velocity = Vector2.zero;
             columnMoveDirection = 0f;
             body.gravityScale = originalGravity;
@@ -219,6 +224,7 @@ public class PlayerColumn : MonoBehaviour {
             } else if (canGrabColumn) {
                 hasGrabbedColumn = true;
                 playerAnimator.Play("Column grab");
+                playerSpineAnimator.Play("Column grab");
             }
         }
     }
