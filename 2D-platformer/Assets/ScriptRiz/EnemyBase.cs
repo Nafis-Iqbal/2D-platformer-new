@@ -7,8 +7,8 @@ public class EnemyBase : MonoBehaviour
 {
     //reposition 
     public bool inTarget = false;
-    public bool isReadyToClimp = false;
-    public bool noReposition;
+    public bool isReadyToClimb = false;
+    public bool isRepositioning;
     Vector2 lBox, rBox;
     public bool inRepositioningPhase;
     public healthofPlayer playerScript;
@@ -20,7 +20,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]
     public float health;
     [SerializeField]
-    public bool notPatrolling;
+    public bool shouldBePatrolling;
     [HideInInspector]
     public Rigidbody2D rb;
     [SerializeField]
@@ -105,39 +105,43 @@ public class EnemyBase : MonoBehaviour
     }
 
     void Update(){
+        // if player dies then patrol as usual..
         if(player == null){
             turn = !Physics2D.OverlapCircle(groundChecker.position, foodRadius, environmentMask);
             turn1 = Physics2D.OverlapCircle(platformChecker.position, foodRadius, environmentMask);
             Patrol();
             return;
-            // notPatrolling = true;
+            // shouldBePatrolling = true;
         }
 
+        //testing code 
         if(Input.GetKeyDown("space")){
             Debug.Log("slow");
             comboMode = true;
             // slowMotionstate(.5f, 4f);
         }
 
+        // to check if player changes the platform...
         if(playerScript.PlatChanged){
             playerLeft = playerScript.leftBox;
             playerRight = playerScript.rightBox;
         }
 
+        // to check if the enemey needs to reposition according to players position or not.....
         if(isGrounded){
             rb.gravityScale = 1f;
-            if((lBox == playerLeft) || (rBox == playerScript.rightBox)){
+            if((lBox == playerLeft) || (rBox == playerRight)){
                 // Debug.Log("insame");
                 // speed = 100f;
                 inRepositioningPhase = false;
-                noReposition = true;
+                isRepositioning = false;
             }else{
                 if(!inRepositioningPhase && TargetInDistance())
-                    noReposition = false;
+                    isRepositioning = true;
             }
         }
 
-        
+        // to check if enemy needs to flip or not
         turn = !Physics2D.OverlapCircle(groundChecker.position, foodRadius, environmentMask);
         turn1 = Physics2D.OverlapCircle(platformChecker.position, foodRadius, environmentMask);
 
@@ -145,7 +149,7 @@ public class EnemyBase : MonoBehaviour
 
         if (!inRepositioningPhase)
         {
-            if (notPatrolling)
+            if (shouldBePatrolling)
             {
                 Patrol();
             }
@@ -153,71 +157,73 @@ public class EnemyBase : MonoBehaviour
             if (playerDistance >= battleCryRange && !farAnimationPlayed)
             {
                 rb.velocity = Vector3.zero;
-                notPatrolling = false;
+                shouldBePatrolling = false;
                 animator.Play("BattleCry");
             }
         }
     }
 
     Vector2 preTarget;
+
     public bool notInRepositioningPhase;
+    
     private void FixedUpdate() {
-        if(player == null){
-            return;
-        }
+
         isGrounded = Physics2D.OverlapCircle(botGroundCheck.position, foodRadius, environmentMask);
         bool atJumpPoint = Physics2D.OverlapCircle(platformChecker.position, foodRadius, environmentMask);
         Vector2 targetPoint = closestRepoPoint();
-
+        // when player is in alerting distance of enemy
         if(TargetInDistance()){
             inTarget = true;
-            if(repositionable(targetPoint) && !noReposition) {
-                notPatrolling = false;
+            if(repositionable(targetPoint) && isRepositioning) {
+                shouldBePatrolling = false;
                 seeker.enabled = false;
                 preTarget = targetPoint;
                 Reposition(targetPoint);
             }else{
                 inTarget = false;
-                notPatrolling = true;
+                shouldBePatrolling = true;
             }
-
-            if (noReposition)
+            // when enemy and player on the same platform
+            if (!isRepositioning)
             {
-                makeFace();
+                faceTowardsPlayer();
 
-                notPatrolling = false;
+                shouldBePatrolling = false;
+                // check if enemy needs to cry for battle
                 if (battleCryEnd)
                 {
                     attacking = true;
                     followEnabled = true;
                 }
-                else
-                {
-                    notPatrolling = false;
+                else{
                     animator.Play("BattleCry");
                 }
-                if (followEnabled && tDistance() > attackRange)
+                // check if enemy needs to approach player
+                if (followEnabled && distanceFromPlayer() > attackRange)
                 {
                     pathFollow();
                 }
-                if (tDistance() <= attackRange)
+                // check if player in attack range
+                if (distanceFromPlayer() <= attackRange)
                 {
                     attack();
                 }
             }
+        // when target is not in alerting distance
         }else {
             inTarget = false;
-            if(!noReposition){
-                    transform.position = preTarget;
-                    noReposition = true;
-                    rb.gravityScale = 1f;
-                    isReadyToClimp = false;
-                notPatrolling = true;
+            if(isRepositioning){
+                transform.position = preTarget;
+                isRepositioning = false;
+                rb.gravityScale = 1f;
+                isReadyToClimb = false;
+                shouldBePatrolling = true;
             }
-            if(!isReadyToClimp){
-                noReposition = true;
+            if(!isReadyToClimb){
+                isRepositioning = false;
             }
-            notPatrolling = true;
+            shouldBePatrolling = true;
             attacking = false;
         }
 
@@ -225,21 +231,21 @@ public class EnemyBase : MonoBehaviour
             animator.Play("Patrolling animation");
         }
 
-        // if(atJumpPoint && isGrounded && TargetInDistance() && noReposition) {
+        // if(atJumpPoint && isGrounded && TargetInDistance() && isRepositioning) {
         //     rb.AddForce(Vector2.up * speed * jumpModifier);
         // }
     }
 
-    void makeFace(){
-        bool watchRight = true;
+    void faceTowardsPlayer(){
+        bool facingRight = true;
             if(player.position.x > transform.position.x){
-                watchRight = true;
+                facingRight = true;
             }else if(player.position.x < transform.position.x){
-                watchRight = false;
+                facingRight = false;
             }
-            if(!watchRight) {
+            if(!facingRight) {
                 transform.localScale = new Vector3(-1f * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            }else if(watchRight) {
+            }else if(facingRight) {
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             }
     }
@@ -265,7 +271,7 @@ public class EnemyBase : MonoBehaviour
         Vector2 force = direction * speed * Time.deltaTime;
 
         //jump
-        if(jumpEnabled && isGrounded && noReposition) {
+        if(jumpEnabled && isGrounded && !isRepositioning) {
             if(direction.y > jumbNodeHeightRequirment) {
                 rb.AddForce(Vector2.up * speed * jumpModifier);
             }
@@ -292,7 +298,7 @@ public class EnemyBase : MonoBehaviour
         return Vector2.Distance(transform.position, player.transform.position) < activateDistance;
     }
 
-    private float tDistance(){
+    private float distanceFromPlayer(){
         return Vector2.Distance(transform.position, player.transform.position);
     }
 
@@ -377,7 +383,7 @@ public class EnemyBase : MonoBehaviour
 
     public void animationEnd(){
         rb.velocity = new Vector2(speed * Time.fixedDeltaTime , rb.velocity.y);
-        notPatrolling = true;
+        shouldBePatrolling = true;
         animator.Play("Patrolling animation");
         if(battleCryEnd){
             farAnimationPlayed = true;
@@ -407,7 +413,7 @@ public class EnemyBase : MonoBehaviour
 
         if (tar.x == transform.position.x && tar.y == transform.position.y)
         {
-            noReposition = true;
+            isRepositioning = false;
         }
     }
 
@@ -422,7 +428,7 @@ public class EnemyBase : MonoBehaviour
             rBox = right;
             Debug.Log(lBox);
             seeker.enabled = true;
-            isReadyToClimp = false;
+            isReadyToClimb = false;
         }
     }
 

@@ -476,8 +476,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inTarget: 0
-  isReadyToClimp: 0
-  noReposition: 0
+  isReadyToClimb: 0
+  isRepositioning: 0
   inRepositioningPhase: 0
   playerScript: {fileID: 0}
   minimumDistanceForRepo: 10
@@ -485,7 +485,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   health: 50
-  notPatrolling: 0
+  shouldBePatrolling: 0
   rb: {fileID: 0}
   groundChecker: {fileID: 567498977}
   platformChecker: {fileID: 1878328542}
@@ -4368,18 +4368,18 @@ GameObject:
   m_Component:
   - component: {fileID: 1400936489}
   - component: {fileID: 1400936487}
-  - component: {fileID: 1400936486}
   - component: {fileID: 1400936485}
   - component: {fileID: 1400936484}
   - component: {fileID: 1400936490}
   - component: {fileID: 1400936488}
+  - component: {fileID: 1400936486}
   m_Layer: 11
   m_Name: HeavyEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1400936484
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4462,16 +4462,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inTarget: 0
-  isReadyToClimp: 0
-  noReposition: 1
+  isReadyToClimb: 0
+  isRepositioning: 0
   inRepositioningPhase: 0
   playerScript: {fileID: 0}
-  minimumDistanceForRepo: 10
+  minimumDistanceForRepo: 50
   repositionLayer:
     serializedVersion: 2
-    m_Bits: 512
-  health: 300
-  notPatrolling: 0
+    m_Bits: 0
+  health: 0
+  shouldBePatrolling: 0
   rb: {fileID: 0}
   groundChecker: {fileID: 1943621394}
   platformChecker: {fileID: 1772027884}
@@ -4484,14 +4484,14 @@ MonoBehaviour:
   canHit: 0
   bullet: {fileID: 0}
   battleCryRange: 3
-  timeBetweenHits: 2
-  animator: {fileID: 1400936485}
+  timeBetweenHits: 1.15
+  animator: {fileID: 0}
   attacking: 0
   battleCryEnd: 0
   farAnimationPlayed: 1
   randomNumber: 100
-  attackRange: 2
-  player: {fileID: 0}
+  attackRange: 0
+  player: {fileID: 640968025}
   activateDistance: 10
   pathUpdateSeconds: 0.5
   speed: 100
@@ -4505,9 +4505,9 @@ MonoBehaviour:
   isGrounded: 0
   playerRight: {x: 0, y: 0}
   playerLeft: {x: 0, y: 0}
-  walkSpeed: 100
+  walkSpeed: 0
   comboMode: 0
-  comboAttackTime: 4
+  comboAttackTime: 2
   notInRepositioningPhase: 0
 --- !u!50 &1400936487
 Rigidbody2D:
@@ -8019,8 +8019,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inTarget: 0
-  isReadyToClimp: 0
-  noReposition: 0
+  isReadyToClimb: 0
+  isRepositioning: 0
   inRepositioningPhase: 0
   playerScript: {fileID: 0}
   minimumDistanceForRepo: 10
@@ -8028,7 +8028,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   health: 0
-  notPatrolling: 0
+  shouldBePatrolling: 0
   rb: {fileID: 0}
   groundChecker: {fileID: 3137284497598496297}
   platformChecker: {fileID: 3137284496254239383}
@@ -127842,6 +127842,11 @@ PrefabInstance:
       propertyPath: playerStaminaSlider
       value: 
       objectReference: {fileID: 271481129}
+    - target: {fileID: 1626359948032388215, guid: a5ab13beee15b1443a1aefec1b01a6b0,
+        type: 3}
+      propertyPath: m_Distance
+      value: 15.431296
+      objectReference: {fileID: 0}
     - target: {fileID: 6825991441321897635, guid: a5ab13beee15b1443a1aefec1b01a6b0,
         type: 3}
       propertyPath: m_Name

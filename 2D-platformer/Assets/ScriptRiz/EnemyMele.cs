@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,10 +7,10 @@ public class EnemyMele : EnemyBase
 
     int repoMode = 0;
     public override void Start(){
-        noReposition = true;
+        isRepositioning = false;
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        notPatrolling = true;
+        shouldBePatrolling = true;
         canHit = true;
         attackRange = EnemyManager.Instance.attackMelRange;
         timeBetweenHits = EnemyManager.Instance.enemyAttackSpeed;
@@ -27,22 +27,23 @@ public class EnemyMele : EnemyBase
     private float baseY;
     private float height;
     private Vector3 startPos;
+    
     public override void Reposition(Vector2 tar) {
         if (tar.y > transform.position.y){
             Vector2 RepoStart = enemyClosestRepoStartPoint();
             if (Mathf.Abs(transform.position.x - RepoStart.x) > 0.05f)
             {
-                if (!isReadyToClimp)
+                if (!isReadyToClimb)
                 {
                     towardsRepoPoint(RepoStart);
                 }
             }
             else
             {
-                isReadyToClimp = true;
+                isReadyToClimb = true;
             }
 
-            if (isReadyToClimp)
+            if (isReadyToClimb)
             {
                 // transform.position = tar;
                 rb.gravityScale = 0f;
@@ -51,9 +52,9 @@ public class EnemyMele : EnemyBase
             float dist = Mathf.Abs(transform.position.y - tar.y);
             if (dist < 0.05f)
             {
-                noReposition = true;
+                isRepositioning = false;
                 rb.gravityScale = 1f;
-                isReadyToClimp = false;
+                isReadyToClimb = false;
             }
         }else{
             startPos = transform.position;
@@ -88,7 +89,7 @@ public class EnemyMele : EnemyBase
             if(!isGrounded) {
                 rb.gravityScale = 20f;
             }else{
-                noReposition = true;
+                isRepositioning = false;
                 rb.gravityScale = 1f;
             }
             
