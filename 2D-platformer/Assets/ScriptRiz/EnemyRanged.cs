@@ -10,9 +10,9 @@ public class EnemyRanged : EnemyBase
     float timeBetweenShoots;
 
     public override void Start(){
-        isReadyToClimp = false;
-        noReposition = true;
-        notPatrolling = true;
+        isReadyToClimb = false;
+        isRepositioning = true;
+        shouldBePatrolling = true;
         canHit = true;
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -79,17 +79,17 @@ public class EnemyRanged : EnemyBase
             // Debug.Log(RepoStart.x+ " "+ RepoStart.y);
             if (Mathf.Abs(transform.position.x - RepoStart.x) > 0.05f)
             {
-                if (!isReadyToClimp)
+                if (!isReadyToClimb)
                 {
                     towardsRepoPoint(RepoStart);
                 }
             }
             else
             {
-                isReadyToClimp = true;
+                isReadyToClimb = true;
             }
 
-            if (isReadyToClimp)
+            if (isReadyToClimb)
             {
                 // transform.position = tar;
                 rb.gravityScale = 0f;
@@ -98,9 +98,9 @@ public class EnemyRanged : EnemyBase
             float dist = Mathf.Abs(transform.position.y - tar.y);
             if (dist < 0.05f)
             {
-                noReposition = true;
+                isRepositioning = true;
                 rb.gravityScale = 1f;
-                isReadyToClimp = false;
+                isReadyToClimb = false;
                 notInRepositioningPhase = true;
             }
         }else{
@@ -136,7 +136,7 @@ public class EnemyRanged : EnemyBase
             if(!isGrounded) {
                 rb.gravityScale = 20f;
             }else{
-                noReposition = true;
+                isRepositioning = true;
                 rb.gravityScale = 1f;
                 notInRepositioningPhase = true;
             }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class HeavyEnemy : EnemyBase
 {
     public override void Start(){
-        noReposition = true;
+        isRepositioning = true;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
         timeBetweenHits = EnemyManager.Instance.heavyEnemyAttackSpeed;
@@ -49,7 +49,7 @@ public class HeavyEnemy : EnemyBase
             if(!isGrounded) {
                 rb.gravityScale = 100f;
             }else{
-                noReposition = true;
+                isRepositioning = true;
                 rb.gravityScale = 1f;
             }
             
