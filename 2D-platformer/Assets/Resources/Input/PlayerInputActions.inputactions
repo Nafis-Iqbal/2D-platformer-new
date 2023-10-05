@@ -51,15 +51,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ColumnLedgeGrab",
-                    "type": "Button",
-                    "id": "901dd880-77e7-4e62-9db8-580b7be2e924",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "ColumnMove",
                     "type": "Value",
                     "id": "f877820c-c2c1-4f96-ac44-bbcb88b1257d",
@@ -242,28 +233,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "c921aa3d-788b-4f87-8623-b0f117811282",
-                    "path": "<Keyboard>/k",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "ColumnLedgeGrab",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d9364f04-7a0e-49fd-b755-08efe77a0516",
-                    "path": "<HID:: USB Gamepad          >/button8",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "ColumnLedgeGrab",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "WS",
                     "id": "8d3a9a9f-68a7-438a-9806-80d23b990f5c",
                     "path": "1DAxis",
@@ -442,7 +411,7 @@
                 {
                     "name": "",
                     "id": "832e94b2-73dc-40c2-a2fe-8ba35b0d09e7",
-                    "path": "<Keyboard>/rightBracket",
+                    "path": "<Mouse>/backButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
