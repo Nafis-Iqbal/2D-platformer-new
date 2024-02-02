@@ -26,7 +26,7 @@ public class PlayerHeavyAttackCollider : MonoBehaviour
         {
             debugColliderColor = Color.red;
             // other.transform.GetComponent<EnemyCombatManager>().takeDamage(PlayerCombatManager.SwordDamage);
-            other.transform.GetComponent<EnemyBase>().health -= PlayerCombatManager.Instance.heavyAttackDamage;
+            other.transform.GetComponent<EnemyBase>().enemyHealth -= PlayerCombatManager.Instance.heavyAttackDamage;
             Debug.Log("enemy damage(heavy attack): " + PlayerCombatManager.Instance.heavyAttackDamage);
         }
         else

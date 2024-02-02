@@ -10,6 +10,8 @@ TagManager:
   - bullet
   - HeavyKnife
   - RepositionBox
+  - Column
+  - Platforms
   layers:
   - Default
   - TransparentFX

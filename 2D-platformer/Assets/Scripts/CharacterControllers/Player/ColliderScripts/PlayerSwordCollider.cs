@@ -26,7 +26,7 @@ public class PlayerSwordCollider : MonoBehaviour
         {
             debugColliderColor = Color.red;
             // other.transform.GetComponent<EnemyCombatManager>().takeDamage(PlayerCombatManager.SwordDamage);
-            other.transform.GetComponent<EnemyBase>().health -= PlayerCombatManager.Instance.swordDamage;
+            other.transform.GetComponent<EnemyBase>().enemyHealth -= PlayerCombatManager.Instance.swordDamage;
             Debug.Log("enemy damage(sword): " + PlayerCombatManager.Instance.swordDamage);
         }
         else

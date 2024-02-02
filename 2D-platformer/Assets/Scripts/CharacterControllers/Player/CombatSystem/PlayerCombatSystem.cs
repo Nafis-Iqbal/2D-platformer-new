@@ -16,6 +16,9 @@ public class PlayerCombatSystem : MonoBehaviour
     private PlayerColumn playerColumn;
     private PlayerJump playerJump;
 
+    [Header("Combat State")]
+    public bool combatMode = false;
+
     [Header("Shuriken Attack Details")]
     public GameObject shurikenPrefab;
     public float shurikenAttackCooldownTime = 1f;
@@ -71,6 +74,11 @@ public class PlayerCombatSystem : MonoBehaviour
         playerColumn = GameManager.Instance.playerTransform.GetComponent<PlayerColumn>();
     }
 
+    private void OnEnable()
+    {
+        combatMode = false;
+    }
+
     private void Start()
     {
         if (playerStaminaSlider == null)
@@ -90,14 +98,14 @@ public class PlayerCombatSystem : MonoBehaviour
         {
             isBlocking = true;
             blockDefenseObject.SetActive(true);
-            playerSpineAnimator.SetBool("Blocking", true);
+            playerSpineAnimator.SetBool("Defence", true);
             // playerSpineAnimator.SetTrigger("blockTrigger");
         }
         else
         {
             isBlocking = false;
             blockDefenseObject.SetActive(false);
-            playerSpineAnimator.SetBool("Blocking", false);
+            playerSpineAnimator.SetBool("Defence", false);
             // playerSpineAnimator.ResetTrigger("blockTrigger");
         }
         isBlockingCached = isBlocking;
@@ -110,7 +118,7 @@ public class PlayerCombatSystem : MonoBehaviour
             currentStamina += normalStaminaBarFillRate * Time.deltaTime;
         }
         StaminaBoundCheck();
-        UpdateStaminaUI();
+        UpdateStaminaUIAfterBlocking();
         PlayerCombatManager.Instance.isBlocking = isBlocking;
         #endregion
 
@@ -155,7 +163,9 @@ public class PlayerCombatSystem : MonoBehaviour
         {
             ExecuteHighPoweredAttack();
         }
-        BoundCheckCharge();
+
+        currentHeavyAttackCharge = Mathf.Min(currentHeavyAttackCharge, totalHeavyAttackChargeAmount);
+
         heavyAttackDamage = (int)Math.Ceiling(successfulHeavyAttackDamage * heavyAttackDamageMultiplier);
         #endregion
 
@@ -184,31 +194,7 @@ public class PlayerCombatSystem : MonoBehaviour
         #endregion
     }
 
-    #region Projectile Attack
-    internal void OnProjectileAttack(InputAction.CallbackContext context)
-    {
-        if (!projectileAttackExecuting && !playerColumn.hasGrabbedColumn)
-        {
-            playerSpineAnimator.Play("projectile throw");
-            var projectile = ObjectPooler.Instance.SpawnFromPool("PlayerProjectile", transform.position, Quaternion.identity);
-            projectile.GetComponent<PlayerProjectile>().Deploy(Vector2.right * transform.localScale.x);
-        }
-    }
-    #endregion
-
-    #region Shuriken Attack
-    public void OnShurikenAttack(InputAction.CallbackContext context)
-    {
-        if (!shurikenAttackExecuting && !playerColumn.hasGrabbedColumn)
-        {
-            playerSpineAnimator.Play("shuriken throw");
-            var shuriken = ObjectPooler.Instance.SpawnFromPool("PlayerShuriken", transform.position, Quaternion.identity);
-            shuriken.GetComponent<PlayerShuriken>().Deploy(Vector2.right * transform.localScale.x);
-        }
-    }
-    #endregion
-
-    #region Player Block
+    #region Player Defence
     public void OnBlockDefense(InputAction.CallbackContext context)
     {
         // Debug.Log($"block: {context}");
@@ -222,13 +208,13 @@ public class PlayerCombatSystem : MonoBehaviour
         }
     }
 
-    public void HandleAttack(int damageAmount)
+    public void HandleAttackDuringDefence(int damageAmount)
     {
         currentStamina -= damageAmount;
         Debug.Log($"stamina decrease: {damageAmount}");
     }
 
-    public void UpdateStaminaUI()
+    public void UpdateStaminaUIAfterBlocking()
     {
         normalizedStamina = currentStamina / maxStamina;
         DOTween.To(() => playerStaminaSlider.value, x => playerStaminaSlider.value = x, normalizedStamina, staminaUIUpdateDuration);
@@ -249,48 +235,96 @@ public class PlayerCombatSystem : MonoBehaviour
     }
     #endregion
 
-    #region Light Attack
-    public void OnLightAttack(InputAction.CallbackContext context)
+    #region Light Attack Variants
+    public void OnWeaponHolsterPrompted(InputAction.CallbackContext context)
     {
         if (!lightAttacked && !lightAttackExecuting && !playerColumn.hasGrabbedColumn)
         {
+            if (combatMode == true)
+            {
+                combatMode = false;
+                GameManager.Instance.playerSpineAnimator.SetTrigger("CombatMode");
+            }
+            else
+            {
+                combatMode = true;
+                GameManager.Instance.playerSpineAnimator.SetTrigger("CombatMode");
+                GameManager.Instance.playerSpineAnimator.SetInteger("WeaponID", 1);
+            }
+        }
+    }
+
+    public void OnWeaponAttack1(InputAction.CallbackContext context)
+    {
+        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
+
+        if (!lightAttacked && !lightAttackExecuting && !playerColumn.hasGrabbedColumn)
+        {
             lightAttacked = true;
-            GameManager.Instance.playerSpineAnimator.Play("light attack");
+            GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
+            GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 1);
+        }
+    }
+
+    public void OnWeaponAttack2(InputAction.CallbackContext context)
+    {
+        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
+
+        if (!lightAttacked && !lightAttackExecuting && !playerColumn.hasGrabbedColumn)
+        {
+            lightAttacked = true;
+            GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
+            GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 2);
+        }
+    }
+
+    public void OnWeaponAttack3(InputAction.CallbackContext context)
+    {
+        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
+
+        if (!lightAttacked && !lightAttackExecuting && !playerColumn.hasGrabbedColumn)
+        {
+            lightAttacked = true;
+            GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
+            GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 3);
+        }
+    }
+
+    public void OnRunAttack(InputAction.CallbackContext context)
+    {
+        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
+
+        if (!lightAttacked && !lightAttackExecuting && !playerColumn.hasGrabbedColumn)
+        {
+            lightAttacked = true;
+            GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
+            GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 4);
+        }
+    }
+
+    public void OnRollAttack(InputAction.CallbackContext context)
+    {
+        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
+
+        if (!lightAttacked && !lightAttackExecuting && !playerColumn.hasGrabbedColumn)
+        {
+            lightAttacked = true;
+            GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
+            GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 5);
         }
     }
     #endregion
 
-    #region Heavy Attack
+    #region Charged Attack
     private void ChargeForAttack()
     {
+        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
+
         currentHeavyAttackCharge += Time.deltaTime * heavyAttackChargeFillRate;
         GameManager.Instance.playerSpineAnimator.SetBool("Charging", true);
     }
 
-    private void ExecuteHighPoweredAttack()
-    {
-        Debug.Log("heavy attack (high damage)...");
-        heavyAttackDamageMultiplier = 1f;
-        isHeavyAttackKeyPressed = false;
-        currentHeavyAttackCharge = 0f;
-        GameManager.Instance.playerSpineAnimator.SetBool("Charging", false);
-        timeElapsedSinceHeavyAttack = 0f;
-        heavyAttackDone = true;
-    }
-
-    private void BoundCheckCharge()
-    {
-        if (currentHeavyAttackCharge < 0f)
-        {
-            currentHeavyAttackCharge = 0f;
-        }
-        else if (currentHeavyAttackCharge > totalHeavyAttackChargeAmount)
-        {
-            currentHeavyAttackCharge = totalHeavyAttackChargeAmount;
-        }
-    }
-
-    public void OnHeavyAttack(InputAction.CallbackContext context)
+    public void OnChargedAttack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
         {
@@ -309,6 +343,17 @@ public class PlayerCombatSystem : MonoBehaviour
         }
     }
 
+    private void ExecuteHighPoweredAttack()
+    {
+        Debug.Log("heavy attack (high damage)...");
+        heavyAttackDamageMultiplier = 1f;
+        isHeavyAttackKeyPressed = false;
+        currentHeavyAttackCharge = 0f;
+        GameManager.Instance.playerSpineAnimator.SetBool("Charging", false);
+        timeElapsedSinceHeavyAttack = 0f;
+        heavyAttackDone = true;
+    }
+
     private void ExecuteLowPoweredAttack()
     {
         Debug.Log("heavy attack (low damage)...");
@@ -318,6 +363,28 @@ public class PlayerCombatSystem : MonoBehaviour
         GameManager.Instance.playerSpineAnimator.SetBool("Charging", false);
         timeElapsedSinceHeavyAttack = 0f;
         heavyAttackDone = true;
+    }
+    #endregion
+
+    #region Projectile Attacks
+    internal void OnProjectileAttack(InputAction.CallbackContext context)
+    {
+        if (!projectileAttackExecuting && !playerColumn.hasGrabbedColumn)
+        {
+            playerSpineAnimator.Play("projectile throw");
+            var projectile = ObjectPooler.Instance.SpawnFromPool("PlayerProjectile", transform.position, Quaternion.identity);
+            projectile.GetComponent<PlayerProjectile>().Deploy(Vector2.right * transform.localScale.x);
+        }
+    }
+
+    public void OnShurikenAttack(InputAction.CallbackContext context)
+    {
+        if (!shurikenAttackExecuting && !playerColumn.hasGrabbedColumn)
+        {
+            playerSpineAnimator.Play("shuriken throw");
+            var shuriken = ObjectPooler.Instance.SpawnFromPool("PlayerShuriken", transform.position, Quaternion.identity);
+            shuriken.GetComponent<PlayerShuriken>().Deploy(Vector2.right * transform.localScale.x);
+        }
     }
     #endregion
 }

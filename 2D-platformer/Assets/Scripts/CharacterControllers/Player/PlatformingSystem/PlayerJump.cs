@@ -9,14 +9,16 @@ public class PlayerJump : MonoBehaviour
 {
     public Animator spineAnimator;
     public float jumpMovementMultiplier = 1f;
-    public float jumpMovementMultiplierX = 1f;
-    public float jumpMovementMultiplierY = 1f;
+    [SerializeField, Range(0f, 2f)] public float jumpMultiplierXSprint = 1f;
+    [SerializeField, Range(0f, 2f)] public float jumpMultiplierXJogg = 1f;
+    float finalJumpMovementMultiplier;
+    //public float jumpMovementMultiplierY = 1f;
     [Header("Components")]
     [HideInInspector] public Rigidbody2D body;
     [HideInInspector] public Vector2 velocity;
     private PlayerAppearanceScript playerAppearanceScript;
     private PlayerMovement playerMovement;
-    private PlayerDash playerDash;
+    private PlayerDodge playerDodge;
     private PlayerColumn playerColumn;
     private PlayerGrapplingGun playerGrapplingGun;
 
@@ -55,6 +57,7 @@ public class PlayerJump : MonoBehaviour
     private bool onGroundCached = false;
     private float jumpBufferCounter;
     private float coyoteTimeCounter = 0;
+    int playerMoveInd;
 
     void Awake()
     {
@@ -63,7 +66,7 @@ public class PlayerJump : MonoBehaviour
 
         //Find the character's Rigidbody and ground detection and juice scripts
         body = GetComponent<Rigidbody2D>();
-        playerDash = GetComponent<PlayerDash>();
+        playerDodge = GetComponent<PlayerDodge>();
         playerAppearanceScript = GetComponentInChildren<PlayerAppearanceScript>();
         playerGrapplingGun = GetComponent<PlayerGrapplingGun>();
         defaultGravityScale = 1f;
@@ -79,44 +82,23 @@ public class PlayerJump : MonoBehaviour
         desiredJump = true;
     }
 
-    private void StopJump()
-    {
-
-    }
-
-    public void Jump(float jumpButtonHoldTime)
-    {
-        StartJump();
-        StartCoroutine(StopJumpCoroutine(jumpButtonHoldTime));
-    }
-
-    IEnumerator StopJumpCoroutine(float waitingTime)
-    {
-        yield return new WaitForSeconds(waitingTime);
-        StopJump();
-    }
-
     public void OnJump(InputAction.CallbackContext context)
     {
         pressingJump = true;
+        playerMoveInd = playerMovement.playerMovementInd;
+
         //This function is called when one of the jump buttons (like space or the A button) is pressed.
-        if (MovementLimiter.instance.playerCanMove)
+        if (MovementLimiter.instance.playerCanMove && MovementLimiter.instance.playerCanParkour)
         {
-            //When we press the jump button, tell the script that we desire a jump.
-            //Also, use the started and canceled contexts to know if we're currently holding the button
-            if (context.started && !currentlyJumping)
+            if (context.canceled)
             {
                 StartJumpAnimation();
             }
-
-            if (context.canceled)
-            {
-                StopJump();
-            }
         }
+        pressingJump = false;
     }
 
-    public void OnJumpReleased(InputAction.CallbackContext context)
+    public void OnJumpReleased()
     {
         pressingJump = false;
     }
@@ -126,23 +108,21 @@ public class PlayerJump : MonoBehaviour
         isCharging = true;
         if (playerAppearanceScript != null)
         {
-            playerAppearanceScript.jumpEffects();
+            spineAnimator.ResetTrigger("Landed");
+            spineAnimator.SetTrigger("Jump");
         }
     }
 
     void Update()
     {
         //Check if we're on ground, using Kit's Ground script
-        onGroundCached = checkGroundHeight();
+        onGround = checkIfOnGroundHeight();
 
-        if (onGroundCached != onGround)
-        {
-            onGround = onGroundCached;
-            if (onGround == false) spineAnimator.SetTrigger("OnAir");
-            else spineAnimator.SetTrigger("Landed");
-        }
+        if (onGround == false) spineAnimator.SetTrigger("OnAir");
+        else spineAnimator.SetTrigger("Landed");
 
-        if (playerDash.isExecuting || playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling)
+
+        if (playerDodge.isExecuting || playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling)
         {
             return;
         }
@@ -193,7 +173,7 @@ public class PlayerJump : MonoBehaviour
         {
             currentlyJumping = false;
         }
-        if (playerDash.isExecuting || playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling)
+        if (playerDodge.isExecuting || playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling)
         {
             return;
         }
@@ -204,6 +184,12 @@ public class PlayerJump : MonoBehaviour
         if (desiredJump)
         {
             DoAJump();
+
+            if (playerMoveInd == 1) finalJumpMovementMultiplier = jumpMultiplierXJogg;
+            else if (playerMoveInd == 2) finalJumpMovementMultiplier = jumpMultiplierXSprint;
+            else finalJumpMovementMultiplier = jumpMovementMultiplier;
+
+            velocity.x = velocity.x * finalJumpMovementMultiplier;
             body.velocity = velocity * jumpMovementMultiplier;
 
             //Skip gravity calculations this frame, so currentlyJumping doesn't turn off
@@ -212,6 +198,23 @@ public class PlayerJump : MonoBehaviour
         }
 
         calculateGravity();
+    }
+
+    private void StopJump()
+    {
+
+    }
+
+    public void Jump(float jumpButtonHoldTime)
+    {
+        StartJump();
+        StartCoroutine(StopJumpCoroutine(jumpButtonHoldTime));
+    }
+
+    IEnumerator StopJumpCoroutine(float waitingTime)
+    {
+        yield return new WaitForSeconds(waitingTime);
+        StopJump();
     }
 
     private void calculateGravity()
@@ -231,16 +234,9 @@ public class PlayerJump : MonoBehaviour
                 //If we're using variable jump height...)
                 if (variablejumpHeight)
                 {
-                    //Apply upward multiplier if player is rising and holding jump
-                    if (pressingJump && currentlyJumping)
-                    {
-                        gravMultiplier = upwardMovementMultiplier;
-                    }
-                    //But apply a special downward multiplier if the player lets go of jump
-                    else
-                    {
-                        gravMultiplier = jumpCutOff;
-                    }
+                    if (playerMoveInd == 0) gravMultiplier = 1.0f;
+                    else if (playerMoveInd == 1) gravMultiplier = 1.2f;
+                    else if (playerMoveInd == 2) gravMultiplier = .8f;
                 }
                 else
                 {
@@ -275,14 +271,11 @@ public class PlayerJump : MonoBehaviour
 
             gravMultiplier = defaultGravityScale;
         }
-
-        //Set the character's Rigidbody's velocity
-        //But clamp the Y variable within the bounds of the speed limit, for the terminal velocity assist option
-        // body.velocity = new Vector3(velocity.x * jumpMovementMultiplierX, Mathf.Clamp(velocity.y * jumpMovementMultiplierY, -speedLimit, 100));
     }
 
     private void DoAJump()
     {
+        Debug.Log("DoAJump");
 
         //Create the jump, provided we are on the ground, in coyote time, or have a double jump available
         if (!playerColumn.hasGrabbedColumn && (onGround || (coyoteTimeCounter > 0.03f && coyoteTimeCounter < coyoteTime) || canJumpAgain))
@@ -321,7 +314,7 @@ public class PlayerJump : MonoBehaviour
     }
 
     //Returns true if player i close enough to the ground for landing animation
-    private bool checkGroundHeight()
+    private bool checkIfOnGroundHeight()
     {
         LayerMask mask = LayerMask.GetMask("Ground");
 
@@ -330,11 +323,14 @@ public class PlayerJump : MonoBehaviour
 
         if (Hit1.collider != null && Hit2.collider != null)
         {
-            if (Hit1.distance < minLandHeight && Hit2.distance < minLandHeight)//if high on ground
+            if (Hit1.distance > minLandHeight && Hit2.distance > minLandHeight)//if high on ground
+            {
+                return false;
+            }
+            else
             {
                 return true;
             }
-            else return false;
         }
 
         return false;

@@ -1,0 +1,106 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemyMelee : EnemyBase
+{
+    private float dist;
+    private float nextX;
+    private float baseY;
+    private float height;
+    private Vector3 startPos;
+    public override void Start()
+    {
+        isRepositioning = false;
+        rb = GetComponent<Rigidbody2D>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        shouldBePatrolling = true;
+        canHit = true;
+        enemyAttackRange = EnemyManager.Instance.attackMelRange;
+        timeBetweenHits = EnemyManager.Instance.enemyAttackSpeed;
+        enemyHealth = EnemyManager.Instance.enemyHealth;
+        enemySpineAnimator = GetComponent<Animator>();
+
+        acquireDependencies();
+
+        enemyWalkSpeed = enemyMovementSpeed;
+    }
+
+    public override void Reposition(Vector2 tar)
+    {
+        if (tar.y > transform.position.y)
+        {
+            Vector2 RepoStart = enemyClosestRepositionStartPoint();
+            if (Mathf.Abs(transform.position.x - RepoStart.x) > 0.05f)
+            {
+                if (!isReadyToClimb)
+                {
+                    towardsRepositionPoint(RepoStart);
+                }
+            }
+            else
+            {
+                isReadyToClimb = true;
+            }
+
+            if (isReadyToClimb)
+            {
+                // transform.position = tar;
+                rb.gravityScale = 0f;
+                towardsFinalTarget(tar);
+            }
+            float dist = Mathf.Abs(transform.position.y - tar.y);
+            if (dist < 0.05f)
+            {
+                isRepositioning = false;
+                rb.gravityScale = 1f;
+                isReadyToClimb = false;
+            }
+        }
+        else
+        {
+            startPos = transform.position;
+            rb.gravityScale = 0f;
+            tar.y += 1f;
+            calculateVelocity(tar);
+        }
+    }
+
+    void towardsFinalTarget(Vector2 tar)
+    {
+        enemySpineAnimator.Play("repositionUp");
+        transform.position = Vector2.MoveTowards(transform.position, tar, 1f * Time.fixedDeltaTime);
+    }
+
+    void towardsRepositionPoint(Vector2 tar)
+    {
+        enemySpineAnimator.Play("Patrolling animation");
+        particleController.instance.moveEnemyParti(true);
+        transform.position = Vector2.MoveTowards(transform.position, tar, enemyMovementSpeed / 50f * Time.fixedDeltaTime);
+    }
+
+    void calculateVelocity(Vector2 tar)
+    {
+        dist = tar.x - startPos.x;
+        nextX = Mathf.MoveTowards(transform.position.x, tar.x, 5f * Time.fixedDeltaTime);
+        baseY = Mathf.Lerp(startPos.y, tar.y, (nextX - startPos.x) / dist);
+        height = 1f * (nextX - startPos.x) * (nextX - tar.x) / (-.25f * dist * dist);
+
+        Vector3 movePosition = new Vector3(nextX, baseY + height, transform.position.z);
+        transform.position = movePosition;
+
+        if (tar.x == transform.position.x && tar.y == transform.position.y)
+        {
+            if (!isGrounded)
+            {
+                rb.gravityScale = 20f;
+            }
+            else
+            {
+                isRepositioning = false;
+                rb.gravityScale = 1f;
+            }
+
+        }
+    }
+}

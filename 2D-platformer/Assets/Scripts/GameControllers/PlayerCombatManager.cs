@@ -85,7 +85,7 @@ public class PlayerCombatManager : MonoBehaviour
             if (isBlockableAttack)
             {
                 // blocking and blockable attack
-                playerCombatSystemScript.HandleAttack(damageAmount);
+                playerCombatSystemScript.HandleAttackDuringDefence(damageAmount);
             }
             else
             {
@@ -108,7 +108,7 @@ public class PlayerCombatManager : MonoBehaviour
             }
         }
         UpdateHealthUI();
-        playerCombatSystemScript.UpdateStaminaUI();
+        playerCombatSystemScript.UpdateStaminaUIAfterBlocking();
     }
 
     private void UpdateHealthUI()

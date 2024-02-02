@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class EnemyRanged : EnemyBase
 {
-    public Transform rowPossition;
+    public Transform projectileSpawnPosition;
     private bool canThrow = true;
     public GameObject row;
     float timeBetweenShoots;
+    private float dist;
+    private float nextX;
+    private float baseY;
+    private float height;
+    private Vector3 startPos;
 
-    public override void Start(){
+    public override void Start()
+    {
         isReadyToClimb = false;
         isRepositioning = true;
         shouldBePatrolling = true;
@@ -17,22 +23,23 @@ public class EnemyRanged : EnemyBase
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         timeBetweenShoots = EnemyManager.Instance.enemyAttackSpeed;
-        attackRange = EnemyManager.Instance.archerRange;
+        enemyAttackRange = EnemyManager.Instance.archerRange;
         battleCryRange = EnemyManager.Instance.genRange;
-        health = EnemyManager.Instance.enemyHealth;
-        animator = GetComponent<Animator>();
-        startNesesarries();
-        walkSpeed = speed;
+        enemyHealth = EnemyManager.Instance.enemyHealth;
+        enemySpineAnimator = GetComponent<Animator>();
+        acquireDependencies();
+        enemyWalkSpeed = enemyMovementSpeed;
     }
 
-    IEnumerator Throw(){
+    IEnumerator Throw()
+    {
         canThrow = false;
-        animator.Play("Idle");
+        enemySpineAnimator.Play("Idle");
         yield return new WaitForSeconds(timeBetweenShoots);
         //Play attack animation;
-        animator.Play("attacking");
-        GameObject throwRow = Instantiate(row, rowPossition.position, Quaternion.identity);
-        throwRow.transform.position = rowPossition.position;
+        enemySpineAnimator.Play("attacking");
+        GameObject throwRow = Instantiate(row, projectileSpawnPosition.position, Quaternion.identity);
+        throwRow.transform.position = projectileSpawnPosition.position;
         throwRow.transform.rotation = transform.rotation;
 
         int dir;
@@ -49,39 +56,38 @@ public class EnemyRanged : EnemyBase
         rowScale.x *= dir;
         throwRow.transform.localScale = rowScale;
         yield return new WaitForSeconds(.5f);
-        randomNumber = Random.Range(1,5);
+        randomNumber = Random.Range(1, 5);
         canThrow = true;
     }
 
-    public override void attack(){
-        if(isGrounded)
+    public override void attack()
+    {
+        if (isGrounded)
             rb.velocity = Vector3.zero;
-        if (canThrow){
+        if (canThrow)
+        {
             farAnimationPlayed = false;
             StartCoroutine(Throw());
         }
 
-        if(randomNumber == 3){
+        if (randomNumber == 3)
+        {
             canHit = false;
-            animator.Play("BattleCry");
+            enemySpineAnimator.Play("BattleCry");
         }
     }
 
-
-    private float dist;
-    private float nextX;
-    private float baseY;
-    private float height;
-    private Vector3 startPos;
-    public override void Reposition(Vector2 tar) {
-        if (tar.y > transform.position.y){
-            Vector2 RepoStart = enemyClosestRepoStartPoint();
+    public override void Reposition(Vector2 tar)
+    {
+        if (tar.y > transform.position.y)
+        {
+            Vector2 RepoStart = enemyClosestRepositionStartPoint();
             // Debug.Log(RepoStart.x+ " "+ RepoStart.y);
             if (Mathf.Abs(transform.position.x - RepoStart.x) > 0.05f)
             {
                 if (!isReadyToClimb)
                 {
-                    towardsRepoPoint(RepoStart);
+                    towardsRepositionPoint(RepoStart);
                 }
             }
             else
@@ -103,7 +109,9 @@ public class EnemyRanged : EnemyBase
                 isReadyToClimb = false;
                 notInRepositioningPhase = true;
             }
-        }else{
+        }
+        else
+        {
             startPos = transform.position;
             rb.gravityScale = 0f;
             tar.y += 1f;
@@ -111,36 +119,41 @@ public class EnemyRanged : EnemyBase
         }
     }
 
-    void towardsFinalTarget(Vector2 tar){
-        animator.Play("repositionUp");
-        transform.position = Vector2.MoveTowards(transform.position , tar , 1f * Time.fixedDeltaTime);
+    void towardsFinalTarget(Vector2 tar)
+    {
+        enemySpineAnimator.Play("repositionUp");
+        transform.position = Vector2.MoveTowards(transform.position, tar, 1f * Time.fixedDeltaTime);
     }
 
-    void towardsRepoPoint(Vector2 tar){
-        animator.Play("Patrolling animation");
-        transform.position = Vector2.MoveTowards(transform.position , tar , speed/50f * Time.fixedDeltaTime);
+    void towardsRepositionPoint(Vector2 tar)
+    {
+        enemySpineAnimator.Play("Patrolling animation");
+        transform.position = Vector2.MoveTowards(transform.position, tar, enemyMovementSpeed / 50f * Time.fixedDeltaTime);
     }
 
-    void calculateVelocity(Vector2 tar) {
+    void calculateVelocity(Vector2 tar)
+    {
         dist = tar.x - startPos.x;
         nextX = Mathf.MoveTowards(transform.position.x, tar.x, 5f * Time.fixedDeltaTime);
-        baseY = Mathf.Lerp(startPos.y , tar.y , (nextX - startPos.x) / dist);
-        height = 1f * (nextX - startPos.x) * (nextX    - tar.x) / (-.25f * dist * dist);
+        baseY = Mathf.Lerp(startPos.y, tar.y, (nextX - startPos.x) / dist);
+        height = 1f * (nextX - startPos.x) * (nextX - tar.x) / (-.25f * dist * dist);
 
         Vector3 movePosition = new Vector3(nextX, baseY + height, transform.position.z);
         transform.position = movePosition;
 
-
         if (tar.x == transform.position.x && tar.y == transform.position.y)
         {
-            if(!isGrounded) {
+            if (!isGrounded)
+            {
                 rb.gravityScale = 20f;
-            }else{
+            }
+            else
+            {
                 isRepositioning = true;
                 rb.gravityScale = 1f;
                 notInRepositioningPhase = true;
             }
-            
+
         }
     }
 }

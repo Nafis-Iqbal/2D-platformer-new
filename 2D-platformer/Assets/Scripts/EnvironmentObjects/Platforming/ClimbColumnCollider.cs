@@ -11,11 +11,15 @@ public class ClimbColumnCollider : MonoBehaviour
 
     private PlayerColumn playerColumn;
     private Rigidbody2D playerRigidbody;
+    private Animator ledgeClimbAnimator;
+    public GameObject ledgeTeleportObject;
+    public int wallLadderID;
 
     private void Awake()
     {
         playerColumn = GameManager.Instance.playerTransform.GetComponent<PlayerColumn>();
         playerRigidbody = GameManager.Instance.playerTransform.GetComponent<Rigidbody2D>();
+        ledgeClimbAnimator = GetComponent<Animator>();
     }
 
     /// On trigger enter the ledge section, start animating player.
@@ -24,12 +28,40 @@ public class ClimbColumnCollider : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             playerTransform = other.transform;
-            playerColumn.OnWallGrab();
-            if ((playerTransform.position.y < transform.position.y) && (playerRigidbody.velocity.y < 0.01f) && playerColumn.columnMoveDirection > 0.1f)
-            {
-                StartCoroutine(movePlayerCoroutine());
-            }
+            playerColumn.inRangeWallLadderID = wallLadderID;
+            playerColumn.insideColumnRange = true;
+            playerColumn.ledgeColliderScript = this;
+            ledgeClimbAnimator.ResetTrigger("AssistLedgeClimb");
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            playerTransform = other.transform;
+            playerColumn.ledgeColliderScript = null;
+
+            playerColumn.insideColumnRange = false;
+            playerColumn.hasGrabbedColumn = false;
+
+            playerColumn.columnPositionInd = 0;
+            playerColumn.inRangeWallLadderID = -1;
+            playerColumn.columnMoveDirection = 0;
+        }
+    }
+
+    public void triggerLedgeClimbAnim()
+    {
+        playerTransform.transform.position = ledgeTeleportObject.transform.position;
+        playerTransform.parent = ledgeTeleportObject.transform;
+
+        ledgeClimbAnimator.SetTrigger("AssistLedgeClimb");
+    }
+
+    public void deparentPlayerObject()
+    {
+        playerTransform.parent = null;
     }
 
     /// remove gravity and reset gravity after some time and move the player.
@@ -38,7 +70,7 @@ public class ClimbColumnCollider : MonoBehaviour
         PlayerInputManager.Instance.playerInputActions.Player.Disable();
         originalGravityScale = playerRigidbody.gravityScale;
         playerRigidbody.gravityScale = 0f;
-        GameManager.Instance.playerSpineAnimator.SetTrigger("WallClimb");
+        GameManager.Instance.playerSpineAnimator.SetTrigger("WallLadderClimb");
         yield return new WaitForSeconds(0.3f);
         playerTransform.position = transform.position;
         playerRigidbody.gravityScale = originalGravityScale;

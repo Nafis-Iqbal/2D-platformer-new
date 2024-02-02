@@ -15,34 +15,16 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
-                    "type": "Value",
+                    "name": "JumpRoll",
+                    "type": "Button",
                     "id": "6e703ba4-d99d-4c70-86ed-e32c8a1a8c5b",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Walk(isMaintainedByOldInput)",
-                    "type": "Button",
-                    "id": "12bb4e08-927e-4555-bc24-ddd006ba339b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
+                    "interactions": "MultiTap(tapDelay=0.11)",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Roll",
-                    "type": "Value",
-                    "id": "8888ae09-25c7-4f71-b52b-f26dff448124",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Dash",
+                    "name": "Dodge",
                     "type": "Value",
                     "id": "9d0ae7c2-08e4-42c2-805c-c0b579f6176c",
                     "expectedControlType": "Button",
@@ -69,7 +51,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ColumnJump",
+                    "name": "ColumnJumpClimb",
                     "type": "Button",
                     "id": "be7956bf-5c77-4f42-9076-b567cbcefe6b",
                     "expectedControlType": "Button",
@@ -78,13 +60,67 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SwordAttack",
+                    "name": "GrapplingGun",
+                    "type": "Value",
+                    "id": "3d6ca192-42fd-4241-8cef-985959ac8995",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "HolsterWeapon",
                     "type": "Button",
-                    "id": "1a99b950-8ed6-4ee9-8e9f-aeb9d7e88dd0",
+                    "id": "87c4c71b-5c8f-41a0-a90b-8f71a9aacd0b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "WeaponMultiTapAttack1Attack2",
+                    "type": "Button",
+                    "id": "1a99b950-8ed6-4ee9-8e9f-aeb9d7e88dd0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "MultiTap(tapDelay=0.1)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "WeaponM3Attack3",
+                    "type": "Button",
+                    "id": "9e53507b-37b3-4962-a6f6-7f67f5247456",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RunningAttack4",
+                    "type": "Button",
+                    "id": "57312e9f-4029-4aa6-8251-c4f2f3cbf834",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RollAttack5",
+                    "type": "Button",
+                    "id": "6f0ace6b-3686-43e9-8fa5-af6b34eb10ed",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChargedAttack6",
+                    "type": "Value",
+                    "id": "75ecfe7e-2f9d-4060-91b6-a48eb6174726",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "ShurikenAttack",
@@ -105,15 +141,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "GrapplingGun",
-                    "type": "Value",
-                    "id": "3d6ca192-42fd-4241-8cef-985959ac8995",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Blocking",
                     "type": "Value",
                     "id": "756b96ad-6285-49e9-bf5a-55ad04765ca2",
@@ -123,13 +150,13 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "HeavyAttack",
-                    "type": "Value",
-                    "id": "75ecfe7e-2f9d-4060-91b6-a48eb6174726",
+                    "name": "Walk(isMaintainedByOldInput)",
+                    "type": "Button",
+                    "id": "12bb4e08-927e-4555-bc24-ddd006ba339b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -206,7 +233,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Jump",
+                    "action": "JumpRoll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -217,18 +244,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b8ff550b-16e7-4f75-b1e7-c1d21bf4c135",
-                    "path": "<HID:: USB Gamepad          >/button5",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Walk(isMaintainedByOldInput)",
+                    "action": "JumpRoll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -371,7 +387,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "ColumnJump",
+                    "action": "ColumnJumpClimb",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -382,7 +398,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ColumnJump",
+                    "action": "ColumnJumpClimb",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -393,7 +409,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "SwordAttack",
+                    "action": "WeaponMultiTapAttack1Attack2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -421,17 +437,6 @@
                 },
                 {
                     "name": "",
-                    "id": "ab3f7161-9296-458f-b428-cb757b1953e0",
-                    "path": "<Keyboard>/o",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "GrapplingGun",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "d75c09c0-e1d0-4907-bf81-98312ceb322d",
                     "path": "<Keyboard>/r",
                     "interactions": "",
@@ -443,56 +448,12 @@
                 },
                 {
                     "name": "",
-                    "id": "a71d88b3-a57f-44da-bdf1-b40be65294a4",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "HeavyAttack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "QE",
-                    "id": "56f81ff9-8e83-4031-8419-7a9f364fbded",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Roll",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "e07db6e9-65e2-45d6-bcef-c550f2c6a59b",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Roll",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "4718eb8c-a2d0-4a77-846e-a17b58c7071d",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Roll",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "",
                     "id": "ea7694a9-fbb2-43d8-b832-7788ac58d167",
                     "path": "<Keyboard>/a",
-                    "interactions": "MultiTap",
+                    "interactions": "MultiTap(tapDelay=0.11)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Dash",
+                    "action": "Dodge",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -500,10 +461,109 @@
                     "name": "",
                     "id": "f9fa9865-ca97-43a8-8d02-2b8ac14e080d",
                     "path": "<Keyboard>/d",
-                    "interactions": "MultiTap",
+                    "interactions": "MultiTap(tapDelay=0.11)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Dash",
+                    "action": "Dodge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e30b285d-b4af-4b92-bdb3-c07f9c82b453",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "WeaponM3Attack3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a71d88b3-a57f-44da-bdf1-b40be65294a4",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ChargedAttack6",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bfffd147-df96-4746-986d-4d718d5e2ddf",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "HolsterWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "LMB&Shift",
+                    "id": "c16faf93-09b1-40b1-8942-6f16eba7d90d",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RunningAttack4",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "binding",
+                    "id": "336eac1a-40f4-4068-8193-af37b5f6a538",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RunningAttack4",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier",
+                    "id": "8dd3ab89-a985-462c-bfcd-eb9507795628",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RunningAttack4",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "848c808d-8642-4b9d-a683-3ad6d8de5492",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RollAttack5",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b8ff550b-16e7-4f75-b1e7-c1d21bf4c135",
+                    "path": "<HID:: USB Gamepad          >/button5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Walk(isMaintainedByOldInput)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ab3f7161-9296-458f-b428-cb757b1953e0",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "GrapplingGun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

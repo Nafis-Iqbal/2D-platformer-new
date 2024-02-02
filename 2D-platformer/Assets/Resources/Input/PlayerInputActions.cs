@@ -37,34 +37,16 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Jump"",
-                    ""type"": ""Value"",
+                    ""name"": ""JumpRoll"",
+                    ""type"": ""Button"",
                     ""id"": ""6e703ba4-d99d-4c70-86ed-e32c8a1a8c5b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Walk(isMaintainedByOldInput)"",
-                    ""type"": ""Button"",
-                    ""id"": ""12bb4e08-927e-4555-bc24-ddd006ba339b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""MultiTap(tapDelay=0.11)"",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Roll"",
-                    ""type"": ""Value"",
-                    ""id"": ""8888ae09-25c7-4f71-b52b-f26dff448124"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Dash"",
+                    ""name"": ""Dodge"",
                     ""type"": ""Value"",
                     ""id"": ""9d0ae7c2-08e4-42c2-805c-c0b579f6176c"",
                     ""expectedControlType"": ""Button"",
@@ -91,7 +73,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ColumnJump"",
+                    ""name"": ""ColumnJumpClimb"",
                     ""type"": ""Button"",
                     ""id"": ""be7956bf-5c77-4f42-9076-b567cbcefe6b"",
                     ""expectedControlType"": ""Button"",
@@ -100,13 +82,67 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SwordAttack"",
+                    ""name"": ""GrapplingGun"",
+                    ""type"": ""Value"",
+                    ""id"": ""3d6ca192-42fd-4241-8cef-985959ac8995"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""HolsterWeapon"",
                     ""type"": ""Button"",
-                    ""id"": ""1a99b950-8ed6-4ee9-8e9f-aeb9d7e88dd0"",
+                    ""id"": ""87c4c71b-5c8f-41a0-a90b-8f71a9aacd0b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""WeaponMultiTapAttack1Attack2"",
+                    ""type"": ""Button"",
+                    ""id"": ""1a99b950-8ed6-4ee9-8e9f-aeb9d7e88dd0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap(tapDelay=0.1)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""WeaponM3Attack3"",
+                    ""type"": ""Button"",
+                    ""id"": ""9e53507b-37b3-4962-a6f6-7f67f5247456"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RunningAttack4"",
+                    ""type"": ""Button"",
+                    ""id"": ""57312e9f-4029-4aa6-8251-c4f2f3cbf834"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RollAttack5"",
+                    ""type"": ""Button"",
+                    ""id"": ""6f0ace6b-3686-43e9-8fa5-af6b34eb10ed"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChargedAttack6"",
+                    ""type"": ""Value"",
+                    ""id"": ""75ecfe7e-2f9d-4060-91b6-a48eb6174726"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""ShurikenAttack"",
@@ -127,15 +163,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""GrapplingGun"",
-                    ""type"": ""Value"",
-                    ""id"": ""3d6ca192-42fd-4241-8cef-985959ac8995"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Blocking"",
                     ""type"": ""Value"",
                     ""id"": ""756b96ad-6285-49e9-bf5a-55ad04765ca2"",
@@ -145,13 +172,13 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""HeavyAttack"",
-                    ""type"": ""Value"",
-                    ""id"": ""75ecfe7e-2f9d-4060-91b6-a48eb6174726"",
+                    ""name"": ""Walk(isMaintainedByOldInput)"",
+                    ""type"": ""Button"",
+                    ""id"": ""12bb4e08-927e-4555-bc24-ddd006ba339b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -228,7 +255,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Jump"",
+                    ""action"": ""JumpRoll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -239,18 +266,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b8ff550b-16e7-4f75-b1e7-c1d21bf4c135"",
-                    ""path"": ""<HID:: USB Gamepad          >/button5"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Walk(isMaintainedByOldInput)"",
+                    ""action"": ""JumpRoll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -393,7 +409,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""ColumnJump"",
+                    ""action"": ""ColumnJumpClimb"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -404,7 +420,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ColumnJump"",
+                    ""action"": ""ColumnJumpClimb"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -415,7 +431,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""SwordAttack"",
+                    ""action"": ""WeaponMultiTapAttack1Attack2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -443,17 +459,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ab3f7161-9296-458f-b428-cb757b1953e0"",
-                    ""path"": ""<Keyboard>/o"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""GrapplingGun"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""d75c09c0-e1d0-4907-bf81-98312ceb322d"",
                     ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
@@ -465,56 +470,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a71d88b3-a57f-44da-bdf1-b40be65294a4"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""HeavyAttack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""QE"",
-                    ""id"": ""56f81ff9-8e83-4031-8419-7a9f364fbded"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Roll"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""e07db6e9-65e2-45d6-bcef-c550f2c6a59b"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Roll"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""4718eb8c-a2d0-4a77-846e-a17b58c7071d"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Roll"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
                     ""id"": ""ea7694a9-fbb2-43d8-b832-7788ac58d167"",
                     ""path"": ""<Keyboard>/a"",
-                    ""interactions"": ""MultiTap"",
+                    ""interactions"": ""MultiTap(tapDelay=0.11)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Dash"",
+                    ""action"": ""Dodge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -522,10 +483,109 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""f9fa9865-ca97-43a8-8d02-2b8ac14e080d"",
                     ""path"": ""<Keyboard>/d"",
-                    ""interactions"": ""MultiTap"",
+                    ""interactions"": ""MultiTap(tapDelay=0.11)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Dash"",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e30b285d-b4af-4b92-bdb3-c07f9c82b453"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""WeaponM3Attack3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a71d88b3-a57f-44da-bdf1-b40be65294a4"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ChargedAttack6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bfffd147-df96-4746-986d-4d718d5e2ddf"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HolsterWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""LMB&Shift"",
+                    ""id"": ""c16faf93-09b1-40b1-8942-6f16eba7d90d"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RunningAttack4"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""336eac1a-40f4-4068-8193-af37b5f6a538"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RunningAttack4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""8dd3ab89-a985-462c-bfcd-eb9507795628"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RunningAttack4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""848c808d-8642-4b9d-a683-3ad6d8de5492"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RollAttack5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b8ff550b-16e7-4f75-b1e7-c1d21bf4c135"",
+                    ""path"": ""<HID:: USB Gamepad          >/button5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Walk(isMaintainedByOldInput)"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab3f7161-9296-458f-b428-cb757b1953e0"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""GrapplingGun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -987,19 +1047,22 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
-        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_WalkisMaintainedByOldInput = m_Player.FindAction("Walk(isMaintainedByOldInput)", throwIfNotFound: true);
-        m_Player_Roll = m_Player.FindAction("Roll", throwIfNotFound: true);
-        m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_JumpRoll = m_Player.FindAction("JumpRoll", throwIfNotFound: true);
+        m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
         m_Player_ColumnMove = m_Player.FindAction("ColumnMove", throwIfNotFound: true);
         m_Player_ColumnJumpDirection = m_Player.FindAction("ColumnJumpDirection", throwIfNotFound: true);
-        m_Player_ColumnJump = m_Player.FindAction("ColumnJump", throwIfNotFound: true);
-        m_Player_SwordAttack = m_Player.FindAction("SwordAttack", throwIfNotFound: true);
+        m_Player_ColumnJumpClimb = m_Player.FindAction("ColumnJumpClimb", throwIfNotFound: true);
+        m_Player_GrapplingGun = m_Player.FindAction("GrapplingGun", throwIfNotFound: true);
+        m_Player_HolsterWeapon = m_Player.FindAction("HolsterWeapon", throwIfNotFound: true);
+        m_Player_WeaponMultiTapAttack1Attack2 = m_Player.FindAction("WeaponMultiTapAttack1Attack2", throwIfNotFound: true);
+        m_Player_WeaponM3Attack3 = m_Player.FindAction("WeaponM3Attack3", throwIfNotFound: true);
+        m_Player_RunningAttack4 = m_Player.FindAction("RunningAttack4", throwIfNotFound: true);
+        m_Player_RollAttack5 = m_Player.FindAction("RollAttack5", throwIfNotFound: true);
+        m_Player_ChargedAttack6 = m_Player.FindAction("ChargedAttack6", throwIfNotFound: true);
         m_Player_ShurikenAttack = m_Player.FindAction("ShurikenAttack", throwIfNotFound: true);
         m_Player_ProjectileAttack = m_Player.FindAction("ProjectileAttack", throwIfNotFound: true);
-        m_Player_GrapplingGun = m_Player.FindAction("GrapplingGun", throwIfNotFound: true);
         m_Player_Blocking = m_Player.FindAction("Blocking", throwIfNotFound: true);
-        m_Player_HeavyAttack = m_Player.FindAction("HeavyAttack", throwIfNotFound: true);
+        m_Player_WalkisMaintainedByOldInput = m_Player.FindAction("Walk(isMaintainedByOldInput)", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1072,37 +1135,43 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Run;
-    private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_WalkisMaintainedByOldInput;
-    private readonly InputAction m_Player_Roll;
-    private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_JumpRoll;
+    private readonly InputAction m_Player_Dodge;
     private readonly InputAction m_Player_ColumnMove;
     private readonly InputAction m_Player_ColumnJumpDirection;
-    private readonly InputAction m_Player_ColumnJump;
-    private readonly InputAction m_Player_SwordAttack;
+    private readonly InputAction m_Player_ColumnJumpClimb;
+    private readonly InputAction m_Player_GrapplingGun;
+    private readonly InputAction m_Player_HolsterWeapon;
+    private readonly InputAction m_Player_WeaponMultiTapAttack1Attack2;
+    private readonly InputAction m_Player_WeaponM3Attack3;
+    private readonly InputAction m_Player_RunningAttack4;
+    private readonly InputAction m_Player_RollAttack5;
+    private readonly InputAction m_Player_ChargedAttack6;
     private readonly InputAction m_Player_ShurikenAttack;
     private readonly InputAction m_Player_ProjectileAttack;
-    private readonly InputAction m_Player_GrapplingGun;
     private readonly InputAction m_Player_Blocking;
-    private readonly InputAction m_Player_HeavyAttack;
+    private readonly InputAction m_Player_WalkisMaintainedByOldInput;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Run => m_Wrapper.m_Player_Run;
-        public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @WalkisMaintainedByOldInput => m_Wrapper.m_Player_WalkisMaintainedByOldInput;
-        public InputAction @Roll => m_Wrapper.m_Player_Roll;
-        public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        public InputAction @JumpRoll => m_Wrapper.m_Player_JumpRoll;
+        public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
         public InputAction @ColumnMove => m_Wrapper.m_Player_ColumnMove;
         public InputAction @ColumnJumpDirection => m_Wrapper.m_Player_ColumnJumpDirection;
-        public InputAction @ColumnJump => m_Wrapper.m_Player_ColumnJump;
-        public InputAction @SwordAttack => m_Wrapper.m_Player_SwordAttack;
+        public InputAction @ColumnJumpClimb => m_Wrapper.m_Player_ColumnJumpClimb;
+        public InputAction @GrapplingGun => m_Wrapper.m_Player_GrapplingGun;
+        public InputAction @HolsterWeapon => m_Wrapper.m_Player_HolsterWeapon;
+        public InputAction @WeaponMultiTapAttack1Attack2 => m_Wrapper.m_Player_WeaponMultiTapAttack1Attack2;
+        public InputAction @WeaponM3Attack3 => m_Wrapper.m_Player_WeaponM3Attack3;
+        public InputAction @RunningAttack4 => m_Wrapper.m_Player_RunningAttack4;
+        public InputAction @RollAttack5 => m_Wrapper.m_Player_RollAttack5;
+        public InputAction @ChargedAttack6 => m_Wrapper.m_Player_ChargedAttack6;
         public InputAction @ShurikenAttack => m_Wrapper.m_Player_ShurikenAttack;
         public InputAction @ProjectileAttack => m_Wrapper.m_Player_ProjectileAttack;
-        public InputAction @GrapplingGun => m_Wrapper.m_Player_GrapplingGun;
         public InputAction @Blocking => m_Wrapper.m_Player_Blocking;
-        public InputAction @HeavyAttack => m_Wrapper.m_Player_HeavyAttack;
+        public InputAction @WalkisMaintainedByOldInput => m_Wrapper.m_Player_WalkisMaintainedByOldInput;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1115,45 +1184,54 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Run.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
                 @Run.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
                 @Run.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
-                @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @WalkisMaintainedByOldInput.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalkisMaintainedByOldInput;
-                @WalkisMaintainedByOldInput.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalkisMaintainedByOldInput;
-                @WalkisMaintainedByOldInput.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalkisMaintainedByOldInput;
-                @Roll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
-                @Roll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
-                @Roll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
-                @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
-                @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
-                @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @JumpRoll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJumpRoll;
+                @JumpRoll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJumpRoll;
+                @JumpRoll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJumpRoll;
+                @Dodge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
+                @Dodge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
+                @Dodge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
                 @ColumnMove.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnMove;
                 @ColumnMove.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnMove;
                 @ColumnMove.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnMove;
                 @ColumnJumpDirection.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJumpDirection;
                 @ColumnJumpDirection.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJumpDirection;
                 @ColumnJumpDirection.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJumpDirection;
-                @ColumnJump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJump;
-                @ColumnJump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJump;
-                @ColumnJump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJump;
-                @SwordAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwordAttack;
-                @SwordAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwordAttack;
-                @SwordAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwordAttack;
+                @ColumnJumpClimb.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJumpClimb;
+                @ColumnJumpClimb.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJumpClimb;
+                @ColumnJumpClimb.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnColumnJumpClimb;
+                @GrapplingGun.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplingGun;
+                @GrapplingGun.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplingGun;
+                @GrapplingGun.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplingGun;
+                @HolsterWeapon.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHolsterWeapon;
+                @HolsterWeapon.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHolsterWeapon;
+                @HolsterWeapon.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHolsterWeapon;
+                @WeaponMultiTapAttack1Attack2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponMultiTapAttack1Attack2;
+                @WeaponMultiTapAttack1Attack2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponMultiTapAttack1Attack2;
+                @WeaponMultiTapAttack1Attack2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponMultiTapAttack1Attack2;
+                @WeaponM3Attack3.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponM3Attack3;
+                @WeaponM3Attack3.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponM3Attack3;
+                @WeaponM3Attack3.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponM3Attack3;
+                @RunningAttack4.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRunningAttack4;
+                @RunningAttack4.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRunningAttack4;
+                @RunningAttack4.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRunningAttack4;
+                @RollAttack5.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRollAttack5;
+                @RollAttack5.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRollAttack5;
+                @RollAttack5.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRollAttack5;
+                @ChargedAttack6.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChargedAttack6;
+                @ChargedAttack6.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChargedAttack6;
+                @ChargedAttack6.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChargedAttack6;
                 @ShurikenAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShurikenAttack;
                 @ShurikenAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShurikenAttack;
                 @ShurikenAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShurikenAttack;
                 @ProjectileAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProjectileAttack;
                 @ProjectileAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProjectileAttack;
                 @ProjectileAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProjectileAttack;
-                @GrapplingGun.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplingGun;
-                @GrapplingGun.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplingGun;
-                @GrapplingGun.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplingGun;
                 @Blocking.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlocking;
                 @Blocking.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlocking;
                 @Blocking.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlocking;
-                @HeavyAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHeavyAttack;
-                @HeavyAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHeavyAttack;
-                @HeavyAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHeavyAttack;
+                @WalkisMaintainedByOldInput.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalkisMaintainedByOldInput;
+                @WalkisMaintainedByOldInput.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalkisMaintainedByOldInput;
+                @WalkisMaintainedByOldInput.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWalkisMaintainedByOldInput;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1161,45 +1239,54 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Run.started += instance.OnRun;
                 @Run.performed += instance.OnRun;
                 @Run.canceled += instance.OnRun;
-                @Jump.started += instance.OnJump;
-                @Jump.performed += instance.OnJump;
-                @Jump.canceled += instance.OnJump;
-                @WalkisMaintainedByOldInput.started += instance.OnWalkisMaintainedByOldInput;
-                @WalkisMaintainedByOldInput.performed += instance.OnWalkisMaintainedByOldInput;
-                @WalkisMaintainedByOldInput.canceled += instance.OnWalkisMaintainedByOldInput;
-                @Roll.started += instance.OnRoll;
-                @Roll.performed += instance.OnRoll;
-                @Roll.canceled += instance.OnRoll;
-                @Dash.started += instance.OnDash;
-                @Dash.performed += instance.OnDash;
-                @Dash.canceled += instance.OnDash;
+                @JumpRoll.started += instance.OnJumpRoll;
+                @JumpRoll.performed += instance.OnJumpRoll;
+                @JumpRoll.canceled += instance.OnJumpRoll;
+                @Dodge.started += instance.OnDodge;
+                @Dodge.performed += instance.OnDodge;
+                @Dodge.canceled += instance.OnDodge;
                 @ColumnMove.started += instance.OnColumnMove;
                 @ColumnMove.performed += instance.OnColumnMove;
                 @ColumnMove.canceled += instance.OnColumnMove;
                 @ColumnJumpDirection.started += instance.OnColumnJumpDirection;
                 @ColumnJumpDirection.performed += instance.OnColumnJumpDirection;
                 @ColumnJumpDirection.canceled += instance.OnColumnJumpDirection;
-                @ColumnJump.started += instance.OnColumnJump;
-                @ColumnJump.performed += instance.OnColumnJump;
-                @ColumnJump.canceled += instance.OnColumnJump;
-                @SwordAttack.started += instance.OnSwordAttack;
-                @SwordAttack.performed += instance.OnSwordAttack;
-                @SwordAttack.canceled += instance.OnSwordAttack;
+                @ColumnJumpClimb.started += instance.OnColumnJumpClimb;
+                @ColumnJumpClimb.performed += instance.OnColumnJumpClimb;
+                @ColumnJumpClimb.canceled += instance.OnColumnJumpClimb;
+                @GrapplingGun.started += instance.OnGrapplingGun;
+                @GrapplingGun.performed += instance.OnGrapplingGun;
+                @GrapplingGun.canceled += instance.OnGrapplingGun;
+                @HolsterWeapon.started += instance.OnHolsterWeapon;
+                @HolsterWeapon.performed += instance.OnHolsterWeapon;
+                @HolsterWeapon.canceled += instance.OnHolsterWeapon;
+                @WeaponMultiTapAttack1Attack2.started += instance.OnWeaponMultiTapAttack1Attack2;
+                @WeaponMultiTapAttack1Attack2.performed += instance.OnWeaponMultiTapAttack1Attack2;
+                @WeaponMultiTapAttack1Attack2.canceled += instance.OnWeaponMultiTapAttack1Attack2;
+                @WeaponM3Attack3.started += instance.OnWeaponM3Attack3;
+                @WeaponM3Attack3.performed += instance.OnWeaponM3Attack3;
+                @WeaponM3Attack3.canceled += instance.OnWeaponM3Attack3;
+                @RunningAttack4.started += instance.OnRunningAttack4;
+                @RunningAttack4.performed += instance.OnRunningAttack4;
+                @RunningAttack4.canceled += instance.OnRunningAttack4;
+                @RollAttack5.started += instance.OnRollAttack5;
+                @RollAttack5.performed += instance.OnRollAttack5;
+                @RollAttack5.canceled += instance.OnRollAttack5;
+                @ChargedAttack6.started += instance.OnChargedAttack6;
+                @ChargedAttack6.performed += instance.OnChargedAttack6;
+                @ChargedAttack6.canceled += instance.OnChargedAttack6;
                 @ShurikenAttack.started += instance.OnShurikenAttack;
                 @ShurikenAttack.performed += instance.OnShurikenAttack;
                 @ShurikenAttack.canceled += instance.OnShurikenAttack;
                 @ProjectileAttack.started += instance.OnProjectileAttack;
                 @ProjectileAttack.performed += instance.OnProjectileAttack;
                 @ProjectileAttack.canceled += instance.OnProjectileAttack;
-                @GrapplingGun.started += instance.OnGrapplingGun;
-                @GrapplingGun.performed += instance.OnGrapplingGun;
-                @GrapplingGun.canceled += instance.OnGrapplingGun;
                 @Blocking.started += instance.OnBlocking;
                 @Blocking.performed += instance.OnBlocking;
                 @Blocking.canceled += instance.OnBlocking;
-                @HeavyAttack.started += instance.OnHeavyAttack;
-                @HeavyAttack.performed += instance.OnHeavyAttack;
-                @HeavyAttack.canceled += instance.OnHeavyAttack;
+                @WalkisMaintainedByOldInput.started += instance.OnWalkisMaintainedByOldInput;
+                @WalkisMaintainedByOldInput.performed += instance.OnWalkisMaintainedByOldInput;
+                @WalkisMaintainedByOldInput.canceled += instance.OnWalkisMaintainedByOldInput;
             }
         }
     }
@@ -1330,19 +1417,22 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnRun(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
-        void OnWalkisMaintainedByOldInput(InputAction.CallbackContext context);
-        void OnRoll(InputAction.CallbackContext context);
-        void OnDash(InputAction.CallbackContext context);
+        void OnJumpRoll(InputAction.CallbackContext context);
+        void OnDodge(InputAction.CallbackContext context);
         void OnColumnMove(InputAction.CallbackContext context);
         void OnColumnJumpDirection(InputAction.CallbackContext context);
-        void OnColumnJump(InputAction.CallbackContext context);
-        void OnSwordAttack(InputAction.CallbackContext context);
+        void OnColumnJumpClimb(InputAction.CallbackContext context);
+        void OnGrapplingGun(InputAction.CallbackContext context);
+        void OnHolsterWeapon(InputAction.CallbackContext context);
+        void OnWeaponMultiTapAttack1Attack2(InputAction.CallbackContext context);
+        void OnWeaponM3Attack3(InputAction.CallbackContext context);
+        void OnRunningAttack4(InputAction.CallbackContext context);
+        void OnRollAttack5(InputAction.CallbackContext context);
+        void OnChargedAttack6(InputAction.CallbackContext context);
         void OnShurikenAttack(InputAction.CallbackContext context);
         void OnProjectileAttack(InputAction.CallbackContext context);
-        void OnGrapplingGun(InputAction.CallbackContext context);
         void OnBlocking(InputAction.CallbackContext context);
-        void OnHeavyAttack(InputAction.CallbackContext context);
+        void OnWalkisMaintainedByOldInput(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

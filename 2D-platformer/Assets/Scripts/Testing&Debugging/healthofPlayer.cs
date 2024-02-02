@@ -11,15 +11,6 @@ public class healthofPlayer : MonoBehaviour
 
     private float health = 100f;
 
-    // private void OnTriggerEnter2D(Collider2D other) {
-    //     if(other.CompareTag("Knife")){
-    //         health -= 15f;
-    //     }
-    //     if(other.CompareTag("HeavyKnife")){
-    //         health -= 30f;
-    //     }
-    // }
-
     float x;
     float y;
 

@@ -47,19 +47,7 @@ public class PlayerAppearanceScript : MonoBehaviour
         TiltPlayer();
 
         //We need to change the character's running animation to suit their current speed
-        moveSpeed = Mathf.Clamp(Mathf.Abs(moveScript.velocity.x), 0, maxSpeed);
-        if (!moveScript.isWalking)
-        {
-            playerSpineAnimator.SetFloat("RunSpeed", moveSpeed);
-            playerSpineAnimator.SetFloat("WalkSpeed", 0f);
-        }
-        else
-        {
-            playerSpineAnimator.SetFloat("WalkSpeed", moveSpeed);
-            playerSpineAnimator.SetFloat("RunSpeed", 0f);
-        }
 
-        checkForLanding();
     }
 
     private void TiltPlayer()
@@ -102,9 +90,6 @@ public class PlayerAppearanceScript : MonoBehaviour
     public void jumpEffects()
     {
         //Play these effects when the player jumps, courtesy of jump script
-        playerSpineAnimator.ResetTrigger("Landed");
-        playerSpineAnimator.SetTrigger("Jump");
-
         AudioManager.Instance.PlayJumpSFX();
 
         jumpParticles.Play();

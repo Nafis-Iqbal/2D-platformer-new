@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrappleCollider : MonoBehaviour {
+public class GrappleCollider : MonoBehaviour
+{
     [SerializeField] private SpriteRenderer grappleSpriteRenderer;
     [SerializeField] private Transform grappleSpriteTransform;
     [SerializeField] private Color grappleActiveColor;
@@ -14,43 +15,55 @@ public class GrappleCollider : MonoBehaviour {
 
     [SerializeField] private PlayerGrapplingGun playerGrapplingGun;
 
-    // private void Awake() {
-    //     playerGrapplingGun = GameManager.Instance.playerTransform.GetComponent<PlayerGrapplingGun>();
-    // }
+    private void Awake()
+    {
+        playerGrapplingGun = GameManager.Instance.playerTransform.GetComponent<PlayerGrapplingGun>();
+    }
 
-    private void OnDrawGizmos() {
+    private void OnDrawGizmos()
+    {
         var collider = GetComponent<Collider2D>();
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireCube(collider.bounds.center, collider.bounds.size);
     }
 
-    private void Update() {
-        if (grappleActive) {
+    private void Update()
+    {
+        if (grappleActive)
+        {
             grappleSpriteTransform.localScale = Vector3.Lerp(grappleSpriteTransform.localScale, grappleActiveScale, Time.deltaTime * grappleActiveScaleSpeed);
-        } else {
+        }
+        else
+        {
             grappleSpriteTransform.localScale = Vector3.Lerp(grappleSpriteTransform.localScale, Vector3.one, Time.deltaTime * grappleActiveScaleSpeed);
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.tag == "Player") {
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
             GrappleActivate();
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other) {
-        if (other.gameObject.tag == "Player") {
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
             GrappleInactive();
         }
     }
 
-    private void GrappleInactive() {
+    private void GrappleInactive()
+    {
         grappleSpriteRenderer.color = grappleInactiveColor;
         grappleActive = false;
         playerGrapplingGun.canGrapple = false;
     }
 
-    private void GrappleActivate() {
+    private void GrappleActivate()
+    {
         grappleSpriteRenderer.color = grappleActiveColor;
         grappleActive = true;
         playerGrapplingGun.UpdateGrappleTargetPosition(transform.position);

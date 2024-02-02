@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,16 +17,17 @@ public class PlayerMovement : MonoBehaviour
     public PlayerCombatSystem playerCombatSystemScript;
     private PlayerJump playerJump;
     private PlayerColumn playerColumn;
-    private PlayerDash playerDash;
+    private PlayerDodge playerDodge;
     private PlayerRoll playerRoll;
     private PlayerGrapplingGun playerGrapplingGun;
     private Rigidbody2D body;
+    private Animator playerSpineAnimator;
     private Vector2 desiredVelocity;
     private float maxSpeedChange;
     private float acceleration;
     private float deceleration;
     private float turnSpeed;
-    public bool isWalking;
+    public bool isSprinting;
 
 
     private float delta;
@@ -39,7 +40,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to reach max speed when in mid-air")] public float maxAirAcceleration;
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to stop in mid-air when no direction is used")] public float maxAirDeceleration;
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to stop when changing direction when in mid-air")] public float maxAirTurnSpeed = 80f;
-    [SerializeField, Range(0f, 1f)][Tooltip("walk speed = walkMultiplier * runningSpeed")] public float walkMultiplier = 0.1f;
+    [SerializeField, Range(0f, 1f)][Tooltip("walk speed = walkMultiplier * joggingSpeed")] public float walkMultiplier = 0.1f;
+    [SerializeField, Range(0f, 2f)][Tooltip("sprint speed = sprintMultiplier * joggingSpeed")] public float sprintMultiplier = 0.1f;
     [SerializeField][Tooltip("Friction to apply against movement on stick")] private float friction;
 
     [Header("Options")]
@@ -50,10 +52,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float directionX;
 
     [Header("Current State")]
-    [SerializeField] private bool onGround;
-    [SerializeField] private bool pressingKey;
+    public bool playerFacingRight = true;
+    public bool onGround;
+    public bool pressingKey;
+    public float movementValue;
+    [Tooltip("Used in Animator to select jogg, sprint or walk animations")]
+    public int playerMovementInd;
     [SerializeField] private float speedMultiplier;
-    [SerializeField] private float movementValue;
 
     private void OnEnable()
     {
@@ -61,21 +66,30 @@ public class PlayerMovement : MonoBehaviour
         //Find the character's Rigidbody and ground detection script
         body = GetComponent<Rigidbody2D>();
         playerJump = GetComponent<PlayerJump>();
-        playerDash = GetComponent<PlayerDash>();
+        playerDodge = GetComponent<PlayerDodge>();
         playerRoll = GetComponent<PlayerRoll>();
         playerGrapplingGun = GetComponent<PlayerGrapplingGun>();
         playerCombatSystemScript = GetComponent<PlayerCombatSystem>();
+        playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
+        playerFacingRight = true;
     }
 
     public void rotateLeft()
     {
-        transform.localScale = new Vector3(-1, 1, 1);
+        Vector3 tempScale = transform.localScale;
+        tempScale.x *= -1.0f;
+        transform.localScale = tempScale;
 
+        playerFacingRight = false;
     }
 
     public void rotateRight()
     {
-        transform.localScale = new Vector3(1, 1, 1);
+        Vector3 tempScale = transform.localScale;
+        tempScale.x = Mathf.Abs(tempScale.x);
+        transform.localScale = tempScale;
+
+        playerFacingRight = true;
     }
 
     public void OnMovement(InputAction.CallbackContext context)
@@ -96,11 +110,20 @@ public class PlayerMovement : MonoBehaviour
             body.AddForce(Vector2.right * context.ReadValue<float>() * playerGrapplingGun.hangSwingForce);
         }
 
-        if (MovementLimiter.instance.playerCanMove)
+        if (context.phase == InputActionPhase.Started)
+        {
+            if (MovementLimiter.instance.playerCanMove)
+            {
+                movementValue = context.ReadValue<float>();
+                directionX = movementValue * speedMultiplier;
+            }
+        }
+        else if (context.phase == InputActionPhase.Canceled || context.phase == InputActionPhase.Performed)
         {
             movementValue = context.ReadValue<float>();
             directionX = movementValue * speedMultiplier;
         }
+
     }
 
     public void OnWalk(InputAction.CallbackContext context)
@@ -123,18 +146,19 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            isWalking = true;
-            speedMultiplier = walkMultiplier;
-
+            isSprinting = true;
+            speedMultiplier = sprintMultiplier;
+            playerMovementInd = 2;
         }
         else
         {
-            isWalking = false;
+            isSprinting = false;
             speedMultiplier = 1f;
+            playerMovementInd = 1;
         }
         directionX = movementValue * speedMultiplier;
 
-        if (playerDash.isExecuting || playerRoll.isExecuting || playerGrapplingGun.grapplingRope.isGrappling)
+        if (playerDodge.isExecuting || playerRoll.isExecuting || playerGrapplingGun.grapplingRope.isGrappling)
         {
             return;
         }
@@ -143,19 +167,32 @@ public class PlayerMovement : MonoBehaviour
         if (!MovementLimiter.instance.playerCanMove)
         {
             directionX = 0;
+            playerMovementInd = 0;
         }
 
         //Used to flip the character's sprite when she changes direction
         //Also tells us that we are currently pressing a direction button
         if (directionX != 0)
         {
-            transform.localScale = new Vector3(directionX > 0 ? 1 : -1, 1, 1);
+            //transform.localScale = new Vector3(directionX > 0 ? 1 : -1, 1, 1);
+            if (directionX > 0 && playerFacingRight == false)
+            {
+                rotateRight();
+            }
+            else if (directionX < 0 && playerFacingRight == true)
+            {
+                rotateLeft();
+            }
+
             pressingKey = true;
         }
         else
         {
             pressingKey = false;
+            playerMovementInd = 0;
         }
+
+        playerSpineAnimator.SetInteger("MoveSpeed", playerMovementInd);
 
         //Calculate's the character's desired velocity - which is the direction you are facing, multiplied by the character's maximum speed
         //Friction is not used in this game
@@ -165,7 +202,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (playerDash.isExecuting ||
+        if (playerDodge.isExecuting ||
             playerRoll.isExecuting ||
             playerGrapplingGun.grapplingRope.isGrappling || playerGrapplingGun.playerIsOnAir
         )
@@ -247,5 +284,10 @@ public class PlayerMovement : MonoBehaviour
         velocity.x = desiredVelocity.x;
 
         body.velocity = velocity * movementSpeedMultiplier * tempSpeedWithoutAccel;
+    }
+
+    public void teleportAndSynchronizePlayer(Vector3 targetTeleportPosition)
+    {
+        transform.position = targetTeleportPosition;
     }
 }

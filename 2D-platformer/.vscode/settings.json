@@ -52,5 +52,9 @@
         "Temp/": true
     },
     "omnisharp.useModernNet": false,
-    "omnisharp.enableEditorConfigSupport": false
+    "omnisharp.enableEditorConfigSupport": false,
+    "dotnet.preferCSharpExtension": true,
+    "search.exclude": {
+        "**/Spine": true
+    }
 }

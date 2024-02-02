@@ -69,14 +69,14 @@ public class PlayerGrapplingGun : MonoBehaviour
             if (canGrapple)
             {
                 playerJump.Jump(jumpButtonHoldTime);
-                playerSpineAnimator.SetBool("GrapplingHookThrow", true);
+                playerSpineAnimator.SetTrigger("GrapplingHookThrow");
                 SetGrapplePoint();
                 isExecuting = true;
             }
         }
         else
         {
-            playerSpineAnimator.SetBool("GrapplingHookThrow", false);
+            playerSpineAnimator.ResetTrigger("GrapplingHookThrow");
             grapplingRope.enabled = false;
             m_springJoint2D.enabled = false;
             m_rigidbody.AddForce(new Vector2(
@@ -94,10 +94,6 @@ public class PlayerGrapplingGun : MonoBehaviour
             isExecuting = false;
         }
     }
-
-    // private void Update() {
-    //     Debug.Log(m_rigidbody.velocity);
-    // }
 
     private void Start()
     {
