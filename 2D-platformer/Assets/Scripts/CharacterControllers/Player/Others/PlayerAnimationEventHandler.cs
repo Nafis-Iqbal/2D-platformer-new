@@ -10,6 +10,8 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     private Rigidbody2D playerRB2D;
     private PlayerMovement playerMovement;
     private PlayerJump playerJump;
+    private PlayerRoll playerRoll;
+    private PlayerDodge playerDodge;
     private PlayerColumn playerColumn;
     private PlayerAppearanceScript playerAppearanceScript;
 
@@ -22,6 +24,8 @@ public class PlayerAnimationEventHandler : MonoBehaviour
         playerMovement = playerTransform.GetComponent<PlayerMovement>();
         playerJump = playerTransform.GetComponent<PlayerJump>();
         playerColumn = playerTransform.GetComponent<PlayerColumn>();
+        playerRoll = playerTransform.GetComponent<PlayerRoll>();
+        playerDodge = playerTransform.GetComponent<PlayerDodge>();
         playerAppearanceScript = playerTransform.GetComponent<PlayerAppearanceScript>();
         lightAttackHitBox = GameManager.Instance.lightAttackHitBox;
     }
@@ -30,6 +34,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public void RestrictPlayerMovement()
     {
         MovementLimiter.instance.playerCanMove = false;
+        playerMovement.stopPlayerCompletely();
     }
 
     public void EnablePlayerMovement()
@@ -57,20 +62,20 @@ public class PlayerAnimationEventHandler : MonoBehaviour
         MovementLimiter.instance.playerCanParkour = true;
     }
 
-    public void DisableRigidbody()
+    public void RistrictPlayerRigidbody()
     {
         Debug.Log("simu1");
         playerRB2D.simulated = false;
     }
 
-    public void EnableRigidbody()
+    public void EnablePlayerRigidbody()
     {
         Debug.Log("simu2");
         playerRB2D.simulated = true;
     }
     #endregion
 
-    #region Physics Tweaks
+    #region Movement Physics Tweaks
     public void AddJumpForce()
     {
         playerJump.StartJump();
@@ -80,17 +85,56 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     {
         playerJump.DisableCharging();
     }
+
+    public void ResetRollingVariables()
+    {
+        playerRoll.DeactivateRolling();
+    }
+
+    public void ResetDodgingVariables()
+    {
+        playerDodge.DeactivateDodging();
+    }
+    #endregion
+
+    #region Combat Physics Tweaks
+    public void ArmedWeaponsOnSwordSlash()
+    {
+        playerMovement.applyPlayerMomentum(1.0f);
+    }
+
+    public void ArmedWeaponsOnSwordSwing()
+    {
+        playerMovement.applyPlayerMomentum(1.0f);
+    }
+
+    public void ArmedWeaponsOnSwordThrust()
+    {
+        playerMovement.applyPlayerMomentum(1.0f);
+    }
+
+    public void ArmedWeaponsJumpAttackMomentum()
+    {
+        playerMovement.applyPlayerMomentum(12.0f);
+    }
+
+    public void ArmedWeaponsChargedAttackMomentum()
+    {
+        playerMovement.applyVariablePlayerMomentum("ChargeAttack", 30.0f);
+    }
     #endregion
 
     #region State Change Methods
     public void LightAttackStarted()
     {
+        RestrictPlayerMovement();
         playerCombatSystemScript.lightAttackExecuting = true;
     }
 
     public void LightAttackEnded()
     {
         playerCombatSystemScript.lightAttackExecuting = false;
+        EnablePlayerMovement();
     }
 
     public void HeavyAttackStarted()
@@ -105,21 +149,50 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     #endregion
 
     #region Player Movement Animation Events
-    public void JumpStartOnMovement()
+    public void MovementOnJumpStart()
     {
         MovementLimiter.instance.playerCanMove = true;
         playerAppearanceScript.jumpEffects();
         playerJump.DisableCharging();
         playerJump.StartJump();
-        PlayerInputManager.Instance.playerInputActions.Player.JumpRoll.Disable();
+
+        PlayerInputManager.Instance.playerInputActions.Player.Jump.Disable();
+        PlayerInputManager.Instance.playerInputActions.Player.RollDodge.Disable();
     }
 
-    public void ResetSystemsOnJumpDropEnd()
+    public void MovementOnJumpAnimEnd()
+    {
+        playerJump.jumpAnimInProgress = false;
+    }
+
+    public void ResetOnJumpDropEnd()
     {
         playerJump.DisableCharging();
         MovementLimiter.instance.playerCanParkour = true;
         MovementLimiter.instance.playerCanMove = true;
-        PlayerInputManager.Instance.playerInputActions.Player.JumpRoll.Enable();
+
+        PlayerInputManager.Instance.playerInputActions.Player.RollDodge.Enable();
+        PlayerInputManager.Instance.playerInputActions.Player.Jump.Enable();
+    }
+
+    public void TriggerSystemsPlayerOnAir()
+    {
+        PlayerInputManager.Instance.playerInputActions.Player.GrapplingGun.Enable();
+    }
+
+    public void TriggerSystemsPlayerLanding()
+    {
+        PlayerInputManager.Instance.playerInputActions.Player.GrapplingGun.Disable();
+    }
+
+    public void MovementEnableGrappleBoost()
+    {
+        PlayerInputManager.Instance.playerInputActions.Player.GrappleBoost.Enable();
+    }
+
+    public void DisableGrappleBoost()
+    {
+        PlayerInputManager.Instance.playerInputActions.Player.GrappleBoost.Disable();
     }
     #endregion
 }

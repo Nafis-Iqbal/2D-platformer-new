@@ -21,6 +21,7 @@ public class PlayerJump : MonoBehaviour
     private PlayerDodge playerDodge;
     private PlayerColumn playerColumn;
     private PlayerGrapplingGun playerGrapplingGun;
+    private PlayerCombatSystem playerCombatSystemScript;
 
 
     [Header("Jumping Stats")]
@@ -34,6 +35,8 @@ public class PlayerJump : MonoBehaviour
     public GameObject checkHeightObject1;
     public GameObject checkHeightObject2;
     public float minLandHeight;
+    public float jumpAttacksMinimumLandHeight;
+    public float movementMinimumLandHeight;
 
     [Header("Options")]
     [Tooltip("Should the character drop when you let go of jump?")] public bool variablejumpHeight;
@@ -50,10 +53,11 @@ public class PlayerJump : MonoBehaviour
     [Header("Current State")]
     public bool canJumpAgain = false;
     [SerializeField] private bool desiredJump;
-    [SerializeField] private bool pressingJump;
     [SerializeField] private bool currentlyJumping;
     public bool isCharging = false;
     public bool onGround;
+    public bool combatMode;
+    public bool jumpAnimInProgress;
     private bool onGroundCached = false;
     private float jumpBufferCounter;
     private float coyoteTimeCounter = 0;
@@ -67,64 +71,37 @@ public class PlayerJump : MonoBehaviour
         //Find the character's Rigidbody and ground detection and juice scripts
         body = GetComponent<Rigidbody2D>();
         playerDodge = GetComponent<PlayerDodge>();
+        playerCombatSystemScript = GetComponent<PlayerCombatSystem>();
         playerAppearanceScript = GetComponentInChildren<PlayerAppearanceScript>();
         playerGrapplingGun = GetComponent<PlayerGrapplingGun>();
         defaultGravityScale = 1f;
+        combatMode = false;
     }
 
-    public void DisableCharging()
+    private void OnEnable()
     {
-        isCharging = false;
-    }
-
-    public void StartJump()
-    {
-        desiredJump = true;
-    }
-
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        pressingJump = true;
-        playerMoveInd = playerMovement.playerMovementInd;
-
-        //This function is called when one of the jump buttons (like space or the A button) is pressed.
-        if (MovementLimiter.instance.playerCanMove && MovementLimiter.instance.playerCanParkour)
-        {
-            if (context.canceled)
-            {
-                StartJumpAnimation();
-            }
-        }
-        pressingJump = false;
-    }
-
-    public void OnJumpReleased()
-    {
-        pressingJump = false;
-    }
-
-    private void StartJumpAnimation()
-    {
-        isCharging = true;
-        if (playerAppearanceScript != null)
-        {
-            spineAnimator.ResetTrigger("Landed");
-            spineAnimator.SetTrigger("Jump");
-        }
+        jumpAnimInProgress = false;
+        minLandHeight = movementMinimumLandHeight;
     }
 
     void Update()
     {
-        //Check if we're on ground, using Kit's Ground script
-        onGround = checkIfOnGroundHeight();
-
-        if (onGround == false) spineAnimator.SetTrigger("OnAir");
-        else spineAnimator.SetTrigger("Landed");
-
 
         if (playerDodge.isExecuting || playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling)
         {
             return;
+        }
+
+        //Check if we're on ground, using Kit's Ground script
+        if (playerCombatSystemScript.heavyAttackExecuting || playerCombatSystemScript.cutOffHeavyAttackCharge > 0.0f) minLandHeight = jumpAttacksMinimumLandHeight;
+        else minLandHeight = movementMinimumLandHeight;
+
+        onGround = checkIfOnGroundHeight();
+
+        if (playerGrapplingGun.isExecuting == false && jumpAnimInProgress == false)
+        {
+            if (onGround == false) spineAnimator.SetTrigger("OnAir");
+            else spineAnimator.SetTrigger("Landed");
         }
 
         setPhysics();
@@ -160,13 +137,6 @@ public class PlayerJump : MonoBehaviour
         }
     }
 
-    private void setPhysics()
-    {
-        //Determine the character's gravity scale, using the stats provided. Multiply it by a gravMultiplier, used later
-        Vector2 newGravity = new Vector2(0, (-2 * jumpHeight) / (timeToJumpApex * timeToJumpApex));
-        body.gravityScale = (newGravity.y / Physics2D.gravity.y) * gravMultiplier;
-    }
-
     private void FixedUpdate()
     {
         if (playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling)
@@ -198,6 +168,42 @@ public class PlayerJump : MonoBehaviour
         }
 
         calculateGravity();
+    }
+
+    private void setPhysics()
+    {
+        //Determine the character's gravity scale, using the stats provided. Multiply it by a gravMultiplier, used later
+        Vector2 newGravity = new Vector2(0, (-2 * jumpHeight) / (timeToJumpApex * timeToJumpApex));
+        body.gravityScale = (newGravity.y / Physics2D.gravity.y) * gravMultiplier;
+    }
+
+    public void DisableCharging()
+    {
+        isCharging = false;
+    }
+
+    public void StartJump()
+    {
+        desiredJump = true;
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        playerMoveInd = playerMovement.playerMovementInd;
+
+        //Debug.Log("ggg juump");
+        if (MovementLimiter.instance.playerCanMove && MovementLimiter.instance.playerCanParkour)
+        {
+            if (!playerGrapplingGun.grapplingRope.isGrappling && onGround) StartJumpAnimation();
+        }
+    }
+
+    private void StartJumpAnimation()
+    {
+        isCharging = true;
+        spineAnimator.ResetTrigger("Landed");
+        spineAnimator.SetTrigger("Jump");
+        jumpAnimInProgress = true;
     }
 
     private void StopJump()
@@ -275,7 +281,7 @@ public class PlayerJump : MonoBehaviour
 
     private void DoAJump()
     {
-        Debug.Log("DoAJump");
+        //Debug.Log("DoAJump");
 
         //Create the jump, provided we are on the ground, in coyote time, or have a double jump available
         if (!playerColumn.hasGrabbedColumn && (onGround || (coyoteTimeCounter > 0.03f && coyoteTimeCounter < coyoteTime) || canJumpAgain))

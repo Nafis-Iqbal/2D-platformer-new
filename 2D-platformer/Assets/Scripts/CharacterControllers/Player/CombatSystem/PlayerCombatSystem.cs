@@ -13,6 +13,7 @@ public class PlayerCombatSystem : MonoBehaviour
     public Animator playerSpineAnimator;
     public Slider playerStaminaSlider;
     public GameObject blockDefenseObject;
+    private PlayerMovement playerMovementScript;
     private PlayerColumn playerColumn;
     private PlayerJump playerJump;
 
@@ -45,9 +46,10 @@ public class PlayerCombatSystem : MonoBehaviour
     public int heavyAttackDamage;
     public float heavyAttackDamageMultiplier = 1f;
     public float heavyAttackCooldownTime = 1f;
-    private float currentHeavyAttackCharge = 0f;
+    public float currentHeavyAttackCharge = 0f;
+    public float cutOffHeavyAttackCharge = 0f;
     private float timeElapsedSinceHeavyAttack = 0f;
-    private bool isHeavyAttackKeyPressed = false;
+    public bool isHeavyAttackKeyPressed = false;
     private bool heavyAttackDone = true;
     public bool canHeavyAttack = true;
     public bool heavyAttackExecuting;
@@ -70,8 +72,9 @@ public class PlayerCombatSystem : MonoBehaviour
         isBlocking = false;
         playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
         currentStamina = maxStamina;
-        playerJump = GameManager.Instance.playerTransform.GetComponent<PlayerJump>();
-        playerColumn = GameManager.Instance.playerTransform.GetComponent<PlayerColumn>();
+        playerMovementScript = GetComponent<PlayerMovement>();
+        playerJump = GetComponent<PlayerJump>();
+        playerColumn = GetComponent<PlayerColumn>();
     }
 
     private void OnEnable()
@@ -154,11 +157,13 @@ public class PlayerCombatSystem : MonoBehaviour
         if (isHeavyAttackKeyPressed && canHeavyAttack && playerJump.onGround)
         {
             ChargeForAttack();
+            if (currentHeavyAttackCharge > 0.0f) cutOffHeavyAttackCharge = currentHeavyAttackCharge;
         }
         else
         {
             currentHeavyAttackCharge = 0f;
         }
+
         if (currentHeavyAttackCharge >= totalHeavyAttackChargeAmount)
         {
             ExecuteHighPoweredAttack();
@@ -169,7 +174,7 @@ public class PlayerCombatSystem : MonoBehaviour
         heavyAttackDamage = (int)Math.Ceiling(successfulHeavyAttackDamage * heavyAttackDamageMultiplier);
         #endregion
 
-        #region Projectile Attack
+        #region Special Item Use
         if (projectileAttackExecuting)
         {
             timeElapsedSinceProjectileAttack += Time.deltaTime;
@@ -179,9 +184,7 @@ public class PlayerCombatSystem : MonoBehaviour
                 projectileAttackExecuting = false;
             }
         }
-        #endregion
 
-        #region Shuriken Attack
         if (shurikenAttackExecuting)
         {
             timeElapsedSinceShurikenAttack += Time.deltaTime;
@@ -242,12 +245,14 @@ public class PlayerCombatSystem : MonoBehaviour
         {
             if (combatMode == true)
             {
-                combatMode = false;
+                combatMode = playerJump.combatMode = false;
+
                 GameManager.Instance.playerSpineAnimator.SetTrigger("CombatMode");
             }
             else
             {
-                combatMode = true;
+                combatMode = playerJump.combatMode = true;
+
                 GameManager.Instance.playerSpineAnimator.SetTrigger("CombatMode");
                 GameManager.Instance.playerSpineAnimator.SetInteger("WeaponID", 1);
             }
@@ -256,7 +261,7 @@ public class PlayerCombatSystem : MonoBehaviour
 
     public void OnWeaponAttack1(InputAction.CallbackContext context)
     {
-        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
+        if (combatMode == false || playerMovementScript.isSprinting == true || MovementLimiter.instance.playerCanAttack == false) return;
 
         if (!lightAttacked && !lightAttackExecuting && !playerColumn.hasGrabbedColumn)
         {
@@ -268,7 +273,7 @@ public class PlayerCombatSystem : MonoBehaviour
 
     public void OnWeaponAttack2(InputAction.CallbackContext context)
     {
-        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
+        if (combatMode == false || playerMovementScript.isSprinting == true || MovementLimiter.instance.playerCanAttack == false) return;
 
         if (!lightAttacked && !lightAttackExecuting && !playerColumn.hasGrabbedColumn)
         {
@@ -321,24 +326,23 @@ public class PlayerCombatSystem : MonoBehaviour
         if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
 
         currentHeavyAttackCharge += Time.deltaTime * heavyAttackChargeFillRate;
-        GameManager.Instance.playerSpineAnimator.SetBool("Charging", true);
+        //GameManager.Instance.playerSpineAnimator.SetBool("Charging", true);
     }
 
     public void OnChargedAttack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
         {
+            cutOffHeavyAttackCharge = currentHeavyAttackCharge = 0.0f;
             isHeavyAttackKeyPressed = true;
+            GameManager.Instance.playerSpineAnimator.ResetTrigger("ChargeAttack");
+            GameManager.Instance.playerSpineAnimator.SetBool("Charging", true);
         }
-        else if (context.phase == InputActionPhase.Canceled && isHeavyAttackKeyPressed)
+        else if (context.phase == InputActionPhase.Canceled)
         {
             if (canHeavyAttack)
             {
                 ExecuteLowPoweredAttack();
-            }
-            else
-            {
-                isHeavyAttackKeyPressed = false;
             }
         }
     }
@@ -349,6 +353,7 @@ public class PlayerCombatSystem : MonoBehaviour
         heavyAttackDamageMultiplier = 1f;
         isHeavyAttackKeyPressed = false;
         currentHeavyAttackCharge = 0f;
+        GameManager.Instance.playerSpineAnimator.SetTrigger("ChargeAttack");
         GameManager.Instance.playerSpineAnimator.SetBool("Charging", false);
         timeElapsedSinceHeavyAttack = 0f;
         heavyAttackDone = true;
@@ -360,14 +365,15 @@ public class PlayerCombatSystem : MonoBehaviour
         heavyAttackDamageMultiplier = (float)failedHeavyAttackDamage / successfulHeavyAttackDamage;
         currentHeavyAttackCharge = 0f;
         isHeavyAttackKeyPressed = false;
+        GameManager.Instance.playerSpineAnimator.SetTrigger("ChargeAttack");
         GameManager.Instance.playerSpineAnimator.SetBool("Charging", false);
         timeElapsedSinceHeavyAttack = 0f;
         heavyAttackDone = true;
     }
     #endregion
 
-    #region Projectile Attacks
-    internal void OnProjectileAttack(InputAction.CallbackContext context)
+    #region Special Items Use
+    public void OnItemUse(InputAction.CallbackContext context)
     {
         if (!projectileAttackExecuting && !playerColumn.hasGrabbedColumn)
         {
@@ -377,7 +383,7 @@ public class PlayerCombatSystem : MonoBehaviour
         }
     }
 
-    public void OnShurikenAttack(InputAction.CallbackContext context)
+    public void OnCombatItemUse(InputAction.CallbackContext context)
     {
         if (!shurikenAttackExecuting && !playerColumn.hasGrabbedColumn)
         {

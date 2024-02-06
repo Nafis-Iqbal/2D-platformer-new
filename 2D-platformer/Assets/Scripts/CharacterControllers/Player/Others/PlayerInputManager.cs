@@ -43,18 +43,24 @@ public class PlayerInputManager : MonoBehaviour
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
 
-        // player run
+        // player move
+        playerInputActions.Player.Move.started += OnMove;
+        playerInputActions.Player.Move.performed += OnMove;
+        playerInputActions.Player.Move.canceled += OnMove;
+
+        //player move
         playerInputActions.Player.Run.started += OnRun;
         playerInputActions.Player.Run.performed += OnRun;
         playerInputActions.Player.Run.canceled += OnRun;
 
-        // player jump and roll
-        //playerInputActions.Player.JumpRoll.started += OnJump;
-        playerInputActions.Player.JumpRoll.canceled += OnJump;
-        playerInputActions.Player.JumpRoll.performed += OnRoll;
+        //Jump
+        playerInputActions.Player.Jump.performed += OnJump;
 
-        // player dodge
-        playerInputActions.Player.Dodge.performed += OnDodge;
+        // player dodge and roll
+        //playerInputActions.Player.JumpRoll.started += OnJump;
+        playerInputActions.Player.RollDodge.canceled += OnDodge;
+        playerInputActions.Player.RollDodge.performed += OnRoll;
+        playerInputActions.Player.RollDodge.Enable();
 
         // player column jump
         playerInputActions.Player.ColumnJumpClimb.performed += OnColumnJumpClimb;
@@ -77,16 +83,21 @@ public class PlayerInputManager : MonoBehaviour
 
         // player charged attack
         playerInputActions.Player.ChargedAttack6.started += OnChargedAttack;
+        playerInputActions.Player.ChargedAttack6.performed += OnChargedAttack;
         playerInputActions.Player.ChargedAttack6.canceled += OnChargedAttack;
 
         // player shuriken attack
-        playerInputActions.Player.ShurikenAttack.started += OnShurikenAttack;
+        playerInputActions.Player.UseCombatItem.started += OnCombatItemUse;
 
         // player projectile attack
-        playerInputActions.Player.ProjectileAttack.started += OnProjectileAttack;
+        playerInputActions.Player.UseItem.started += OnItemUse;
 
         // player grappling gun
         playerInputActions.Player.GrapplingGun.started += OnGrapplingGun;
+        playerInputActions.Player.GrapplingGun.Disable();
+
+        playerInputActions.Player.GrappleBoost.started += OnGrappleBoost;
+        playerInputActions.Player.GrappleBoost.Disable();
 
         // player blocking defense
         playerInputActions.Player.Blocking.started += OnBlockingDefense;
@@ -107,13 +118,13 @@ public class PlayerInputManager : MonoBehaviour
             (playerCombatSystemScript.isBlockingCached && playerJump.onGround) ||
             (playerCombatSystemScript.lightAttackExecuting && playerJump.onGround) ||
             playerCombatSystemScript.heavyAttackExecuting ||
-            playerColumn.isExecuting)
+            playerColumn.isExecuting || playerRoll.isExecuting || playerDodge.isExecuting)
         {
-            playerInputActions.Player.Run.Disable();
+            playerInputActions.Player.Move.Disable();
         }
         else
         {
-            playerInputActions.Player.Run.Enable();
+            playerInputActions.Player.Move.Enable();
         }
 
         // jump
@@ -125,11 +136,11 @@ public class PlayerInputManager : MonoBehaviour
             playerGrapplingGun.isExecuting ||
             playerCombatSystemScript.isBlockingCached)
         {
-            playerInputActions.Player.JumpRoll.Disable();
+            playerInputActions.Player.Jump.Disable();
         }
         else
         {
-            playerInputActions.Player.JumpRoll.Enable();
+            playerInputActions.Player.Jump.Enable();
         }
 
         // roll
@@ -141,25 +152,25 @@ public class PlayerInputManager : MonoBehaviour
             playerGrapplingGun.isExecuting ||
             playerCombatSystemScript.isBlockingCached)
         {
-            playerInputActions.Player.JumpRoll.Disable();
+            playerInputActions.Player.RollDodge.Disable();
         }
         else
         {
-            playerInputActions.Player.JumpRoll.Enable();
+            playerInputActions.Player.RollDodge.Enable();
         }
 
-        // dash
+        // dodge
         if (playerCombatSystemScript.lightAttackExecuting ||
             playerCombatSystemScript.heavyAttackExecuting ||
             playerRoll.isExecuting ||
             playerGrapplingGun.isExecuting ||
             playerCombatSystemScript.isBlockingCached)
         {
-            playerInputActions.Player.Dodge.Disable();
+            playerInputActions.Player.RollDodge.Disable();
         }
         else
         {
-            playerInputActions.Player.Dodge.Enable();
+            playerInputActions.Player.RollDodge.Enable();
         }
 
         // column ledge grab
@@ -219,11 +230,11 @@ public class PlayerInputManager : MonoBehaviour
             playerGrapplingGun.isExecuting ||
             playerCombatSystemScript.isBlockingCached)
         {
-            playerInputActions.Player.ShurikenAttack.Disable();
+            playerInputActions.Player.UseCombatItem.Disable();
         }
         else
         {
-            playerInputActions.Player.ShurikenAttack.Enable();
+            playerInputActions.Player.UseCombatItem.Enable();
         }
 
         // projectile attack
@@ -234,25 +245,11 @@ public class PlayerInputManager : MonoBehaviour
             playerGrapplingGun.isExecuting ||
             playerCombatSystemScript.isBlockingCached)
         {
-            playerInputActions.Player.ProjectileAttack.Disable();
+            playerInputActions.Player.UseItem.Disable();
         }
         else
         {
-            playerInputActions.Player.ProjectileAttack.Enable();
-        }
-
-        // grappling gun
-        if (playerRoll.isExecuting ||
-            playerDodge.isExecuting ||
-            playerCombatSystemScript.heavyAttackExecuting ||
-            playerCombatSystemScript.lightAttackExecuting ||
-            playerCombatSystemScript.isBlockingCached)
-        {
-            playerInputActions.Player.GrapplingGun.Disable();
-        }
-        else
-        {
-            playerInputActions.Player.GrapplingGun.Enable();
+            playerInputActions.Player.UseItem.Enable();
         }
 
         // blocking
@@ -280,14 +277,19 @@ public class PlayerInputManager : MonoBehaviour
         playerGrapplingGun.OnGrapplingGun(context);
     }
 
-    private void OnProjectileAttack(InputAction.CallbackContext context)
+    private void OnGrappleBoost(InputAction.CallbackContext context)
     {
-        playerCombatSystemScript.OnProjectileAttack(context);
+        playerGrapplingGun.OnGrappleBoost(context);
     }
 
-    private void OnShurikenAttack(InputAction.CallbackContext context)
+    private void OnItemUse(InputAction.CallbackContext context)
     {
-        playerCombatSystemScript.OnShurikenAttack(context);
+        playerCombatSystemScript.OnItemUse(context);
+    }
+
+    private void OnCombatItemUse(InputAction.CallbackContext context)
+    {
+        playerCombatSystemScript.OnCombatItemUse(context);
     }
 
     private void OnHolsterWeapon(InputAction.CallbackContext context)
@@ -354,17 +356,19 @@ public class PlayerInputManager : MonoBehaviour
 
     private void OnWalk(InputAction.CallbackContext context)
     {
-        playerInputActions.Player.Run.Disable();
-        playerInputActions.Player.Run.Enable();
+        playerInputActions.Player.Move.Disable();
+        playerInputActions.Player.Move.Enable();
 
         playerMovement.OnWalk(context);
     }
 
-    public void OnRun(InputAction.CallbackContext context)
+    public void OnMove(InputAction.CallbackContext context)
     {
-        //if (context.phase == InputActionPhase.Canceled) Debug.Log("contekst is " + context.phase);
-
         playerMovement.OnMovement(context);
     }
 
+    public void OnRun(InputAction.CallbackContext context)
+    {
+        playerMovement.OnRun(context);
+    }
 }

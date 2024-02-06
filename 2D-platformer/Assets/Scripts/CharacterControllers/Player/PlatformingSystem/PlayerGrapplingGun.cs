@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +9,10 @@ public class PlayerGrapplingGun : MonoBehaviour
     public bool playerIsOnAir = false;
     [Header("Scripts Ref:")]
     public GrapplingRope grapplingRope;
+    private PlayerMovement playerMovement;
+    private Transform playerTransform;
     [SerializeField] private PlayerJump playerJump;
+    public Animator playerSpineAnimator;
 
     [Header("Main Camera:")]
     public Camera m_camera;
@@ -44,45 +48,56 @@ public class PlayerGrapplingGun : MonoBehaviour
 
     [HideInInspector] public Vector2 grapplePoint;
     [HideInInspector] public Vector2 grappleDistanceVector;
+    [Header("Player State")]
     public bool canGrapple = false;
-    [SerializeField] private float jumpButtonHoldTime = 0.5f;
-    [Header("Releasing:")]
+    public bool isExecuting = false;
+
+    [Header("Release Jump")]
     public float hangSwingForce = 10f;
-    [SerializeField] private float releaseForceMultiplierX = 1f;
-    [SerializeField] private float releaseForceMultiplierY = 1f;
+    [SerializeField] private float jumpButtonHoldTime = 0.5f;
+    [SerializeField, Range(0f, 15.0f)] private float minReleaseForceX = 1f;
+    [SerializeField, Range(0f, 15.0f)] private float minReleaseForceY = 1f;
     [SerializeField] private float releaseRopeMovementDisableDuration = 1f;
 
-    public bool isExecuting = false;
-    private PlayerMovement playerMovement;
+    [Header("Swinging Tune")]
+    public bool swingEndAnimPlaying = false;
+    [SerializeField, Range(0f, 5.0f)] public float requiredTurnVelocity;
+    bool playerTilted = false;
+    public float playerTiltOffset;
+    [Range(0f, 30.0f)] public float grappleBoostIncrement;
+    public float maxSwingVelocity;
+    Quaternion currentPlayerRotation;
+    Vector2 grapplePointAngleVector;
+    float angleWithGrapplePoint;
+    float lastFrameVelocity;
+    Vector2 tempSwingVelocity;
 
     private void Awake()
     {
+        playerTransform = GameManager.Instance.playerTransform;
         playerJump = GetComponent<PlayerJump>();
         playerMovement = GameManager.Instance.playerTransform.GetComponent<PlayerMovement>();
+        playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
     }
 
-    public void OnGrapplingGun(InputAction.CallbackContext context)
+    private void OnEnable()
     {
-        var playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
-        if (!grapplingRope.isGrappling)
+        playerTilted = false;
+    }
+
+    private void Start()
+    {
+        grapplingRope.enabled = false;
+        m_springJoint2D.enabled = false;
+        lastFrameVelocity = m_rigidbody.velocity.x;
+
+    }
+
+    private void Update()
+    {
+        if (isExecuting)
         {
-            if (canGrapple)
-            {
-                playerJump.Jump(jumpButtonHoldTime);
-                playerSpineAnimator.SetTrigger("GrapplingHookThrow");
-                SetGrapplePoint();
-                isExecuting = true;
-            }
-        }
-        else
-        {
-            playerSpineAnimator.ResetTrigger("GrapplingHookThrow");
-            grapplingRope.enabled = false;
-            m_springJoint2D.enabled = false;
-            m_rigidbody.AddForce(new Vector2(
-                m_rigidbody.velocity.x * releaseForceMultiplierX,
-                m_rigidbody.velocity.y * releaseForceMultiplierY),
-                ForceMode2D.Impulse);
+
             if (m_rigidbody.velocity.x > 0f)
             {
                 playerMovement.rotateRight();
@@ -91,15 +106,102 @@ public class PlayerGrapplingGun : MonoBehaviour
             {
                 playerMovement.rotateLeft();
             }
+
+            //Swing End mechanics
+            //Debug.Log("swing: " + m_rigidbody.velocity.x);
+            if (Mathf.Abs(m_rigidbody.velocity.x) < lastFrameVelocity)//Player moving towards amplitude
+            {
+                if (Mathf.Abs(m_rigidbody.velocity.x) < requiredTurnVelocity)
+                {
+                    playerSpineAnimator.SetBool("GrappleSwingEnd", true);
+                }
+            }
+            else if (Mathf.Abs(m_rigidbody.velocity.x) > lastFrameVelocity)//Player moving towards center
+            {
+                playerSpineAnimator.SetBool("GrappleSwingEnd", false);
+            }
+
+            lastFrameVelocity = Mathf.Abs(m_rigidbody.velocity.x);
+
+            grapplePointAngleVector = m_springJoint2D.connectedAnchor - new Vector2(gunPivot.position.x, gunPivot.position.y);
+            angleWithGrapplePoint = Vector2.SignedAngle(grapplePointAngleVector, Vector2.up);
+            currentPlayerRotation.eulerAngles = new Vector3(0.0f, 0.0f, -angleWithGrapplePoint + playerTiltOffset);
+            playerTransform.localRotation = currentPlayerRotation;
+            playerTilted = true;
+            Debug.Log("Angle GGP" + angleWithGrapplePoint);
+        }
+        else
+        {
+            if (playerTilted == true)
+            {
+                playerTilted = false;
+                currentPlayerRotation.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
+                playerTransform.localRotation = currentPlayerRotation;
+            }
+        }
+    }
+
+    public void OnGrapplingGun(InputAction.CallbackContext context)
+    {
+        if (!grapplingRope.isGrappling)
+        {
+            if (canGrapple)
+            {
+                playerSpineAnimator.SetBool("GrapplingHookThrow", true);
+                SetGrapplePoint();
+                isExecuting = true;
+            }
+        }
+        else
+        {
+            PlayerInputManager.Instance.playerInputActions.Player.GrappleBoost.Disable();
+
+            playerSpineAnimator.SetBool("GrapplingHookThrow", false);
+            playerSpineAnimator.SetBool("GrappleSwingEnd", false);
+            grapplingRope.enabled = false;
+            m_springJoint2D.enabled = false;
+
+            // m_rigidbody.AddForce(new Vector2(
+            //     m_rigidbody.velocity.x + minReleaseForceX,
+            //     m_rigidbody.velocity.y + minReleaseForceY),
+            //     ForceMode2D.Impulse);
+            if (m_rigidbody.velocity.x > 0f)
+            {
+                playerMovement.rotateRight();
+                m_rigidbody.AddForce(new Vector2(
+                m_rigidbody.velocity.x + minReleaseForceX,
+                m_rigidbody.velocity.y + minReleaseForceY),
+                ForceMode2D.Impulse);
+            }
+            else if (m_rigidbody.velocity.x < 0f)
+            {
+                playerMovement.rotateLeft();
+                m_rigidbody.AddForce(new Vector2(
+                m_rigidbody.velocity.x - minReleaseForceX,
+                m_rigidbody.velocity.y + minReleaseForceY),
+                ForceMode2D.Impulse);
+            }
             isExecuting = false;
         }
     }
 
-    private void Start()
+    public void OnGrappleBoost(InputAction.CallbackContext context)
     {
-        grapplingRope.enabled = false;
-        m_springJoint2D.enabled = false;
+        tempSwingVelocity = m_rigidbody.velocity;
 
+        if (context.ReadValue<float>() > 0f)
+        {
+            tempSwingVelocity.x += grappleBoostIncrement;
+        }
+        else if (context.ReadValue<float>() < 0f)
+        {
+            tempSwingVelocity.x -= grappleBoostIncrement;
+        }
+
+        if (tempSwingVelocity.x > maxSwingVelocity) tempSwingVelocity.x = maxSwingVelocity;
+        else if (Mathf.Abs(tempSwingVelocity.x) > maxSwingVelocity) tempSwingVelocity.x = -maxSwingVelocity;
+
+        m_rigidbody.velocity = tempSwingVelocity;
     }
 
     void SetGrapplePoint()
