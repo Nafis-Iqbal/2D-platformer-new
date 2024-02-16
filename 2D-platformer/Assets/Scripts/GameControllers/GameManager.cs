@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public Transform playerTransform;
+    public int playerCurrentPlatformID = -1, playerCurrentPlatformLevel = -1;
     public CinemachineVirtualCamera virtualCamera;
     public Animator playerSpineAnimator;
     public static GameManager Instance;

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -62,7 +62,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
         MovementLimiter.instance.playerCanParkour = true;
     }
 
-    public void RistrictPlayerRigidbody()
+    public void RestrictPlayerRigidbody()
     {
         Debug.Log("simu1");
         playerRB2D.simulated = false;
@@ -124,7 +124,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     }
     #endregion
 
-    #region State Change Methods
+    #region Combat State Change Methods
     public void LightAttackStarted()
     {
         RestrictPlayerMovement();
@@ -155,6 +155,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
         playerAppearanceScript.jumpEffects();
         playerJump.DisableCharging();
         playerJump.StartJump();
+        playerJump.jumpAnimInProgress = true;
 
         PlayerInputManager.Instance.playerInputActions.Player.Jump.Disable();
         PlayerInputManager.Instance.playerInputActions.Player.RollDodge.Disable();
@@ -183,6 +184,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public void TriggerSystemsPlayerLanding()
     {
         PlayerInputManager.Instance.playerInputActions.Player.GrapplingGun.Disable();
+        playerJump.jumpAnimInProgress = false;
     }
 
     public void MovementEnableGrappleBoost()

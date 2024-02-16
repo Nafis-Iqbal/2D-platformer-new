@@ -21,6 +21,7 @@ public class PlayerCombatSystem : MonoBehaviour
     public bool combatMode = false;
 
     [Header("Shuriken Attack Details")]
+    public int activeCombatItemID;
     public GameObject shurikenPrefab;
     public float shurikenAttackCooldownTime = 1f;
     public bool shurikenAttackExecuting = false;
@@ -247,13 +248,13 @@ public class PlayerCombatSystem : MonoBehaviour
             {
                 combatMode = playerJump.combatMode = false;
 
-                GameManager.Instance.playerSpineAnimator.SetTrigger("CombatMode");
+                GameManager.Instance.playerSpineAnimator.SetBool("CombatMode", false);
             }
             else
             {
                 combatMode = playerJump.combatMode = true;
 
-                GameManager.Instance.playerSpineAnimator.SetTrigger("CombatMode");
+                GameManager.Instance.playerSpineAnimator.SetBool("CombatMode", true);
                 GameManager.Instance.playerSpineAnimator.SetInteger("WeaponID", 1);
             }
         }
@@ -375,19 +376,20 @@ public class PlayerCombatSystem : MonoBehaviour
     #region Special Items Use
     public void OnItemUse(InputAction.CallbackContext context)
     {
-        if (!projectileAttackExecuting && !playerColumn.hasGrabbedColumn)
+        if (!projectileAttackExecuting && !playerColumn.hasGrabbedColumn && playerJump.onGround)
         {
-            playerSpineAnimator.Play("projectile throw");
-            var projectile = ObjectPooler.Instance.SpawnFromPool("PlayerProjectile", transform.position, Quaternion.identity);
-            projectile.GetComponent<PlayerProjectile>().Deploy(Vector2.right * transform.localScale.x);
+            playerSpineAnimator.SetTrigger("UseItem");
+            playerSpineAnimator.SetInteger("ItemID", activeCombatItemID);
         }
     }
 
     public void OnCombatItemUse(InputAction.CallbackContext context)
     {
-        if (!shurikenAttackExecuting && !playerColumn.hasGrabbedColumn)
+        if (!shurikenAttackExecuting && !playerColumn.hasGrabbedColumn && playerJump.onGround && playerJump.combatMode == true)
         {
-            playerSpineAnimator.Play("shuriken throw");
+            playerSpineAnimator.SetTrigger("ProjectileThrow");
+            playerSpineAnimator.SetInteger("ProjectileID", activeCombatItemID);
+
             var shuriken = ObjectPooler.Instance.SpawnFromPool("PlayerShuriken", transform.position, Quaternion.identity);
             shuriken.GetComponent<PlayerShuriken>().Deploy(Vector2.right * transform.localScale.x);
         }

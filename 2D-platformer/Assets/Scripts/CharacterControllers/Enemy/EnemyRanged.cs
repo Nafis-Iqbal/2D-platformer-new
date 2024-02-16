@@ -13,22 +13,29 @@ public class EnemyRanged : EnemyBase
     private float baseY;
     private float height;
     private Vector3 startPos;
+    private EnemyClassInfo enemyData;
+    public int enemyID;
 
-    public override void Start()
+    public override void OnEnable()
     {
+        base.OnEnable();
         isReadyToClimb = false;
         isRepositioning = true;
-        shouldBePatrolling = true;
-        canHit = true;
-        rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        timeBetweenShoots = EnemyManager.Instance.enemyAttackSpeed;
-        enemyAttackRange = EnemyManager.Instance.archerRange;
-        battleCryRange = EnemyManager.Instance.genRange;
-        enemyHealth = EnemyManager.Instance.enemyHealth;
-        enemySpineAnimator = GetComponent<Animator>();
+        isPatrolling = true;
+        canAttackPlayer = true;
+
+        enemyData = EnemyManager.Instance.enemyData[enemyID];
+
+        enemyClassSpeed = enemyData.enemyMovementSpeed;
+        playerHorizontalDetectionDistance = enemyData.enemyHorizontalDetectionDistance;
+        playerVerticalDetectionLevels = enemyData.enemyVerticalDetectionLevels;
+
+        enemyAttackRange = enemyData.enemyAttackRange;
+        minTimeBetweenAttacks = enemyData.enemyMinTimeBetweenAttacks;
+        enemyHealth = enemyData.enemyHealth;
+        enemyStamina = enemyData.enemyStamina;
+        enemyBattleCryRange = enemyData.enemyBattleCryRange;
         acquireDependencies();
-        enemyWalkSpeed = enemyMovementSpeed;
     }
 
     IEnumerator Throw()
@@ -43,7 +50,7 @@ public class EnemyRanged : EnemyBase
         throwRow.transform.rotation = transform.rotation;
 
         int dir;
-        if (transform.position.x > player.position.x)
+        if (transform.position.x > playerTransform.position.x)
         {
             dir = -1;
         }
@@ -60,19 +67,18 @@ public class EnemyRanged : EnemyBase
         canThrow = true;
     }
 
-    public override void attack()
+    public override void handleAttackPlayerAnimation()
     {
         if (isGrounded)
-            rb.velocity = Vector3.zero;
+            rb2d.velocity = Vector3.zero;
         if (canThrow)
         {
-            farAnimationPlayed = false;
             StartCoroutine(Throw());
         }
 
         if (randomNumber == 3)
         {
-            canHit = false;
+            canAttackPlayer = false;
             enemySpineAnimator.Play("BattleCry");
         }
     }
@@ -98,22 +104,21 @@ public class EnemyRanged : EnemyBase
             if (isReadyToClimb)
             {
                 // transform.position = tar;
-                rb.gravityScale = 0f;
+                rb2d.gravityScale = 0f;
                 towardsFinalTarget(tar);
             }
             float dist = Mathf.Abs(transform.position.y - tar.y);
             if (dist < 0.05f)
             {
                 isRepositioning = true;
-                rb.gravityScale = 1f;
+                rb2d.gravityScale = 1f;
                 isReadyToClimb = false;
-                notInRepositioningPhase = true;
             }
         }
         else
         {
             startPos = transform.position;
-            rb.gravityScale = 0f;
+            rb2d.gravityScale = 0f;
             tar.y += 1f;
             calculateVelocity(tar);
         }
@@ -128,7 +133,7 @@ public class EnemyRanged : EnemyBase
     void towardsRepositionPoint(Vector2 tar)
     {
         enemySpineAnimator.Play("Patrolling animation");
-        transform.position = Vector2.MoveTowards(transform.position, tar, enemyMovementSpeed / 50f * Time.fixedDeltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, tar, enemyCurrentMovementSpeed / 50f * Time.fixedDeltaTime);
     }
 
     void calculateVelocity(Vector2 tar)
@@ -145,13 +150,12 @@ public class EnemyRanged : EnemyBase
         {
             if (!isGrounded)
             {
-                rb.gravityScale = 20f;
+                rb2d.gravityScale = 20f;
             }
             else
             {
                 isRepositioning = true;
-                rb.gravityScale = 1f;
-                notInRepositioningPhase = true;
+                rb2d.gravityScale = 1f;
             }
 
         }

@@ -8,10 +8,8 @@ using UnityEngine.InputSystem.Interactions;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float tempSpeedTurn = 1.0f;
-    public float tempSpeedAccel = 1.0f;
-    public float tempSpeedDecel = 1.0f;
-    public float tempSpeedWithoutAccel = 1.0f;
+    #region OBJECTS & SCRIPTS
+    [Header("Drag & Drops")]
     public PlayerCombatSystem playerCombatSystemScript;
     private PlayerJump playerJump;
     private PlayerColumn playerColumn;
@@ -20,12 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerGrapplingGun playerGrapplingGun;
     private Rigidbody2D playerRB2D;
     private Animator playerSpineAnimator;
-    private Vector2 desiredVelocity;
-    private float maxSpeedChange;
-    private float acceleration;
-    private float deceleration;
-    private float turnSpeed;
-    private float delta;
+    #endregion
 
     [Header("Movement Stats")]
     [SerializeField, Range(0f, 20f)][Tooltip("Maximum movement speed")] public float maxSpeed = 10f;
@@ -49,6 +42,15 @@ public class PlayerMovement : MonoBehaviour
     [Header("Calculations")]
     [SerializeField] public Vector2 velocity;
     [SerializeField] private float directionX;
+    private Vector2 desiredVelocity;
+    private float maxSpeedChange;
+    private float acceleration;
+    private float deceleration;
+    private float turnSpeed;
+    public float tempSpeedTurn = 1.0f;
+    public float tempSpeedAccel = 1.0f;
+    public float tempSpeedDecel = 1.0f;
+    public float tempSpeedWithoutAccel = 1.0f;
 
     [Header("Current State")]
     public bool playerFacingRight = true;
@@ -61,8 +63,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnEnable()
     {
-
-        //Find the character's Rigidbody and ground detection script
         playerRB2D = GetComponent<Rigidbody2D>();
         playerJump = GetComponent<PlayerJump>();
         playerDodge = GetComponent<PlayerDodge>();
@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-
+        #region HORIZONTAL MOVEMENT
         if (isSprinting == true)
         {
             if (playerCombatSystemScript.combatMode == true)
@@ -104,24 +104,23 @@ public class PlayerMovement : MonoBehaviour
         }
 
         directionX = movementValue * speedMultiplier;
+        #endregion
 
         if (playerDodge.isExecuting || playerRoll.isExecuting || playerGrapplingGun.grapplingRope.isGrappling)
         {
             return;
         }
 
-        //Used to stop movement when the character is playing her death animation
+        //LIMIT PLAYER MOVEMENT BASED ON STATES
         if (!MovementLimiter.instance.playerCanMove)
         {
             directionX = 0;
             playerMovementInd = 0;
         }
 
-        //Used to flip the character's sprite when she changes direction
-        //Also tells us that we are currently pressing a direction button
+        //FLIP PLAYER FACING DIRECTION
         if (directionX != 0)
         {
-            //transform.localScale = new Vector3(directionX > 0 ? 1 : -1, 1, 1);
             if (directionX > 0 && playerFacingRight == false)
             {
                 rotateRight();
@@ -141,10 +140,7 @@ public class PlayerMovement : MonoBehaviour
 
         playerSpineAnimator.SetInteger("MoveSpeed", playerMovementInd);
 
-        //Calculate's the character's desired velocity - which is the direction you are facing, multiplied by the character's maximum speed
-        //Friction is not used in this game
         desiredVelocity = new Vector2(directionX, 0f) * Mathf.Max(maxSpeed - friction, 0f);
-
     }
 
     private void FixedUpdate()
@@ -163,16 +159,10 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        //Fixed update runs in sync with Unity's physics engine
-
-        //Get Kit's current ground status from her ground script
         onGround = playerJump.onGround;
-
-        //Get the Rigidbody's current velocity
         velocity = playerRB2D.velocity;
 
-        //Calculate movement, depending on whether "Instant Movement" has been checked
-        if (!playerCombatSystemScript.heavyAttackExecuting && !playerCombatSystemScript.lightAttackExecuting)
+        if (playerCombatSystemScript.heavyAttackExecuting == false && playerCombatSystemScript.lightAttackExecuting == false)
         {
             if (useAcceleration)
             {
@@ -194,9 +184,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnMovement(InputAction.CallbackContext context)
     {
-        //This is called when you input a direction on a valid input type, such as arrow keys or analogue stick
-        //The value will read -1 when pressing left, 0 when idle, and 1 when pressing right.
-
         if (playerGrapplingGun.isExecuting)
         {
             if (context.ReadValue<float>() > 0f)
@@ -335,14 +322,15 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void teleportAndSynchronizePlayer(Vector3 targetTeleportPosition)
-    {
-        transform.position = targetTeleportPosition;
-    }
-
     public void stopPlayerCompletely()
     {
         playerRB2D.velocity = Vector2.zero;
+    }
+
+    #region UNUSED
+    public void teleportAndSynchronizePlayer(Vector3 targetTeleportPosition)
+    {
+        transform.position = targetTeleportPosition;
     }
 
     public void OnWalk(InputAction.CallbackContext context)
@@ -357,4 +345,5 @@ public class PlayerMovement : MonoBehaviour
 
         }
     }
+    #endregion
 }

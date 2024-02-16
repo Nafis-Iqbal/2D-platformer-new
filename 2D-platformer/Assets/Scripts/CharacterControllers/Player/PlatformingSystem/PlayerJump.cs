@@ -58,7 +58,6 @@ public class PlayerJump : MonoBehaviour
     public bool onGround;
     public bool combatMode;
     public bool jumpAnimInProgress;
-    private bool onGroundCached = false;
     private float jumpBufferCounter;
     private float coyoteTimeCounter = 0;
     int playerMoveInd;
@@ -191,7 +190,7 @@ public class PlayerJump : MonoBehaviour
     {
         playerMoveInd = playerMovement.playerMovementInd;
 
-        //Debug.Log("ggg juump");
+        Debug.Log("ggg juump");
         if (MovementLimiter.instance.playerCanMove && MovementLimiter.instance.playerCanParkour)
         {
             if (!playerGrapplingGun.grapplingRope.isGrappling && onGround) StartJumpAnimation();
@@ -203,7 +202,6 @@ public class PlayerJump : MonoBehaviour
         isCharging = true;
         spineAnimator.ResetTrigger("Landed");
         spineAnimator.SetTrigger("Jump");
-        jumpAnimInProgress = true;
     }
 
     private void StopJump()

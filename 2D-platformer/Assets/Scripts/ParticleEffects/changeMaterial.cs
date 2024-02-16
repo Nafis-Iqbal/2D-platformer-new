@@ -12,9 +12,9 @@ public class changeMaterial : MonoBehaviour
     {
         playerScript = EnemyManager.Instance.player.GetComponent<healthofPlayer>();
         ps = GetComponent<ParticleSystem>();
-        
-         rend = GetComponent<Renderer>();
-         rend.enabled = true;
+
+        rend = GetComponent<Renderer>();
+        rend.enabled = true;
         // rend.sharedMaterial = materials[0];
     }
 
@@ -24,6 +24,4 @@ public class changeMaterial : MonoBehaviour
         main.startColor = playerScript.platColor;
         //rend.material.SetColor("_BaseColor", playerScript.platColor);
     }
-
-
 }

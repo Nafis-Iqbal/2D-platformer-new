@@ -4,24 +4,26 @@ using UnityEngine;
 
 public class PlatformData : MonoBehaviour
 {
+    public int platformID, platformLevel;
     public Color efffectColor;
-    public Transform startPos;
-    public Transform endPos;
-    public healthofPlayer playerScript;
+    public Transform leftEndPosition;
+    public Transform rightEndPosition;
 
     private void Start()
     {
-        playerScript = EnemyManager.Instance.player.GetComponent<healthofPlayer>();
+
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            playerScript.setPlatInfo(startPos.position, endPos.position, efffectColor);
+            GameManager.Instance.playerCurrentPlatformID = platformID;
+            GameManager.Instance.playerCurrentPlatformLevel = platformLevel;
         }
+
         if (other.CompareTag("Enemy"))
         {
-            other.gameObject.transform.GetComponent<EnemyBase>().setEnemyPlatform(startPos.position, endPos.position);
+            other.gameObject.transform.GetComponent<EnemyBase>().setEnemyPlatform(leftEndPosition.position, rightEndPosition.position, platformID, platformLevel);
         }
     }
 }

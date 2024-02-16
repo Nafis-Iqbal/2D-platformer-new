@@ -5,22 +5,13 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public GameObject player;
+    [Header("Base Movement Stats")]
+    public float basePatrolSpeedMultiplier;
+    public float baseCombatWalkSpeedMultiplier;
+    public float baseCombatRunSpeedMultiplier;
 
-    [Header("Archer Stats")]
-    public float archerRange = 5f;
-    public float enemyHealth = 50f;
-    [Header("FootSoldier Stats")]
-    [Header("HeavySoldier Stats")]
-    public float heavyEnemyHealth = 300f;
-
-    public float heavyEnemySpeed = 40f;
-    public float heavyEnemyAttackSpeed = .8f;
-    public float HeavyAttackRange = 1.5f;
-    public float enemySpeed = 500f;
-    public float enemyAttackSpeed = .35f;
-
-    public float genRange = 10f;
-    public float attackMelRange = .7f;
+    [Header("Enemy Info")]
+    public EnemyClassInfo[] enemyData = new EnemyClassInfo[10];
 
     public static EnemyManager instance = null;
 

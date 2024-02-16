@@ -9,28 +9,33 @@ public class EnemyHeavy : EnemyBase
     private float baseY;
     private float height;
     private Vector3 startPos;
-    public override void Start()
+    private EnemyClassInfo enemyData;
+    public int enemyID;
+    public override void OnEnable()
     {
         isRepositioning = true;
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        rb = GetComponent<Rigidbody2D>();
-        timeBetweenHits = EnemyManager.Instance.heavyEnemyAttackSpeed;
-        enemyAttackRange = EnemyManager.Instance.HeavyAttackRange;
-        enemySpineAnimator.speed = .5f;
-        activateDistance = 50f;
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        rb2d = GetComponent<Rigidbody2D>();
 
-        enemyHealth = EnemyManager.Instance.enemyHealth;
-        enemySpineAnimator = GetComponent<Animator>();
+        enemyData = EnemyManager.Instance.enemyData[enemyID];
+
+        enemyClassSpeed = enemyData.enemyMovementSpeed;
+        playerHorizontalDetectionDistance = enemyData.enemyHorizontalDetectionDistance;
+        playerVerticalDetectionLevels = enemyData.enemyVerticalDetectionLevels;
+
+        enemyAttackRange = enemyData.enemyAttackRange;
+        minTimeBetweenAttacks = enemyData.enemyMinTimeBetweenAttacks;
+        enemyHealth = enemyData.enemyHealth;
+        enemyStamina = enemyData.enemyStamina;
+        enemyBattleCryRange = enemyData.enemyBattleCryRange;
 
         acquireDependencies();
-
-        enemyWalkSpeed = enemyMovementSpeed;
     }
 
     public override void Reposition(Vector2 tar)
     {
         startPos = transform.position;
-        rb.gravityScale = 0f;
+        rb2d.gravityScale = 0f;
         tar.y += 1f;
         calculateVelocity(tar);
     }
@@ -51,14 +56,13 @@ public class EnemyHeavy : EnemyBase
         {
             if (!isGrounded)
             {
-                rb.gravityScale = 100f;
+                rb2d.gravityScale = 100f;
             }
             else
             {
                 isRepositioning = true;
-                rb.gravityScale = 1f;
+                rb2d.gravityScale = 1f;
             }
-
         }
     }
 }

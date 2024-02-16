@@ -213,7 +213,6 @@ public class PlayerColumn : MonoBehaviour
         {
             MovementLimiter.instance.playerCanParkour = false;
             hasGrabbedColumn = true;
-            playerSpineAnimator.SetInteger("WallLadderID", wallLadderID);
             playerSpineAnimator.SetTrigger("WallLadderClimb");
         }
     }
@@ -309,6 +308,11 @@ public class PlayerColumn : MonoBehaviour
 
         Gizmos.DrawLine(transform.position + columnColliderOffset * transform.localScale.x, transform.position + columnColliderOffset * transform.localScale.x + new Vector3(columnLength, 0, 0) * transform.localScale.x);
 
+        //up check object
+        Gizmos.DrawLine(climbCheckObjectUp.transform.position, climbCheckObjectUp.transform.position + new Vector3(0.2f, 0.0f, 0.0f));
+
+        //down check object
+        Gizmos.DrawLine(climbCheckObjectDown.transform.position, climbCheckObjectDown.transform.position + new Vector3(0.2f, 0.0f, 0.0f));
     }
 
     private void startFalling()
@@ -323,7 +327,7 @@ public class PlayerColumn : MonoBehaviour
 
     private void enableTiredMechanics()
     {
-        playerSpineAnimator.Play("column grab tired");
+        playerSpineAnimator.SetTrigger("ClimbHoldTired");
         PlayerInputManager.Instance.playerInputActions.Player.ColumnMove.Disable();
     }
 
