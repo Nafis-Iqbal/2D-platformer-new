@@ -18,7 +18,8 @@ public class EnemyClassInfo
     [Header("COMBAT PROPERTIES")]
     public bool hasToAndFroMovement;
     public bool movesAwayAfterAttack;
-    public bool changesDirectioDuringAttack;
+    public bool changesDirectionDuringAttack;
+    public float toAndFroMoveFrequency;
 
     [Header("SPEED")]
     public float enemyMovementSpeed;
@@ -40,4 +41,7 @@ public class EnemyClassInfo
     public float enemyHealth;
     public float enemyStamina;
     public float enemyBattleCryRange;
+
+    [Header("ATTACKS")]
+    public EnemyAttackInfo[] enemyAttacks = new EnemyAttackInfo[3];
 }

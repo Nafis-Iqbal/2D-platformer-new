@@ -7,7 +7,10 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: PatrolMode
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3769073421259724136}
   m_Solo: 0
@@ -670,6 +673,13 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
+  - time: 0
+    functionName: RestrictCharacterMovement
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.5
     functionName: ArmedWeaponsSwordUnSheath
     data: 
@@ -1291,13 +1301,6 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
-  - time: 0.81666666
-    functionName: EnableCharacterMovement
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
 --- !u!74 &-2556280596379449179
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -2803,7 +2806,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.016666668
-    functionName: RestrictCharacterMovement
+    functionName: LightAttackStarted
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -3422,7 +3425,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.016666668
-    functionName: RestrictCharacterMovement
+    functionName: LightAttackStarted
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

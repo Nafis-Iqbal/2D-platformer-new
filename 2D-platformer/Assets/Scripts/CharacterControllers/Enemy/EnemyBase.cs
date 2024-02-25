@@ -6,49 +6,59 @@ using Microsoft.Unity.VisualStudio.Editor;
 
 public class EnemyBase : MonoBehaviour
 {
-    [Header("Drag and Drops")]
+    [Header("DRAG AND DROPS")]
+    public Animator enemySpineAnimator;
     protected Rigidbody2D rb2d;
     protected PlayerCombatSystem playerCombatSystemScript;
-    public Animator enemySpineAnimator;
     public Transform playerTransform;
     public GameObject checkHeightObject1, checkHeightObject2;
     public LayerMask environmentMask;
     public LayerMask repositionLayer;
 
-    [Header("Enemy Movement")]
-    public bool canMove = true;
+    [Header("MOVEMENT SYSTEM")]
+    public float minLandHeight;
     protected float enemyClassSpeed;
     protected Vector2 characterMovementDirection = Vector2.zero;
-    public float enemyCurrentMovementSpeed = 100f;
+    protected float enemyCurrentMovementSpeed = 100f;
+    //protected float projectedDistanceFromPlayer;
+    public float projectedDistanceFromPlayer;
+    //protected float playerContactAvoidRange;
+    public float playerContactAvoidRange;
     protected float enemyPatrolSpeedMultiplier, enemyCombatWalkSpeedMultiplier, enemyCombatRunSpeedMultiplier;
-    public float nextWayPointDistance = 3f;
-    public float minLandHeight;
     //JUMP
+    public float nextWayPointDistance = 3f;
     public float jumpNodeHeightRequirement = .8f;
     public float jumpModifier = .3f;//What is this?
     public float jumpCheckOffset = .1f;//What is this?
 
-    [Header("Enemy Patrolling System")]
-    float lastPatrolTurnTime;
+    [Header("PATROLLING SYSTEM")]
     public float patrolDirectionalDuration;
+    float lastPatrolTurnTime;
     bool turnCharacterNow;
     public bool enemyAlreadyAlerted;
 
-    [Header("Enemy States")]
+    [Header("ENEMY MOVEMENT STATES")]
+    public bool canMove = true;
+    public bool characterFacingRight;
     public bool isGrounded;
     public bool isPatrolling;//false means combat mode
     public bool isRepositioning;
-    public bool isAttacking;//in close combat range and performing attacks
-    public bool isPoiseBroken, isStunned;
-    public bool doingAttackMove;
-    public bool moveAwayAfterAttack;
+    public bool isFleeingFromPlayer;
     public bool isChangingPlatform;
     public bool isReadyToClimb;
-    public bool characterFacingRight;
+    [Header("ENEMY COMBAT STATES")]
+    public bool canAttackPlayer = true;
+    public bool isAttacking;//in close combat range and performing attacks
+    public bool doingAttackMove;
+    public bool closeInForAttack;
+    public bool moveAwayAfterAttack;
+    public bool isPoiseBroken, isStunned;
 
-    [Header("Player Targetting And Repositioning")]
+    [Header("PLAYER TARGETTING AND REPOSITIONING")]
     public bool groundBasedEnemy;
     public bool canChangePlatform;
+    public bool maintainsDistanceFromPlayer;
+    //protected float playerDistanceFromEnemy;
     public float playerDistanceFromEnemy;
     int enemyPlatformLevel, playerPlatformLevel;
     public int enemyPlatformID, playerPlatformID;
@@ -56,46 +66,47 @@ public class EnemyBase : MonoBehaviour
     public bool targetInVerticalRange = false;
     public float minimumDistanceForReposition = 50f;//What is this??
 
-    [Header("Enemy Combat & Animation System")]
+    [Header("COMBAT ANIMATION SYSTEM")]
     public float enemyHealth;
     public float enemyStamina;
-    public bool canAttackPlayer = true;
+
     public float minTimeBetweenAttacks;
     protected float lastAttackTime;
-    protected float randomInterpolationPoint;
     public float baseMomentumForce;
+
     public float playerHorizontalDetectionDistance;
     public int playerVerticalDetectionLevels;
     protected float enemyBattleCryRange;
     public float enemyTrackingRange;
     public float enemyAttackRange;
+
     public bool hasToAndFroMovement;
+    protected float toAndFroMoveFrequency;
+    public int toAndFroRandomNumber;
     public bool hasComboAttack = false;
     public int comboAttackID;
-    public bool closeInForAttack;
     public bool movesAwayAfterAttack;
-    public bool changesDirectioDuringAttack;
+    public bool changesDirectionDuringAttack;
+
     public GameObject knife;
     public GameObject UnblockableKnife;
 
-    [Header("A* Pathfinding")]
+    [Header("A* PATHFINDING")]
+    public float pathUpdateSeconds = .5f;//What is this??
     private Path pathAiToFollow;
     Seeker seeker;
-    public float pathUpdateSeconds = .5f;//What is this??
     private int currentWayPoint = 0;//What is this??
 
-    [Header("Custom Behaviour")]
+    [Header("CUSTOM BEHAVIOUR")]
     public bool followEnabled = false;
     public bool jumpEnabled = true;
     public bool lookAtPlayerEnabled = true;
 
-    [Header("Confused or Useless")]
+    [Header("CHANGING PLATFORM")]
     public Vector2 playerPlatformRightEndPosition;
     public Vector2 playerPlatformLeftEndPosition;
     Vector2 platformLeftEndBox, platformRightEndBox;//Target Platform Reposition Point
     public bool triggeredBattleCry = false;
-    public int randomNumber = 100;//What is this?? -- How is it affecting the randoness, and what is it affecting
-    Vector2 preTarget;//What is this??
 
     public virtual void OnEnable()
     {
@@ -112,6 +123,7 @@ public class EnemyBase : MonoBehaviour
         isReadyToClimb = false;
         isGrounded = true;
         isPoiseBroken = isStunned = false;
+        isFleeingFromPlayer = false;
     }
 
     public void acquireDependencies()
@@ -140,6 +152,78 @@ public class EnemyBase : MonoBehaviour
         playerPlatformLevel = GameManager.Instance.playerCurrentPlatformLevel;
     }
 
+    public void checkPlayerPositionUpdateData()
+    {
+        if (playerInCombatRange())
+        {
+            if (groundBasedEnemy == true)
+            {
+                playerDistanceFromEnemy = horizontalDistanceFromPlayer();
+
+                if (targetInHorizontalRange)//Start pursuing Player
+                {
+                    if (isPatrolling == true)
+                    {
+                        isPatrolling = false;
+                        canMove = false;
+                        enemySpineAnimator.SetTrigger("Alerted");
+
+                        if (enemyAlreadyAlerted == false)
+                        {
+                            enemyAlreadyAlerted = true;
+                            enemySpineAnimator.SetBool("PatrolMode", false);
+                        }
+                    }
+                    else if (triggeredBattleCry == true)
+                    {
+
+                    }
+                    else if (isRepositioning == false && doingAttackMove == false)
+                    {
+                        if (playerDistanceFromEnemy < playerContactAvoidRange)
+                        {
+                            isRepositioning = true;
+                            isFleeingFromPlayer = true;
+                            isAttacking = false;
+                        }
+                        else if (playerDistanceFromEnemy > enemyTrackingRange)
+                        {
+                            isRepositioning = true;
+                            isFleeingFromPlayer = false;
+                            isAttacking = false;
+                        }
+                    }
+                    else if (isRepositioning == true)
+                    {
+                        if (playerDistanceFromEnemy > playerContactAvoidRange && playerDistanceFromEnemy < enemyTrackingRange)
+                        {
+                            isRepositioning = false;
+                            isFleeingFromPlayer = false;
+                            isAttacking = true;
+                        }
+                    }
+                }
+                else if (targetInVerticalRange)//Start changing Platform
+                {
+                    isChangingPlatform = true;
+                    isPatrolling = false;
+
+                    if (enemyAlreadyAlerted == false)
+                    {
+                        enemyAlreadyAlerted = true;
+                        enemySpineAnimator.SetBool("PatrolMode", false);
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (enemyAlreadyAlerted == false)
+            {
+                isPatrolling = true;
+            }
+        }
+    }
     void Update()
     {
         if (playerPlatformID < 0) getPlayerPlatformInfo();
@@ -172,7 +256,7 @@ public class EnemyBase : MonoBehaviour
                     enemySpineAnimator.SetBool("OnAir", true);
                 }
                 #region Changing Platform
-                if (isChangingPlatform)
+                if (isChangingPlatform)//Changing Platform
                 {
 
                 }
@@ -182,22 +266,9 @@ public class EnemyBase : MonoBehaviour
                 {
                     if (isAttacking == false)//PURSUING PLAYER
                     {
-                        if (horizontalDistanceFromPlayer() > enemyTrackingRange && canMove == true)//PURSUE PLAYER
+                        if (canMove && isRepositioning)//Reposition For Attack, through running
                         {
-                            if (isRepositioning == false)
-                            {
-                                isRepositioning = true;
-                                isAttacking = false;
-                                enemySpineAnimator.SetInteger("MoveSpeed", 2);
-                                enemySpineAnimator.SetBool("BackWalk", false);
-
-                                if (enemyAlreadyAlerted == false)
-                                {
-                                    enemyAlreadyAlerted = true;
-                                    canMove = false;
-                                    enemySpineAnimator.SetBool("PatrolMode", false);
-                                }
-                            }
+                            HandleRepositionAnimation();
                         }
                         else if (triggeredBattleCry)//BATTLE CRY
                         {
@@ -209,27 +280,10 @@ public class EnemyBase : MonoBehaviour
                             enemySpineAnimator.SetTrigger("BattleCry");
                             stopCharacterCompletely();
                         }
-                        else if (horizontalDistanceFromPlayer() <= enemyTrackingRange)//SWITCH TO ATTACK
-                        {
-                            if (isAttacking == false)
-                            {
-                                enemySpineAnimator.SetInteger("MoveSpeed", 1);
-                                isAttacking = true;
-                                isRepositioning = false;
-                            }
-                        }
                     }
-                    else//ATTACK PLAYER
+                    else//IN ATTACKING PLAYER MODE
                     {
-                        if (horizontalDistanceFromPlayer() <= enemyTrackingRange)
-                        {
-                            isAttacking = true;
-                            handleAttackPlayerAnimation();
-                        }
-                        else
-                        {
-                            isAttacking = false;
-                        }
+                        HandleAttackPlayerAnimation();
                     }
                 }
                 #endregion
@@ -245,7 +299,13 @@ public class EnemyBase : MonoBehaviour
     {
         isGrounded = checkIfOnGroundHeight();
 
-        if (isPatrolling == true && canMove == true)
+        if (canMove == false && isGrounded == true)
+        {
+            rb2d.velocity = Vector2.zero;
+            return;
+        }
+
+        if (isPatrolling == true)
         {
             HandlePatrollingMovement();
         }
@@ -272,17 +332,13 @@ public class EnemyBase : MonoBehaviour
                         //ATTACK
                         if (isAttacking == true && canMove == true)
                         {
-                            if (!doingAttackMove) faceTowardsPlayer();//face player if not in attack animation
-                            else if (changesDirectioDuringAttack) faceTowardsPlayer();//face player when has capacity, even when during attack
-
-                            handleAttackPlayerMovement();
+                            HandleAttackPlayerMovement();
                         }
                         //REPOSITION
                         else if (canMove == true && isRepositioning)
                         {
-                            faceTowardsPlayer();
                             enemyCurrentMovementSpeed = enemyClassSpeed * enemyCombatRunSpeedMultiplier;
-                            Reposition(playerTransform.position);
+                            HandleRepositionMovement(playerTransform.position);
                         }
                         //BATTLE CRY
                         else if (isRepositioning == false && canMove == false)
@@ -305,12 +361,11 @@ public class EnemyBase : MonoBehaviour
                     {
                         isPatrolling = false;
                         seeker.enabled = false;
-                        preTarget = targetPoint;
                         //Reposition(targetPoint);
                         // check if player in attack range
                         if (nodeDistanceFromPlayer() <= enemyTrackingRange)
                         {
-                            handleAttackPlayerMovement();
+                            HandleAttackPlayerMovement();
                         }
                     }
                     else
@@ -440,6 +495,12 @@ public class EnemyBase : MonoBehaviour
         return false;
     }
 
+    protected bool playerInsideCombatMovementRange()
+    {
+        if (playerDistanceFromEnemy > playerContactAvoidRange + .15f && playerDistanceFromEnemy < enemyTrackingRange - .15f) return true;
+        else return false;
+    }
+
     protected float nodeDistanceFromPlayer()
     {
         return Vector2.Distance(transform.position, playerTransform.position);
@@ -544,7 +605,7 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
-    void faceTowardsPlayer()
+    protected void faceTowardsPlayer()
     {
         if (playerTransform.position.x >= transform.position.x)//Player is at right side of Enemy
         {
@@ -555,6 +616,26 @@ public class EnemyBase : MonoBehaviour
             }
         }
         else//Player is at left side of Enemy
+        {
+            if (characterFacingRight == true)
+            {
+                characterFacingRight = false;
+                transform.localScale = new Vector3(-1f * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            }
+        }
+    }
+
+    protected void faceAwayFromPlayer()
+    {
+        if (playerTransform.position.x < transform.position.x)//Player is at left side of Enemy
+        {
+            if (characterFacingRight == false)
+            {
+                characterFacingRight = true;
+                transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            }
+        }
+        else//Player is at right side of Enemy
         {
             if (characterFacingRight == true)
             {
@@ -600,7 +681,7 @@ public class EnemyBase : MonoBehaviour
     #endregion
 
     #region Overridable Base Methods
-    public virtual void handleAttackPlayerAnimation()//MODIFY METHODS TO INTEGRATE MECANIM ANIMATIONS
+    public virtual void HandleAttackPlayerAnimation()//MODIFY METHODS TO INTEGRATE MECANIM ANIMATIONS
     {
         rb2d.velocity = Vector3.zero;
 
@@ -608,7 +689,7 @@ public class EnemyBase : MonoBehaviour
         enemySpineAnimator.SetInteger("AttackID", 1);
     }
 
-    public virtual void handleAttackPlayerMovement()//MODIFY METHODS TO INTEGRATE MECANIM ANIMATIONS
+    public virtual void HandleAttackPlayerMovement()//MODIFY METHODS TO INTEGRATE MECANIM ANIMATIONS
     {
         if (doingAttackMove == false && canMove == true)
         {
@@ -622,7 +703,19 @@ public class EnemyBase : MonoBehaviour
         enemySpineAnimator.SetInteger("AttackID", comboAttackID);
     }
 
-    public virtual void Reposition(Vector2 targetPlayerPosition)//Overridden by all Derived classes
+    public virtual void HandleRepositionAnimation()//Overridden by all Derived classes
+    {
+        enemySpineAnimator.SetInteger("MoveSpeed", 2);
+        if (hasToAndFroMovement) enemySpineAnimator.SetBool("BackWalk", false);
+
+        if (enemyAlreadyAlerted == false)
+        {
+            enemyAlreadyAlerted = true;
+            enemySpineAnimator.SetBool("PatrolMode", false);
+        }
+    }
+
+    public virtual void HandleRepositionMovement(Vector2 targetPlayerPosition)//Overridden by all Derived classes
     {
         transform.position = new Vector2(targetPlayerPosition.x, targetPlayerPosition.y);
 
@@ -668,8 +761,13 @@ public class EnemyBase : MonoBehaviour
         if (movesAwayAfterAttack)
         {
             moveAwayAfterAttack = true;
-            if (groundBasedEnemy) enemySpineAnimator.SetBool("BackWalk", true);
+            if (groundBasedEnemy && hasToAndFroMovement) enemySpineAnimator.SetBool("BackWalk", true);
         }
+    }
+
+    public void combatPromptsOnAttackStart()
+    {
+
     }
 
     public void combatPromptsDamageOnBlockableAttack()
@@ -751,36 +849,6 @@ public class EnemyBase : MonoBehaviour
     #endregion
 
     #region Repositioning(REPURPOSE AND REIMPLEMENT)
-    public void checkPlayerPositionUpdateData()
-    {
-        if (playerInCombatRange())
-        {
-            if (groundBasedEnemy == true)
-            {
-                if (targetInHorizontalRange)//Start pursuing Player
-                {
-                    if (isPatrolling == true)
-                    {
-                        isPatrolling = false;
-                        canMove = false;
-                        enemySpineAnimator.SetTrigger("Alerted");
-                    }
-                }
-                else if (targetInVerticalRange)//Start changing Platform
-                {
-                    isChangingPlatform = true;
-                    isPatrolling = false;
-                }
-            }
-        }
-        else
-        {
-            if (enemyAlreadyAlerted == false)
-            {
-                isPatrolling = true;
-            }
-        }
-    }
     private Vector2 closestRepositionPoint()
     {
         if (Vector2.Distance(transform.position, playerTransform.transform.position) < Vector2.Distance(transform.position, playerPlatformLeftEndPosition))

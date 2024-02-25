@@ -12,6 +12,8 @@ TagManager:
   - RepositionBox
   - Column
   - Platforms
+  - PlayerWeapon
+  - ObjectTracker
   layers:
   - Default
   - TransparentFX

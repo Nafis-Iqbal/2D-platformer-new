@@ -325,7 +325,7 @@ public class PlayerJump : MonoBehaviour
         RaycastHit2D Hit1 = Physics2D.Raycast(checkHeightObject1.transform.position, Vector3.down, 20.0f, mask);
         RaycastHit2D Hit2 = Physics2D.Raycast(checkHeightObject2.transform.position, Vector3.down, 20.0f, mask);
 
-        if (Hit1.collider != null && Hit2.collider != null)
+        if (Hit1.collider.CompareTag("Platforms") == true && Hit2.collider.CompareTag("Platforms") == true)
         {
             if (Hit1.distance > minLandHeight && Hit2.distance > minLandHeight)//if high on ground
             {

@@ -10,7 +10,7 @@ public class EnemyAttackInfo
     public int attackDamage;
     public int attackStaminaCost;
     public float attackMinCooldownTime;
-    private float lastAttackUsedTime;
+    public float lastAttackUsedTime = -1.0f;
     public string postAttackBehaviour;
     public float attackRange;
     public bool isRanged;

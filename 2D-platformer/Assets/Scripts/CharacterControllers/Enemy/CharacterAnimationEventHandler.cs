@@ -5,17 +5,6 @@ using UnityEngine;
 public class CharacterAnimationEventHandler : MonoBehaviour
 {
     public EnemyBase enemyBaseScript;
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public void MovementPauseEndDuringPatrol()
     {
@@ -91,7 +80,7 @@ public class CharacterAnimationEventHandler : MonoBehaviour
     public void LightAttackStarted()
     {
         RestrictCharacterMovement();
-        enemyBaseScript.isAttacking = true;
+        enemyBaseScript.doingAttackMove = true;
     }
 
     public void LightAttackEnded()
@@ -102,13 +91,12 @@ public class CharacterAnimationEventHandler : MonoBehaviour
     public void HeavyAttackStarted()
     {
         RestrictCharacterMovement();
-        enemyBaseScript.isAttacking = true;
+        enemyBaseScript.doingAttackMove = true;
     }
 
     public void HeavyAttackEnded()
     {
-        enemyBaseScript.isAttacking = false;
-        EnableCharacterMovement();
+        enemyBaseScript.combatPromptsOnAttackEnd();
     }
 
     public void PatrolToCombatEnd()
