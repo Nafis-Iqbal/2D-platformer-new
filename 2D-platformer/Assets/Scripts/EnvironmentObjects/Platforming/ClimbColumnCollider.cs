@@ -6,13 +6,17 @@ using UnityEngine;
 
 public class ClimbColumnCollider : MonoBehaviour
 {
+    public bool isRightCollider;
+    public bool hasClimbableLedge;
     private Transform playerTransform;
     private float originalGravityScale;
 
     private PlayerColumn playerColumn;
     private Rigidbody2D playerRigidbody;
     private Animator ledgeClimbAnimator;
-    public GameObject ledgeTeleportObject;
+    public GameObject leftLedgeTeleportObject;
+    public GameObject rightLedgeTeleportObject;
+    public GameObject upClimbLimitRef, downClimbLimitRef;
     public int wallLadderID;
 
     private void Awake()
@@ -53,8 +57,16 @@ public class ClimbColumnCollider : MonoBehaviour
 
     public void triggerLedgeClimbAnim()
     {
-        playerTransform.transform.position = ledgeTeleportObject.transform.position;
-        playerTransform.parent = ledgeTeleportObject.transform;
+        if (isRightCollider)
+        {
+            playerTransform.transform.position = rightLedgeTeleportObject.transform.position;
+            playerTransform.parent = rightLedgeTeleportObject.transform;
+        }
+        else
+        {
+            playerTransform.transform.position = leftLedgeTeleportObject.transform.position;
+            playerTransform.parent = leftLedgeTeleportObject.transform;
+        }
 
         ledgeClimbAnimator.SetTrigger("AssistLedgeClimb");
     }

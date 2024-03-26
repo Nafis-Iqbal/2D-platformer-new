@@ -54,9 +54,9 @@ public class PlayerAppearanceScript : MonoBehaviour
     {
         //See which direction the character is currently running towards, and tilt in that direction
         float directionToTilt = 0;
-        if (moveScript.velocity.x != 0)
+        if (moveScript.tempVelocity.x != 0)
         {
-            directionToTilt = Mathf.Sign(moveScript.velocity.x);
+            directionToTilt = Mathf.Sign(moveScript.tempVelocity.x);
         }
 
         //Create a vector that the character will tilt towards

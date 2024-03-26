@@ -41,6 +41,8 @@ public class PlayerDodge : MonoBehaviour
             {
                 canDodge = false;
             }
+
+            if (playerMovement.isSprinting == true) canDodge = false;
         }
     }
 

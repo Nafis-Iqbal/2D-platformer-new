@@ -11,7 +11,8 @@ public class PlayerJump : MonoBehaviour
     public float jumpMovementMultiplier = 1f;
     [SerializeField, Range(0f, 2f)] public float jumpMultiplierXSprint = 1f;
     [SerializeField, Range(0f, 2f)] public float jumpMultiplierXJogg = 1f;
-    float finalJumpMovementMultiplier;
+    [HideInInspector]
+    public float finalJumpMovementMultiplier;
     //public float jumpMovementMultiplierY = 1f;
     [Header("Components")]
     [HideInInspector] public Rigidbody2D body;
@@ -57,7 +58,7 @@ public class PlayerJump : MonoBehaviour
     public bool isCharging = false;
     public bool onGround;
     public bool combatMode;
-    public bool jumpAnimInProgress;
+    public bool jumpAnimInProgress, jumpInProgress;
     private float jumpBufferCounter;
     private float coyoteTimeCounter = 0;
     int playerMoveInd;
@@ -79,15 +80,17 @@ public class PlayerJump : MonoBehaviour
 
     private void OnEnable()
     {
-        jumpAnimInProgress = false;
-        minLandHeight = movementMinimumLandHeight;
+        ResetJumpVariables();
     }
 
     void Update()
     {
 
-        if (playerDodge.isExecuting || playerColumn.hasGrabbedColumn || playerGrapplingGun.grapplingRope.isGrappling)
+        if (playerDodge.isExecuting || playerColumn.hasGrabbedColumn || playerColumn.isClimbingLedge || playerGrapplingGun.grapplingRope.isGrappling)
         {
+            jumpInProgress = false;
+            spineAnimator.ResetTrigger("OnAir");
+            spineAnimator.ResetTrigger("Landed");
             return;
         }
 
@@ -157,9 +160,8 @@ public class PlayerJump : MonoBehaviour
             if (playerMoveInd == 1) finalJumpMovementMultiplier = jumpMultiplierXJogg;
             else if (playerMoveInd == 2) finalJumpMovementMultiplier = jumpMultiplierXSprint;
             else finalJumpMovementMultiplier = jumpMovementMultiplier;
-
-            velocity.x = velocity.x * finalJumpMovementMultiplier;
-            body.velocity = velocity * jumpMovementMultiplier;
+            //velocity.x = velocity.x * finalJumpMovementMultiplier;
+            body.velocity = velocity;
 
             //Skip gravity calculations this frame, so currentlyJumping doesn't turn off
             //This makes sure you can't do the coyote time double jump bug
@@ -322,21 +324,34 @@ public class PlayerJump : MonoBehaviour
     {
         LayerMask mask = LayerMask.GetMask("Ground");
 
-        RaycastHit2D Hit1 = Physics2D.Raycast(checkHeightObject1.transform.position, Vector3.down, 20.0f, mask);
-        RaycastHit2D Hit2 = Physics2D.Raycast(checkHeightObject2.transform.position, Vector3.down, 20.0f, mask);
+        RaycastHit2D Hit1 = Physics2D.Raycast(checkHeightObject1.transform.position, Vector2.down, 100.0f, mask);
+        RaycastHit2D Hit2 = Physics2D.Raycast(checkHeightObject2.transform.position, Vector2.down, 100.0f, mask);
 
         if (Hit1.collider.CompareTag("Platforms") == true && Hit2.collider.CompareTag("Platforms") == true)
         {
             if (Hit1.distance > minLandHeight && Hit2.distance > minLandHeight)//if high on ground
             {
+                //Debug.Log("On Air: " + Hit1.distance + " " + Hit2.distance + "lH: " + minLandHeight);
                 return false;
             }
             else
             {
-                return true;
+                //Debug.Log("On Ground: " + Hit1.distance + "lH: " + minLandHeight);
+                return true;//On Ground
             }
         }
+        else
+        {
+            //Debug.Log("On Ground: " + Hit1.distance + " gb " + Hit1.collider.gameObject);
+            return false;//On Air
+        }
+    }
 
-        return false;
+    public void ResetJumpVariables()
+    {
+        jumpAnimInProgress = false;
+        jumpInProgress = false;
+        minLandHeight = movementMinimumLandHeight;
+        spineAnimator.ResetTrigger("Jump");
     }
 }

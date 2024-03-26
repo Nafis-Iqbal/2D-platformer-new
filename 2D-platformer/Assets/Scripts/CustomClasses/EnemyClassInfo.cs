@@ -16,10 +16,13 @@ public class EnemyClassInfo
     public bool airBased;
 
     [Header("COMBAT PROPERTIES")]
+    public bool canBlock;
     public bool hasToAndFroMovement;
     public bool movesAwayAfterAttack;
     public bool changesDirectionDuringAttack;
     public float toAndFroMoveFrequency;
+    public float battleCryFrequency;
+    public float defensiveStanceHealthLimit;
 
     [Header("SPEED")]
     public float enemyMovementSpeed;
@@ -40,7 +43,10 @@ public class EnemyClassInfo
     public float enemyMinTimeBetweenAttacks;
     public float enemyHealth;
     public float enemyStamina;
+    public float staminaRegenRate;
     public float enemyBattleCryRange;
+    public float poiseBreakHealthLimit;
+    public float poiseBreakHealthResetInterval;
 
     [Header("ATTACKS")]
     public EnemyAttackInfo[] enemyAttacks = new EnemyAttackInfo[3];

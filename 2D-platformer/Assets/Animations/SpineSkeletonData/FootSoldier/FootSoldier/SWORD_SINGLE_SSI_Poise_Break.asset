@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3e95a05e4c9774397eeeb7bdee8ccb, type: 3}
   m_Name: SWORD_SINGLE_SSI_Poise_Break
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: c2daf26df5bf30f45898508f6419d964, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 7b40de81630b75d48bff49879f8c8a31, type: 2}
   animationName: SWORD_SINGLE/SSI_Poise_Break

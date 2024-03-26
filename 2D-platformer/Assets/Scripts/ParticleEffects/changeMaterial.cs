@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class changeMaterial : MonoBehaviour
+public class ChangeMaterial : MonoBehaviour
 {
     public Material[] materials;
     Renderer rend;
     public ParticleSystem ps;
-    public healthofPlayer playerScript;
+    //public healthofPlayer playerScript;
     void Start()
     {
-        playerScript = EnemyManager.Instance.player.GetComponent<healthofPlayer>();
+        //playerScript = EnemyManager.Instance.player.GetComponent<healthofPlayer>();
         ps = GetComponent<ParticleSystem>();
 
         rend = GetComponent<Renderer>();
@@ -21,7 +21,7 @@ public class changeMaterial : MonoBehaviour
     private void Update()
     {
         var main = ps.main;
-        main.startColor = playerScript.platColor;
+        //main.startColor = playerScript.platColor;
         //rend.material.SetColor("_BaseColor", playerScript.platColor);
     }
 }

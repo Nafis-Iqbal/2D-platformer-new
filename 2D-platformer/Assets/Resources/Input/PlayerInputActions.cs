@@ -118,7 +118,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""WeaponMultiTapAttack1Attack2"",
+                    ""name"": ""WeaponAttack1MultiTapAttack2RollAttack"",
                     ""type"": ""Button"",
                     ""id"": ""1a99b950-8ed6-4ee9-8e9f-aeb9d7e88dd0"",
                     ""expectedControlType"": ""Button"",
@@ -449,7 +449,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""WeaponMultiTapAttack1Attack2"",
+                    ""action"": ""WeaponAttack1MultiTapAttack2RollAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -460,7 +460,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""WeaponMultiTapAttack1Attack2"",
+                    ""action"": ""WeaponAttack1MultiTapAttack2RollAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1272,7 +1272,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_GrapplingGun = m_Player.FindAction("GrapplingGun", throwIfNotFound: true);
         m_Player_GrappleBoost = m_Player.FindAction("GrappleBoost", throwIfNotFound: true);
         m_Player_HolsterWeapon = m_Player.FindAction("HolsterWeapon", throwIfNotFound: true);
-        m_Player_WeaponMultiTapAttack1Attack2 = m_Player.FindAction("WeaponMultiTapAttack1Attack2", throwIfNotFound: true);
+        m_Player_WeaponAttack1MultiTapAttack2RollAttack = m_Player.FindAction("WeaponAttack1MultiTapAttack2RollAttack", throwIfNotFound: true);
         m_Player_WeaponM3Attack3 = m_Player.FindAction("WeaponM3Attack3", throwIfNotFound: true);
         m_Player_RunningAttack4 = m_Player.FindAction("RunningAttack4", throwIfNotFound: true);
         m_Player_RollAttack5 = m_Player.FindAction("RollAttack5", throwIfNotFound: true);
@@ -1362,7 +1362,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_GrapplingGun;
     private readonly InputAction m_Player_GrappleBoost;
     private readonly InputAction m_Player_HolsterWeapon;
-    private readonly InputAction m_Player_WeaponMultiTapAttack1Attack2;
+    private readonly InputAction m_Player_WeaponAttack1MultiTapAttack2RollAttack;
     private readonly InputAction m_Player_WeaponM3Attack3;
     private readonly InputAction m_Player_RunningAttack4;
     private readonly InputAction m_Player_RollAttack5;
@@ -1385,7 +1385,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @GrapplingGun => m_Wrapper.m_Player_GrapplingGun;
         public InputAction @GrappleBoost => m_Wrapper.m_Player_GrappleBoost;
         public InputAction @HolsterWeapon => m_Wrapper.m_Player_HolsterWeapon;
-        public InputAction @WeaponMultiTapAttack1Attack2 => m_Wrapper.m_Player_WeaponMultiTapAttack1Attack2;
+        public InputAction @WeaponAttack1MultiTapAttack2RollAttack => m_Wrapper.m_Player_WeaponAttack1MultiTapAttack2RollAttack;
         public InputAction @WeaponM3Attack3 => m_Wrapper.m_Player_WeaponM3Attack3;
         public InputAction @RunningAttack4 => m_Wrapper.m_Player_RunningAttack4;
         public InputAction @RollAttack5 => m_Wrapper.m_Player_RollAttack5;
@@ -1433,9 +1433,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @HolsterWeapon.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHolsterWeapon;
                 @HolsterWeapon.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHolsterWeapon;
                 @HolsterWeapon.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHolsterWeapon;
-                @WeaponMultiTapAttack1Attack2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponMultiTapAttack1Attack2;
-                @WeaponMultiTapAttack1Attack2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponMultiTapAttack1Attack2;
-                @WeaponMultiTapAttack1Attack2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponMultiTapAttack1Attack2;
+                @WeaponAttack1MultiTapAttack2RollAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponAttack1MultiTapAttack2RollAttack;
+                @WeaponAttack1MultiTapAttack2RollAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponAttack1MultiTapAttack2RollAttack;
+                @WeaponAttack1MultiTapAttack2RollAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponAttack1MultiTapAttack2RollAttack;
                 @WeaponM3Attack3.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponM3Attack3;
                 @WeaponM3Attack3.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponM3Attack3;
                 @WeaponM3Attack3.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponM3Attack3;
@@ -1494,9 +1494,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @HolsterWeapon.started += instance.OnHolsterWeapon;
                 @HolsterWeapon.performed += instance.OnHolsterWeapon;
                 @HolsterWeapon.canceled += instance.OnHolsterWeapon;
-                @WeaponMultiTapAttack1Attack2.started += instance.OnWeaponMultiTapAttack1Attack2;
-                @WeaponMultiTapAttack1Attack2.performed += instance.OnWeaponMultiTapAttack1Attack2;
-                @WeaponMultiTapAttack1Attack2.canceled += instance.OnWeaponMultiTapAttack1Attack2;
+                @WeaponAttack1MultiTapAttack2RollAttack.started += instance.OnWeaponAttack1MultiTapAttack2RollAttack;
+                @WeaponAttack1MultiTapAttack2RollAttack.performed += instance.OnWeaponAttack1MultiTapAttack2RollAttack;
+                @WeaponAttack1MultiTapAttack2RollAttack.canceled += instance.OnWeaponAttack1MultiTapAttack2RollAttack;
                 @WeaponM3Attack3.started += instance.OnWeaponM3Attack3;
                 @WeaponM3Attack3.performed += instance.OnWeaponM3Attack3;
                 @WeaponM3Attack3.canceled += instance.OnWeaponM3Attack3;
@@ -1660,7 +1660,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnGrapplingGun(InputAction.CallbackContext context);
         void OnGrappleBoost(InputAction.CallbackContext context);
         void OnHolsterWeapon(InputAction.CallbackContext context);
-        void OnWeaponMultiTapAttack1Attack2(InputAction.CallbackContext context);
+        void OnWeaponAttack1MultiTapAttack2RollAttack(InputAction.CallbackContext context);
         void OnWeaponM3Attack3(InputAction.CallbackContext context);
         void OnRunningAttack4(InputAction.CallbackContext context);
         void OnRollAttack5(InputAction.CallbackContext context);

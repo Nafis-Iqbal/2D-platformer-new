@@ -15,9 +15,7 @@ public class EnemyHeavy : EnemyBase
     private EnemyClassInfo enemyData;
 
     [Header("HEAVY ENEMY")]
-    public int enemyID;
     private EnemyAttackInfo[] enemyAttacks = new EnemyAttackInfo[2];
-    public int currentAttackID;
     public bool isChragingTowardsPlayer;
     public float chargingVelocity;
     float lastToFroCheckTime;
@@ -28,9 +26,13 @@ public class EnemyHeavy : EnemyBase
 
         isPatrolling = true;
         canAttackPlayer = true;
+        blockingStanceVelocityUpdated = false;
         isChragingTowardsPlayer = false;
 
         enemyData = EnemyManager.Instance.enemyData[enemyID];
+
+        canBlock = enemyData.canBlock;
+        defensiveStanceHealthLimit = enemyData.defensiveStanceHealthLimit;
 
         enemyClassSpeed = enemyData.enemyMovementSpeed;
         enemyPatrolSpeedMultiplier = enemyData.enemyPatrolSpeedMultiplier;
@@ -50,9 +52,8 @@ public class EnemyHeavy : EnemyBase
         movesAwayAfterAttack = enemyData.movesAwayAfterAttack;
         changesDirectionDuringAttack = enemyData.changesDirectionDuringAttack;
 
-        enemyHealth = enemyData.enemyHealth;
-        enemyStamina = enemyData.enemyStamina;
         enemyBattleCryRange = enemyData.enemyBattleCryRange;
+        battleCryMinimumInterval = enemyData.battleCryFrequency;
         playerContactAvoidRange = enemyData.playerAvoidRange;
 
         enemyAttacks = enemyData.enemyAttacks;
@@ -114,7 +115,7 @@ public class EnemyHeavy : EnemyBase
         else if (doingAttackMove == true) return;
         if (!doingAttackMove) faceTowardsPlayer();//face player if not in attack animation
 
-        if (currentTime - lastAttackTime > minTimeBetweenAttacks)
+        if (currentTime - lastAttackTime > minTimeBetweenAttacks && !doingAttackMove)
         {
             //CHOOSE ATTACK BASED ON PROBABILITY
             if (currentAttackID < 0)
@@ -145,10 +146,10 @@ public class EnemyHeavy : EnemyBase
 
                         lastAttackTime = Time.time;
                         enemyAttacks[currentAttackID].useAttack();
-                        //currentAttackID = 2;
+                        currentAttackID = 2;
                         enemySpineAnimator.SetTrigger("Attack");
                         enemySpineAnimator.SetInteger("AttackID", currentAttackID);
-                        currentAttackID = -1;
+                        //currentAttackID = -1;
                     }
                     else
                     {
@@ -301,7 +302,7 @@ public class EnemyHeavy : EnemyBase
     void towardsRepositionPoint(Vector2 tar)
     {
         enemySpineAnimator.Play("Patrolling animation");
-        particleController.instance.moveEnemyParti(true);
+        ParticleController.instance.moveEnemyParti(true);
         transform.position = Vector2.MoveTowards(transform.position, tar, enemyCurrentMovementSpeed / 50f * Time.fixedDeltaTime);
     }
 

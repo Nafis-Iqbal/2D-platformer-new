@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: FOOT_SOLDIER_SkeletonData
   m_EditorClassIdentifier: 
   atlasAssets:
-  - {fileID: 11400000, guid: 454b3d0e28dcf1741b43bfbabd075d4d, type: 2}
+  - {fileID: 11400000, guid: 68eb68560892bf24483369e9cc557b9c, type: 2}
   scale: 0.01
-  skeletonJSON: {fileID: 4900000, guid: 837826cb2a573934896e0e8ae33396de, type: 3}
+  skeletonJSON: {fileID: 4900000, guid: ec7295d07f39cb844a5b51de5b910314, type: 3}
   isUpgradingBlendModeMaterials: 0
   blendModeMaterials:
     requiresBlendModeMaterials: 0

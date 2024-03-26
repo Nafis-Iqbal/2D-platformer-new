@@ -4,16 +4,17 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Knife
   - Enemy
   - Grapple point
-  - bullet
-  - HeavyKnife
   - RepositionBox
   - Column
   - Platforms
   - PlayerWeapon
   - ObjectTracker
+  - Objects
+  - EnemyCollider
+  - Shield
+  - Projectile
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - Enemy
   - EnemyWeapon
   - Reposition
-  - 
+  - CombatInfo
   - 
   - 
   - 
@@ -48,12 +49,27 @@ TagManager:
   - 
   - PlatformInfo
   m_SortingLayers:
-  - name: BackGround
+  - name: FarBackGround
     uniqueID: 196701375
+    locked: 0
+  - name: MidBackGround
+    uniqueID: 3043512885
+    locked: 0
+  - name: PathLayer
+    uniqueID: 2476495797
+    locked: 0
+  - name: BackPropsLayer
+    uniqueID: 2144476147
+    locked: 0
+  - name: PlayerLayer
+    uniqueID: 2215657541
+    locked: 0
+  - name: FrontPropsLayer
+    uniqueID: 2954137767
+    locked: 0
+  - name: CloseBackground
+    uniqueID: 2374500207
     locked: 0
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: ForeGround
-    uniqueID: 3269162115
     locked: 0

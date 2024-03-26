@@ -6,11 +6,19 @@ using Microsoft.Unity.VisualStudio.Editor;
 
 public class EnemyBase : MonoBehaviour
 {
+    public int enemyID;
     [Header("DRAG AND DROPS")]
     public Animator enemySpineAnimator;
     protected Rigidbody2D rb2d;
     protected PlayerCombatSystem playerCombatSystemScript;
+    protected PlayerMovement playerMovementScript;
+    [SerializeField]
+    protected HealthStaminaSystem characterHealthStaminaScript;
+    [SerializeField]
+    protected ProjectileDetector projectileDetectorScript;
     public Transform playerTransform;
+    protected Rigidbody2D playerRigidBody;
+    public GameObject meleeWeaponObject;
     public GameObject checkHeightObject1, checkHeightObject2;
     public LayerMask environmentMask;
     public LayerMask repositionLayer;
@@ -39,43 +47,55 @@ public class EnemyBase : MonoBehaviour
 
     [Header("ENEMY MOVEMENT STATES")]
     public bool canMove = true;
+    public bool canBlock;
     public bool characterFacingRight;
     public bool isGrounded;
     public bool isPatrolling;//false means combat mode
+    public bool isAlerted;
+    public bool isChangingCombatMode;
     public bool isRepositioning;
+    bool cachedIsRepositioning;
     public bool isFleeingFromPlayer;
     public bool isChangingPlatform;
     public bool isReadyToClimb;
     [Header("ENEMY COMBAT STATES")]
+    public bool isDead;
     public bool canAttackPlayer = true;
     public bool isAttacking;//in close combat range and performing attacks
+    bool cachedIsAttacking;
+    public bool isDefensive = false;
     public bool doingAttackMove;
     public bool closeInForAttack;
     public bool moveAwayAfterAttack;
-    public bool isPoiseBroken, isStunned;
+    public bool isAIRoutineInterrupted;
+    public bool isCharacterBlocking, isShielded;
+    public bool isPoiseBroken, isStunned, isKnockedOffGround;
+    public bool weaponInLethalState;
+    public bool playHitEffectOnScale = false;
 
     [Header("PLAYER TARGETTING AND REPOSITIONING")]
-    public bool groundBasedEnemy;
-    public bool canChangePlatform;
-    public bool maintainsDistanceFromPlayer;
     //protected float playerDistanceFromEnemy;
     public float playerDistanceFromEnemy;
+    public bool groundBasedEnemy;
+    public bool canChangePlatform;
     int enemyPlatformLevel, playerPlatformLevel;
     public int enemyPlatformID, playerPlatformID;
     public bool targetInHorizontalRange = false;
     public bool targetInVerticalRange = false;
-    public float minimumDistanceForReposition = 50f;//What is this??
+    public float playerHorizontalDetectionDistance;
+    public int playerVerticalDetectionLevels;
+    public float minimumDistanceForReposition = 50f;
 
     [Header("COMBAT ANIMATION SYSTEM")]
-    public float enemyHealth;
-    public float enemyStamina;
-
+    public float charScaleShrinkSpeed = 60.0f;
+    public float shrinkSizeMultiplier = .85f;
+    float initialCharacterYScale;
+    bool charScaleDecreasing;
+    public int currentAttackID;
     public float minTimeBetweenAttacks;
     protected float lastAttackTime;
     public float baseMomentumForce;
 
-    public float playerHorizontalDetectionDistance;
-    public int playerVerticalDetectionLevels;
     protected float enemyBattleCryRange;
     public float enemyTrackingRange;
     public float enemyAttackRange;
@@ -83,13 +103,19 @@ public class EnemyBase : MonoBehaviour
     public bool hasToAndFroMovement;
     protected float toAndFroMoveFrequency;
     public int toAndFroRandomNumber;
-    public bool hasComboAttack = false;
     public int comboAttackID;
+
+    float deathTime;
+    public float timeBeforeDisable = 3.5f;
+
+    [Header("CUSTOM BEHAVIOUR")]
+    public bool followEnabled = false;
+    public bool jumpEnabled = true;
+    public bool lookAtPlayerEnabled = true;
+    public bool hasBattleCry = true;
+    public bool hasComboAttack = false;
     public bool movesAwayAfterAttack;
     public bool changesDirectionDuringAttack;
-
-    public GameObject knife;
-    public GameObject UnblockableKnife;
 
     [Header("A* PATHFINDING")]
     public float pathUpdateSeconds = .5f;//What is this??
@@ -97,16 +123,25 @@ public class EnemyBase : MonoBehaviour
     Seeker seeker;
     private int currentWayPoint = 0;//What is this??
 
-    [Header("CUSTOM BEHAVIOUR")]
-    public bool followEnabled = false;
-    public bool jumpEnabled = true;
-    public bool lookAtPlayerEnabled = true;
-
     [Header("CHANGING PLATFORM")]
     public Vector2 playerPlatformRightEndPosition;
     public Vector2 playerPlatformLeftEndPosition;
     Vector2 platformLeftEndBox, platformRightEndBox;//Target Platform Reposition Point
+
+    [Header("BATTLE CRY")]
     public bool triggeredBattleCry = false;
+    public float battleCryMinimumInterval = 5.0f;
+    float lastBattleCryTime;
+    public bool battleCryInProgress;
+    float playerMoveDirectionCheckTime;
+    int currentPlayerMoveDirection, previousPlayerMoveDirection, finalPlayerMoveDirection;
+    Vector2 tempVelocityVector;
+
+    [Header("BLOCKING & DEFENSIVE STANCE")]
+    public float defensiveStanceHealthLimit;
+    public bool hitByProjectile;
+    protected float hitByProjectileTime;
+    protected bool blockingStanceVelocityUpdated;
 
     public virtual void OnEnable()
     {
@@ -119,11 +154,24 @@ public class EnemyBase : MonoBehaviour
         enemyAlreadyAlerted = false;
         lastAttackTime = Time.time;
         doingAttackMove = false;
+
+
+        isDefensive = false;
+        hitByProjectile = false;
+        hitByProjectileTime = Time.time;
+        isCharacterBlocking = isShielded = false;
         closeInForAttack = false;
         isReadyToClimb = false;
+        isAIRoutineInterrupted = false;
         isGrounded = true;
-        isPoiseBroken = isStunned = false;
+        isPoiseBroken = isStunned = isKnockedOffGround = false;
         isFleeingFromPlayer = false;
+        isDead = false;
+        weaponInLethalState = false;
+        charScaleDecreasing = false;
+        playHitEffectOnScale = false;
+        initialCharacterYScale = transform.localScale.y;
+        previousPlayerMoveDirection = 0;
     }
 
     public void acquireDependencies()
@@ -132,17 +180,23 @@ public class EnemyBase : MonoBehaviour
 
         rb2d = GetComponent<Rigidbody2D>();
         seeker = GetComponent<Seeker>();
+        characterHealthStaminaScript = GetComponent<HealthStaminaSystem>();
 
-        InvokeRepeating("updatePath", 0f, pathUpdateSeconds);
+        //InvokeRepeating("updatePath", 0f, pathUpdateSeconds);
 
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        playerRigidBody = playerTransform.GetComponent<Rigidbody2D>();
         playerCombatSystemScript = playerTransform.GetComponent<PlayerCombatSystem>();
+        playerMovementScript = playerTransform.GetComponent<PlayerMovement>();
     }
 
     public void resetAnimationsSystem()
     {
         characterFacingRight = true;
+
         triggeredBattleCry = false;
+        lastBattleCryTime = Time.time;
+
         characterMovementDirection = Vector2.right;
     }
 
@@ -162,11 +216,21 @@ public class EnemyBase : MonoBehaviour
 
                 if (targetInHorizontalRange)//Start pursuing Player
                 {
-                    if (isPatrolling == true)
+                    if (battleCryInProgress == true)
+                    {
+                        faceTowardsPlayer();
+                        isFleeingFromPlayer = false;
+                        isRepositioning = false;
+                        isAttacking = false;
+                        isPatrolling = false;
+                    }
+                    else if (isPatrolling == true)
                     {
                         isPatrolling = false;
+                        isAlerted = true;
                         canMove = false;
                         enemySpineAnimator.SetTrigger("Alerted");
+                        faceTowardsPlayer();
 
                         if (enemyAlreadyAlerted == false)
                         {
@@ -174,23 +238,37 @@ public class EnemyBase : MonoBehaviour
                             enemySpineAnimator.SetBool("PatrolMode", false);
                         }
                     }
-                    else if (triggeredBattleCry == true)
+                    else if (isAlerted == true)
                     {
-
+                        canMove = false;
                     }
-                    else if (isRepositioning == false && doingAttackMove == false)
+                    else if (isChangingCombatMode == true)
                     {
-                        if (playerDistanceFromEnemy < playerContactAvoidRange)
+                        canMove = false;
+                    }
+                    //(MOST IMPORTANT STATE LOGIC)
+                    else if (isRepositioning == false && doingAttackMove == false)//In Attacking distance
+                    {
+                        if (playerDistanceFromEnemy < playerContactAvoidRange)//Avoid
                         {
+                            canMove = true;
                             isRepositioning = true;
                             isFleeingFromPlayer = true;
                             isAttacking = false;
                         }
-                        else if (playerDistanceFromEnemy > enemyTrackingRange)
+                        else if (playerDistanceFromEnemy > enemyTrackingRange)//Track/Chase
                         {
+                            canMove = true;
                             isRepositioning = true;
                             isFleeingFromPlayer = false;
                             isAttacking = false;
+                        }
+                        else if (playerDistanceFromEnemy > playerContactAvoidRange && playerDistanceFromEnemy < enemyTrackingRange)//Attack
+                        {
+                            canMove = true;
+                            isRepositioning = false;
+                            isFleeingFromPlayer = false;
+                            isAttacking = true;
                         }
                     }
                     else if (isRepositioning == true)
@@ -226,6 +304,12 @@ public class EnemyBase : MonoBehaviour
     }
     void Update()
     {
+        if (isDead && Time.time - deathTime > timeBeforeDisable)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         if (playerPlatformID < 0) getPlayerPlatformInfo();
 
         #region Player Detection
@@ -240,10 +324,39 @@ public class EnemyBase : MonoBehaviour
         }
         #endregion
 
+        #region Player Movement Direction
+        if (Time.time - playerMoveDirectionCheckTime > 1.5f)
+        {
+            tempVelocityVector = playerRigidBody.velocity;
+
+            if (tempVelocityVector.x < -0.1f) currentPlayerMoveDirection = -1;
+            else if (tempVelocityVector.x > 0.1f) currentPlayerMoveDirection = 1;
+            else currentPlayerMoveDirection = 0;
+
+            playerMoveDirectionCheckTime = Time.time;
+
+            if (previousPlayerMoveDirection < 0 && currentPlayerMoveDirection < 0)
+            {
+                finalPlayerMoveDirection = -1;
+            }
+            else if (previousPlayerMoveDirection > 0 && currentPlayerMoveDirection > 0)
+            {
+                finalPlayerMoveDirection = 1;
+            }
+            else finalPlayerMoveDirection = 0;
+
+            previousPlayerMoveDirection = currentPlayerMoveDirection;
+        }
+        #endregion
+
         #region Patrolling
         if (isPatrolling == true && canMove == true)
         {
             HandlePatrollingAnimation();
+        }
+        else if (battleCryInProgress == true)
+        {
+            HandleBattleCryAnimation();
         }
         #endregion
         else
@@ -264,25 +377,34 @@ public class EnemyBase : MonoBehaviour
                 #region Combat Mode
                 else if (isPatrolling == false)//Combat Mode
                 {
-                    if (isAttacking == false)//PURSUING PLAYER
+                    if (battleCryInProgress == false && Time.time - lastBattleCryTime > battleCryMinimumInterval)
+                    {
+                        if (getPlayerAttackingMovementStatus() == false && playerDistanceFromEnemy > enemyBattleCryRange && isDefensive == false)
+                        {
+                            triggeredBattleCry = true;
+                        }
+                    }
+
+                    if (triggeredBattleCry)
+                    {
+                        triggeredBattleCry = false;
+                        isRepositioning = false;
+                        lastBattleCryTime = Time.time;
+
+                        enemySpineAnimator.SetInteger("MoveSpeed", 0);
+                        enemySpineAnimator.SetTrigger("BattleCry");
+                        stopCharacterCompletely();
+                    }
+                    else if (isAttacking == false)//PURSUING PLAYER
                     {
                         if (canMove && isRepositioning)//Reposition For Attack, through running
                         {
                             HandleRepositionAnimation();
                         }
-                        else if (triggeredBattleCry)//BATTLE CRY
-                        {
-                            triggeredBattleCry = false;
-                            isRepositioning = false;
-                            canMove = false;
-
-                            enemySpineAnimator.SetInteger("MoveSpeed", 0);
-                            enemySpineAnimator.SetTrigger("BattleCry");
-                            stopCharacterCompletely();
-                        }
                     }
                     else//IN ATTACKING PLAYER MODE
                     {
+                        //Process attacking or defending stance
                         HandleAttackPlayerAnimation();
                     }
                 }
@@ -293,19 +415,57 @@ public class EnemyBase : MonoBehaviour
 
             }
         }
+
+        #region Hit Effect
+        if (playHitEffectOnScale)
+        {
+            Vector3 tempScale = transform.localScale;
+
+            if (charScaleDecreasing)
+            {
+                if ((tempScale.y - Time.deltaTime * charScaleShrinkSpeed) > initialCharacterYScale * shrinkSizeMultiplier)
+                {
+                    tempScale.y = tempScale.y - (Time.deltaTime * charScaleShrinkSpeed);
+                }
+                else
+                {
+                    charScaleDecreasing = false;
+                    tempScale.y = initialCharacterYScale * shrinkSizeMultiplier;
+                }
+            }
+            else
+            {
+                if ((tempScale.y + Time.deltaTime * charScaleShrinkSpeed) < initialCharacterYScale)
+                {
+                    tempScale.y = tempScale.y + (Time.deltaTime * charScaleShrinkSpeed);
+                }
+                else
+                {
+                    tempScale.y = initialCharacterYScale;
+                    charScaleDecreasing = true;
+                    playHitEffectOnScale = false;
+                }
+            }
+            transform.localScale = tempScale;
+        }
+        #endregion
     }
 
     private void FixedUpdate()
     {
         isGrounded = checkIfOnGroundHeight();
 
-        if (canMove == false && isGrounded == true)
+        if (canMove == false && isGrounded == true || isDead == true || isAlerted)
         {
             rb2d.velocity = Vector2.zero;
             return;
         }
 
-        if (isPatrolling == true)
+        if (battleCryInProgress)
+        {
+            HandleBattleCryMovement();
+        }
+        else if (isPatrolling == true)
         {
             HandlePatrollingMovement();
         }
@@ -379,18 +539,6 @@ public class EnemyBase : MonoBehaviour
                         isPatrolling = true;
                     }
                 }
-            }
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("PlayerWeapon"))
-        {
-            enemyHealth -= 20f;
-            if (enemyHealth <= 0f)
-            {
-                enemySpineAnimator.SetTrigger("Death");
             }
         }
     }
@@ -520,6 +668,33 @@ public class EnemyBase : MonoBehaviour
         else return true;
     }
 
+    //Returns true if player moving towards character, false when moving away from character
+    protected bool getPlayerAttackingMovementStatus()
+    {
+        if (characterFacingRight)
+        {
+            if (finalPlayerMoveDirection > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
+        else if (!characterFacingRight)
+        {
+            if (finalPlayerMoveDirection < 0)
+            {
+                return false;
+            }
+            else return true;
+        }
+
+        return true;
+    }
+
     protected float getMoveAwayFromPlayerDirection()
     {
         if (isPlayerAtRight())
@@ -537,51 +712,20 @@ public class EnemyBase : MonoBehaviour
         }
         else return -1.0f;
     }
-    #endregion
 
-    #region Routine Enemy Behaviour Methods
-    public void setEnemyPlatform(Vector2 platformLeftEndPosition, Vector2 platformRightEndPosition, int platformID, int platformLevel)//Setting up objects for tracking player around Platforms
+    protected bool isPlayerFacingCharacter()
     {
-        enemyPlatformID = platformID;
-        enemyPlatformLevel = platformLevel;
-        if (transform.position.x <= platformRightEndPosition.x && transform.position.x >= platformLeftEndPosition.x
-        && transform.position.y <= platformLeftEndPosition.y + 5f && transform.position.y >= platformLeftEndPosition.y - 5f)
+        if (playerTransform.position.x > transform.position.x)
         {
-            platformLeftEndBox = platformLeftEndPosition;
-            platformRightEndBox = platformRightEndPosition;
-
-            seeker.enabled = true;
-            isReadyToClimb = false;
+            if (playerMovementScript.playerFacingRight == true) return false;
+            else return true;
         }
-    }
-    void HandlePatrollingAnimation()//This method takes care of the enemy movement itself
-    {
-        enemySpineAnimator.SetBool("PatrolMode", true);
-
-        if (turnCharacterNow == false && Time.time - lastPatrolTurnTime > patrolDirectionalDuration)
+        else if (playerTransform.position.x < transform.position.x)
         {
-            stopCharacterCompletely();
-            lastPatrolTurnTime = Time.time;
-            turnCharacterNow = true;
-            canMove = false;
-            enemySpineAnimator.SetInteger("MoveSpeed", 0);
-            enemyCurrentMovementSpeed = 0.0f;
+            if (playerMovementScript.playerFacingRight == true) return true;
+            else return false;
         }
-        else if (turnCharacterNow == false)
-        {
-            canMove = true;
-            enemySpineAnimator.SetInteger("MoveSpeed", 1);
-            enemyCurrentMovementSpeed = enemyClassSpeed * enemyPatrolSpeedMultiplier;
-        }
-
-    }
-
-    public void movementPauseEndDuringPatrol()
-    {
-        canMove = true;
-        turnCharacterNow = false;
-        flipCharacterDirection();
-        enemySpineAnimator.SetInteger("MoveSpeed", 1);
+        else return true;
     }
     #endregion
 
@@ -680,6 +824,57 @@ public class EnemyBase : MonoBehaviour
     }
     #endregion
 
+    #region Routine Enemy Behaviour Methods
+    public void setEnemyPlatform(Vector2 platformLeftEndPosition, Vector2 platformRightEndPosition, int platformID, int platformLevel)//Setting up objects for tracking player around Platforms
+    {
+        enemyPlatformID = platformID;
+        enemyPlatformLevel = platformLevel;
+        if (transform.position.x <= platformRightEndPosition.x && transform.position.x >= platformLeftEndPosition.x
+        && transform.position.y <= platformLeftEndPosition.y + 5f && transform.position.y >= platformLeftEndPosition.y - 5f)
+        {
+            platformLeftEndBox = platformLeftEndPosition;
+            platformRightEndBox = platformRightEndPosition;
+
+            seeker.enabled = true;
+            isReadyToClimb = false;
+        }
+    }
+    void HandlePatrollingAnimation()//This method takes care of the enemy movement itself
+    {
+        enemySpineAnimator.SetBool("PatrolMode", true);
+
+        if (turnCharacterNow == false && Time.time - lastPatrolTurnTime > patrolDirectionalDuration)
+        {
+            stopCharacterCompletely();
+            lastPatrolTurnTime = Time.time;
+            turnCharacterNow = true;
+            canMove = false;
+            enemySpineAnimator.SetInteger("MoveSpeed", 0);
+            enemyCurrentMovementSpeed = 0.0f;
+        }
+        else if (turnCharacterNow == false)
+        {
+            canMove = true;
+            enemySpineAnimator.SetInteger("MoveSpeed", 1);
+            enemyCurrentMovementSpeed = enemyClassSpeed * enemyPatrolSpeedMultiplier;
+        }
+
+    }
+
+    void HandleBattleCryAnimation()
+    {
+
+    }
+
+    public void movementPauseEndDuringPatrol()
+    {
+        canMove = true;
+        turnCharacterNow = false;
+        flipCharacterDirection();
+        enemySpineAnimator.SetInteger("MoveSpeed", 1);
+    }
+    #endregion
+
     #region Overridable Base Methods
     public virtual void HandleAttackPlayerAnimation()//MODIFY METHODS TO INTEGRATE MECANIM ANIMATIONS
     {
@@ -741,6 +936,11 @@ public class EnemyBase : MonoBehaviour
         rb2d.velocity = new Vector2(enemyCurrentMovementSpeed * characterMovementDirection.x, rb2d.velocity.y);
     }
 
+    public virtual void HandleBattleCryMovement()
+    {
+        rb2d.velocity = Vector2.zero;
+    }
+
     #endregion
 
     #region Animation Events
@@ -758,6 +958,7 @@ public class EnemyBase : MonoBehaviour
         canMove = true;
         lastAttackTime = Time.time;
         doingAttackMove = false;
+        currentAttackID = -1;
         if (movesAwayAfterAttack)
         {
             moveAwayAfterAttack = true;
@@ -768,27 +969,6 @@ public class EnemyBase : MonoBehaviour
     public void combatPromptsOnAttackStart()
     {
 
-    }
-
-    public void combatPromptsDamageOnBlockableAttack()
-    {
-        knife.SetActive(true);
-    }
-
-    public void CombatPromptsDamageOnUnblockableAttack()
-    {
-        UnblockableKnife.SetActive(true);
-    }
-
-    public void combatPromptsDamagePlayerEnd()
-    {
-        knife.SetActive(false);
-        UnblockableKnife.SetActive(false);
-    }
-
-    public void disableObjectOnDeath()
-    {
-        gameObject.SetActive(false);
     }
 
     public void disableCharacterRigidbody()
@@ -813,16 +993,36 @@ public class EnemyBase : MonoBehaviour
         enemySpineAnimator.SetInteger("MoveSpeed", 2);
     }
 
+    public void onCharacterHurtStart()
+    {
+        canMove = false;
+
+        cachedIsAttacking = isAttacking;
+        isAttacking = false;
+
+        doingAttackMove = false;
+
+        cachedIsRepositioning = isRepositioning;
+        isRepositioning = false;
+    }
+
+    public void onCharacterHurtEnd()
+    {
+        canMove = true;
+        isAttacking = cachedIsAttacking;
+        isRepositioning = cachedIsRepositioning;
+    }
+
     public void applyCharacterMomentum(float momentumLevel)//momentum 
     {
         if (characterFacingRight)
         {
-            Debug.Log("mom" + Vector2.right * momentumLevel * baseMomentumForce);
+            //Debug.Log("mom" + Vector2.right * momentumLevel * baseMomentumForce);
             rb2d.AddForce(Vector2.right * momentumLevel * baseMomentumForce, ForceMode2D.Impulse);
         }
         else
         {
-            Debug.Log("fVec: " + momentumLevel + " " + baseMomentumForce);
+            //Debug.Log("fVec: " + momentumLevel + " " + baseMomentumForce);
             rb2d.AddForce(Vector2.left * momentumLevel * baseMomentumForce, ForceMode2D.Impulse);
         }
     }
@@ -867,6 +1067,132 @@ public class EnemyBase : MonoBehaviour
             return new Vector2(platformLeftEndBox.x + scale, transform.position.y);
         }
         return new Vector2(platformRightEndBox.x - scale, transform.position.y);
+    }
+    #endregion
+
+    #region Damage and Feedback
+    public void TakeDamage(EnemyAttackInfo weaponAttackInfo, bool isBlockableAttack = false)
+    {
+        PlayOnHitEffect();
+        //Debug.Log("Dmg: " + damageAmount);
+        if (!isCharacterBlocking && !isShielded)
+        {
+            if (characterHealthStaminaScript.modifyHealth(-weaponAttackInfo.attackDamage) < 0.15f)
+            {
+                enemySpineAnimator.SetTrigger("Death");
+                isDead = true;
+                deathTime = Time.time;
+            }
+            else if (characterHealthStaminaScript.poiseBroken == true)
+            {
+                enemySpineAnimator.SetTrigger("Hurt");
+                characterHealthStaminaScript.recoverPoise();
+            }
+        }
+        else if (isCharacterBlocking && characterHealthStaminaScript.staminaCompletelyDepleted == false)
+        {
+            if (isBlockableAttack)
+            {
+                // blocking and blockable attack
+                if (characterHealthStaminaScript.currentStamina >= weaponAttackInfo.attackStaminaDamage)
+                {
+                    characterHealthStaminaScript.modifyStamina(-weaponAttackInfo.attackStaminaDamage);
+                    enemySpineAnimator.SetTrigger("DefenceHit");
+                }
+                else
+                {
+                    if (characterHealthStaminaScript.modifyHealth(-(weaponAttackInfo.attackDamage - characterHealthStaminaScript.currentStamina)) < 0.10f)
+                    {
+                        enemySpineAnimator.SetTrigger("Death");
+                    }
+                }
+            }
+            else
+            {
+                PlayOnHitEffect();
+                // if current stamina more than half of total stamina, damage will be reduced to half
+                if (characterHealthStaminaScript.currentStamina >= characterHealthStaminaScript.totalStamina / 2f)
+                {
+                    characterHealthStaminaScript.modifyHealth(-(weaponAttackInfo.attackDamage / 2));
+                }
+                else // else will get full damage
+                {
+                    characterHealthStaminaScript.modifyHealth(-weaponAttackInfo.attackDamage);
+                }
+
+                characterHealthStaminaScript.modifyStamina(-1000);
+            }
+        }
+        else if (isCharacterBlocking && characterHealthStaminaScript.staminaCompletelyDepleted == true)
+        {
+            characterHealthStaminaScript.modifyHealth(-weaponAttackInfo.attackDamage);
+            enemySpineAnimator.SetTrigger("Hurt");
+        }
+    }
+
+    public void TakeProjectileDamage(float damageAmount, float staminaDamageAmount, bool isBlockable = true)
+    {
+        PlayOnHitEffect();
+
+        if (!isCharacterBlocking && !isShielded)
+        {
+            if (characterHealthStaminaScript.modifyHealth(-damageAmount) < 0.15f)
+            {
+                enemySpineAnimator.SetTrigger("Death");
+                isDead = true;
+                deathTime = Time.time;
+            }
+            else if (characterHealthStaminaScript.poiseBroken == true)
+            {
+                enemySpineAnimator.SetTrigger("Hurt");
+                characterHealthStaminaScript.recoverPoise();
+            }
+        }
+        else
+        {
+            if (isBlockable)
+            {
+                Debug.Log("fuck");
+                // blocking and blockable attack
+                if (characterHealthStaminaScript.currentStamina >= staminaDamageAmount)
+                {
+                    characterHealthStaminaScript.modifyStamina(-staminaDamageAmount);
+                    enemySpineAnimator.SetTrigger("DefenceHit");
+                }
+                else
+                {
+                    if (characterHealthStaminaScript.modifyHealth(-damageAmount / 2.0f) < 0.10f)
+                    {
+                        enemySpineAnimator.SetTrigger("Death");
+                    }
+                    else
+                    {
+                        enemySpineAnimator.SetTrigger("PoiseBreak");
+                    }
+                }
+            }
+            else
+            {
+                PlayOnHitEffect();
+                // if current stamina more than half of total stamina, damage will be reduced to half
+                if (characterHealthStaminaScript.currentStamina >= characterHealthStaminaScript.totalStamina / 2f)
+                {
+                    characterHealthStaminaScript.modifyHealth(-(damageAmount / 2));
+                }
+                else // else will get full damage
+                {
+                    characterHealthStaminaScript.modifyHealth(-damageAmount);
+                }
+                enemySpineAnimator.SetTrigger("PoiseBreak");
+                characterHealthStaminaScript.modifyStamina(-1000);
+            }
+        }
+    }
+
+    public void PlayOnHitEffect()
+    {
+        playHitEffectOnScale = true;
+        charScaleDecreasing = true;
     }
     #endregion
 }

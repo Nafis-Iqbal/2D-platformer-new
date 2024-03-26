@@ -96,7 +96,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "WeaponMultiTapAttack1Attack2",
+                    "name": "WeaponAttack1MultiTapAttack2RollAttack",
                     "type": "Button",
                     "id": "1a99b950-8ed6-4ee9-8e9f-aeb9d7e88dd0",
                     "expectedControlType": "Button",
@@ -427,7 +427,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "WeaponMultiTapAttack1Attack2",
+                    "action": "WeaponAttack1MultiTapAttack2RollAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -438,7 +438,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "WeaponMultiTapAttack1Attack2",
+                    "action": "WeaponAttack1MultiTapAttack2RollAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

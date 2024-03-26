@@ -15,9 +15,7 @@ public class EnemySpearShield : EnemyBase
     private EnemyClassInfo enemyData;
 
     [Header("SPEAR SHIELD ENEMY")]
-    public int enemyID;
     private EnemyAttackInfo[] enemyAttacks = new EnemyAttackInfo[2];
-    public int currentAttackID;
     public bool isChragingTowardsPlayer;
     public float chargingVelocity;
     float lastToFroCheckTime;
@@ -50,8 +48,6 @@ public class EnemySpearShield : EnemyBase
         movesAwayAfterAttack = enemyData.movesAwayAfterAttack;
         changesDirectionDuringAttack = enemyData.changesDirectionDuringAttack;
 
-        enemyHealth = enemyData.enemyHealth;
-        enemyStamina = enemyData.enemyStamina;
         enemyBattleCryRange = enemyData.enemyBattleCryRange;
         playerContactAvoidRange = enemyData.playerAvoidRange;
 
@@ -114,7 +110,7 @@ public class EnemySpearShield : EnemyBase
         else if (doingAttackMove == true) return;
         if (!doingAttackMove) faceTowardsPlayer();//face player if not in attack animation
 
-        if (currentTime - lastAttackTime > minTimeBetweenAttacks)
+        if (currentTime - lastAttackTime > minTimeBetweenAttacks && !doingAttackMove)
         {
             //CHOOSE ATTACK BASED ON PROBABILITY
             if (currentAttackID < 0)
@@ -148,7 +144,7 @@ public class EnemySpearShield : EnemyBase
                         //currentAttackID = 2;
                         enemySpineAnimator.SetTrigger("Attack");
                         enemySpineAnimator.SetInteger("AttackID", currentAttackID);
-                        currentAttackID = -1;
+                        //currentAttackID = -1;
                     }
                     else
                     {
@@ -301,7 +297,7 @@ public class EnemySpearShield : EnemyBase
     void towardsRepositionPoint(Vector2 tar)
     {
         enemySpineAnimator.Play("Patrolling animation");
-        particleController.instance.moveEnemyParti(true);
+        ParticleController.instance.moveEnemyParti(true);
         transform.position = Vector2.MoveTowards(transform.position, tar, enemyCurrentMovementSpeed / 50f * Time.fixedDeltaTime);
     }
 

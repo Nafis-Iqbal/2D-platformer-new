@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class particleController : MonoBehaviour
+public class ParticleController : MonoBehaviour
 {
-    public static particleController instance;
+    public static ParticleController instance;
     [Header("RainParticles")]
     [SerializeField] private GameObject rainEffect;
     [SerializeField] private ParticleSystem rainBack;
@@ -12,7 +12,7 @@ public class particleController : MonoBehaviour
     [SerializeField] private ParticleSystem rainFront;
     public float rainBackEmit = 60;
     public float rainMidEmit = 30;
-    public float rainFrontEmit  = 25;
+    public float rainFrontEmit = 25;
     public bool startRain = false;
     [Header("Player Particles")]
     [SerializeField] private ParticleSystem moveParticles;
@@ -48,7 +48,7 @@ public class particleController : MonoBehaviour
 
     private void Start()
     {
-        if(startRain == true)
+        if (startRain == true)
         {
             rainEffect.SetActive(true);
         }
@@ -63,9 +63,9 @@ public class particleController : MonoBehaviour
 
     public void startRaining(bool startRain)
     {
-        if(startRain == true)
+        if (startRain == true)
         {
-           rainEffect.SetActive(true);
+            rainEffect.SetActive(true);
         }
         else
         {

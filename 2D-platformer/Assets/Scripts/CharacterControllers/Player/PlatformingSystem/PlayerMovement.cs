@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerGrapplingGun playerGrapplingGun;
     private Rigidbody2D playerRB2D;
     private Animator playerSpineAnimator;
+    public GameObject checkSlopeObject;
     #endregion
 
     [Header("Movement Stats")]
@@ -40,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("When false, the charcter will skip acceleration and deceleration and instantly move and stop")][SerializeField] private bool useAcceleration;
 
     [Header("Calculations")]
-    [SerializeField] public Vector2 velocity;
+    [SerializeField] public Vector2 tempVelocity;
     [SerializeField] private float directionX;
     private Vector2 desiredVelocity;
     private float maxSpeedChange;
@@ -52,12 +53,23 @@ public class PlayerMovement : MonoBehaviour
     public float tempSpeedDecel = 1.0f;
     public float tempSpeedWithoutAccel = 1.0f;
 
+    #region Slope Calculations
+    public bool isOnSlope;
+    public float slopeAngleThreshold, slideDownAngleThreshold;
+    public PhysicsMaterial2D fullFriction, zeroFriction;
+    [SerializeField]
+    private float slopeDownAngle;
+    private Vector2 slopeNormalPerp;
+    #endregion
+
     [Header("Current State")]
     public bool playerFacingRight = true;
     public bool onGround;
+    public bool isSliding;
     public bool isSprinting;
     public bool pressingKey;
     public float movementValue;
+
     [Tooltip("Used in Animator to select jogg, sprint or walk animations")]
     public int playerMovementInd;
 
@@ -71,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
         playerCombatSystemScript = GetComponent<PlayerCombatSystem>();
         playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
         playerFacingRight = true;
+        isOnSlope = false;
     }
 
     private void Update()
@@ -118,9 +131,41 @@ public class PlayerMovement : MonoBehaviour
             playerMovementInd = 0;
         }
 
-        //FLIP PLAYER FACING DIRECTION
-        if (directionX != 0)
+        if (directionX < .01f && directionX > -.01f)//directionX 0 and player stand still
         {
+            pressingKey = false;
+            playerMovementInd = 0;
+
+            if (isOnSlope)
+            {
+                if (isSliding == false)
+                {
+                    if (playerRB2D.sharedMaterial != fullFriction)
+                    {
+                        playerRB2D.sharedMaterial = fullFriction;
+                    }
+                }
+                else
+                {
+                    if (playerRB2D.sharedMaterial != zeroFriction)
+                    {
+                        playerRB2D.sharedMaterial = zeroFriction;
+                    }
+                    //Switch To Sliding Animation
+                }
+            }
+            else
+            {
+                if (playerRB2D.sharedMaterial != zeroFriction)
+                {
+                    playerRB2D.sharedMaterial = zeroFriction;
+                }
+            }
+        }
+        //FLIP PLAYER FACING DIRECTION
+        else if (directionX != 0)//Player moving
+        {
+            //Debug.Log("bichi");
             if (directionX > 0 && playerFacingRight == false)
             {
                 rotateRight();
@@ -131,11 +176,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             pressingKey = true;
-        }
-        else
-        {
-            pressingKey = false;
-            playerMovementInd = 0;
+            playerRB2D.sharedMaterial = zeroFriction;
         }
 
         playerSpineAnimator.SetInteger("MoveSpeed", playerMovementInd);
@@ -152,15 +193,29 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
-        if (playerCombatSystemScript.shurikenAttackExecuting || playerCombatSystemScript.projectileAttackExecuting
-            || playerCombatSystemScript.isBlocking)
+        if (playerCombatSystemScript.isBlocking)
         {
             playerRB2D.velocity = Vector2.zero;
             return;
         }
+        if (playerCombatSystemScript.isKnockedOffGround)
+        {
+            if (playerFacingRight)
+            {
+                playerRB2D.velocity = Vector2.left * playerCombatSystemScript.knockedOffVelocity;
+            }
+            else
+            {
+                playerRB2D.velocity = Vector2.right * playerCombatSystemScript.knockedOffVelocity;
+            }
+            return;
+        }
+
+        //checking slope angle of ground
+        checkBaseSlope();
 
         onGround = playerJump.onGround;
-        velocity = playerRB2D.velocity;
+        tempVelocity = playerRB2D.velocity;
 
         if (playerCombatSystemScript.heavyAttackExecuting == false && playerCombatSystemScript.lightAttackExecuting == false)
         {
@@ -170,14 +225,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                if (onGround)
-                {
-                    runWithoutAcceleration();
-                }
-                else
-                {
-                    runWithAcceleration();
-                }
+                runWithoutAcceleration();
             }
         }
     }
@@ -225,6 +273,25 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void runWithoutAcceleration()
+    {
+        //If we're not using acceleration and deceleration, just send our desired velocity (direction * max speed) to the Rigidbody
+        tempVelocity.x = desiredVelocity.x;
+
+        if (playerJump.jumpInProgress)//Use jump velocity along horizontal aksis
+        {
+            tempVelocity.x = tempVelocity.x * playerJump.finalJumpMovementMultiplier;
+            playerRB2D.velocity = tempVelocity * movementSpeedMultiplier * tempSpeedWithoutAccel;
+        }
+        else if (isOnSlope == false)//use normal velocity along eks aksis
+        {
+            playerRB2D.velocity = tempVelocity * movementSpeedMultiplier * tempSpeedWithoutAccel;
+        }
+        else
+        {
+            playerRB2D.velocity = new Vector2(-tempVelocity.x * slopeNormalPerp.x, -tempVelocity.x * slopeNormalPerp.y) * movementSpeedMultiplier * tempSpeedWithoutAccel;
+        }
+    }
     private void runWithAcceleration()
     {
         //Set our acceleration, deceleration, and turn speed stats, based on whether we're on the ground on in the air
@@ -236,7 +303,7 @@ public class PlayerMovement : MonoBehaviour
         if (pressingKey)
         {
             //If the sign (i.e. positive or negative) of our input direction doesn't match our movement, it means we're turning around and so should use the turn speed stat.
-            if (Mathf.Sign(directionX) != Mathf.Sign(velocity.x))
+            if (Mathf.Sign(directionX) != Mathf.Sign(tempVelocity.x))
             {
                 maxSpeedChange = turnSpeed * Time.fixedDeltaTime * tempSpeedTurn;
             }
@@ -253,19 +320,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Move our velocity towards the desired velocity, at the rate of the number calculated above
-        velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
+        tempVelocity.x = Mathf.MoveTowards(tempVelocity.x, desiredVelocity.x, maxSpeedChange);
 
         //Update the Rigidbody with this new velocity
-        playerRB2D.velocity = velocity * movementSpeedMultiplier;
+        playerRB2D.velocity = tempVelocity * movementSpeedMultiplier;
 
-    }
-
-    private void runWithoutAcceleration()
-    {
-        //If we're not using acceleration and deceleration, just send our desired velocity (direction * max speed) to the Rigidbody
-        velocity.x = desiredVelocity.x;
-
-        playerRB2D.velocity = velocity * movementSpeedMultiplier * tempSpeedWithoutAccel;
     }
 
     public void rotateLeft()
@@ -290,12 +349,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (playerFacingRight)
         {
-            Debug.Log("mom" + Vector2.right * momentumLevel * baseMomentumForce);
+            //Debug.Log("mom" + Vector2.right * momentumLevel * baseMomentumForce);
             playerRB2D.AddForce(Vector2.right * momentumLevel * baseMomentumForce, ForceMode2D.Impulse);
         }
         else
         {
-            Debug.Log("fVec: " + momentumLevel + " " + baseMomentumForce);
+            //Debug.Log("fVec: " + momentumLevel + " " + baseMomentumForce);
             playerRB2D.AddForce(Vector2.left * momentumLevel * baseMomentumForce, ForceMode2D.Impulse);
         }
     }
@@ -325,6 +384,33 @@ public class PlayerMovement : MonoBehaviour
     public void stopPlayerCompletely()
     {
         playerRB2D.velocity = Vector2.zero;
+    }
+
+    public void checkBaseSlope()
+    {
+        LayerMask mask = LayerMask.GetMask("Ground");
+
+        //check if standing on slope
+        RaycastHit2D Hit3 = Physics2D.Raycast(checkSlopeObject.transform.position, Vector3.down, 1.0f, mask);
+        if (onGround == true && Hit3.collider != null)
+        {
+            slopeNormalPerp = Vector2.Perpendicular(Hit3.normal).normalized;
+            slopeDownAngle = Vector2.Angle(Hit3.normal, Vector2.up);
+
+            if (slopeDownAngle > slopeAngleThreshold) isOnSlope = true;
+            else isOnSlope = false;
+
+            if (slopeDownAngle > slideDownAngleThreshold)
+            {
+                isSliding = true;
+            }
+            else isSliding = false;
+
+            Debug.DrawRay(Hit3.point, Hit3.normal, Color.green);
+            Debug.DrawRay(Hit3.point, slopeNormalPerp, Color.red);
+        }
+        else isOnSlope = false;
+
     }
 
     #region UNUSED

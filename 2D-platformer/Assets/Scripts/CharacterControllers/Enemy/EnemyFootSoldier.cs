@@ -14,9 +14,7 @@ public class EnemyFootSoldier : EnemyBase
     private EnemyClassInfo enemyData;
 
     [Header("MELEE ENEMY")]
-    public int enemyID;
     private EnemyAttackInfo[] enemyAttacks = new EnemyAttackInfo[2];
-    public int currentAttackID;
     float lastToFroCheckTime;
 
     public override void OnEnable()
@@ -25,8 +23,12 @@ public class EnemyFootSoldier : EnemyBase
 
         isPatrolling = true;
         canAttackPlayer = true;
+        blockingStanceVelocityUpdated = false;
 
         enemyData = EnemyManager.Instance.enemyData[enemyID];
+
+        canBlock = enemyData.canBlock;
+        defensiveStanceHealthLimit = enemyData.defensiveStanceHealthLimit;
 
         enemyClassSpeed = enemyData.enemyMovementSpeed;
         enemyPatrolSpeedMultiplier = enemyData.enemyPatrolSpeedMultiplier;
@@ -46,9 +48,8 @@ public class EnemyFootSoldier : EnemyBase
         movesAwayAfterAttack = enemyData.movesAwayAfterAttack;
         changesDirectionDuringAttack = enemyData.changesDirectionDuringAttack;
 
-        enemyHealth = enemyData.enemyHealth;
-        enemyStamina = enemyData.enemyStamina;
         enemyBattleCryRange = enemyData.enemyBattleCryRange;
+        battleCryMinimumInterval = enemyData.battleCryFrequency;
         playerContactAvoidRange = enemyData.playerAvoidRange;
 
         enemyAttacks = enemyData.enemyAttacks;
@@ -87,6 +88,39 @@ public class EnemyFootSoldier : EnemyBase
 
     public override void HandleAttackPlayerAnimation()
     {
+        if (!isDefensive && canBlock)
+        {
+            if (characterHealthStaminaScript.currentHealth <= defensiveStanceHealthLimit)
+            {
+                isDefensive = true;
+            }
+        }
+
+        if (isDefensive)
+        {
+            //Debug.Log("Trying to enter");
+            if ((isPlayerFacingCharacter() == true && playerCombatSystemScript.usingCombatItem == true && doingAttackMove == false) || projectileDetectorScript.projectileInRange)
+            {
+                isCharacterBlocking = true;
+                closeInForAttack = false;
+                enemySpineAnimator.SetBool("Defence", true);
+
+                if (blockingStanceVelocityUpdated == false)
+                {
+                    rb2d.velocity = Vector2.zero;
+                    blockingStanceVelocityUpdated = true;
+                }
+            }
+            else
+            {
+                isCharacterBlocking = false;
+                blockingStanceVelocityUpdated = false;
+                enemySpineAnimator.SetBool("Defence", false);
+            }
+        }
+
+        if (isCharacterBlocking) return;
+
         currentTime = Time.time;
         playerDistanceFromEnemy = horizontalDistanceFromPlayer();
         enemySpineAnimator.SetInteger("MoveSpeed", 1);
@@ -96,7 +130,7 @@ public class EnemyFootSoldier : EnemyBase
         if (!doingAttackMove) faceTowardsPlayer();//face player if not in attack animation
 
         //canAttack variable changed from animation
-        if (currentTime - lastAttackTime > minTimeBetweenAttacks)
+        if (currentTime - lastAttackTime > minTimeBetweenAttacks && !doingAttackMove)
         {
             if (currentAttackID < 0)
             {
@@ -128,7 +162,7 @@ public class EnemyFootSoldier : EnemyBase
                         enemyAttacks[currentAttackID].useAttack();
                         enemySpineAnimator.SetTrigger("Attack");
                         enemySpineAnimator.SetInteger("AttackID", currentAttackID);
-                        currentAttackID = -1;
+                        //currentAttackID = -1;
                     }
                     else
                     {
@@ -166,6 +200,12 @@ public class EnemyFootSoldier : EnemyBase
     {
         if (!canMove || doingAttackMove) return;
 
+        if (isCharacterBlocking)
+        {
+            rb2d.velocity = Vector2.zero;
+            return;
+        }
+
         enemyCurrentMovementSpeed = enemyClassSpeed * enemyCombatWalkSpeedMultiplier;
 
         if (closeInForAttack == true)
@@ -193,6 +233,11 @@ public class EnemyFootSoldier : EnemyBase
             rb2d.velocity = Vector2.zero;
             enemySpineAnimator.SetInteger("MoveSpeed", 0);
         }
+    }
+
+    void HandleCharacterDefense()
+    {
+
     }
 
     void assignCharacterMovementDirection(int toAndFroInd)
@@ -263,7 +308,7 @@ public class EnemyFootSoldier : EnemyBase
     void towardsRepositionPoint(Vector2 tar)
     {
         enemySpineAnimator.Play("Patrolling animation");
-        particleController.instance.moveEnemyParti(true);
+        ParticleController.instance.moveEnemyParti(true);
         transform.position = Vector2.MoveTowards(transform.position, tar, enemyCurrentMovementSpeed / 50f * Time.fixedDeltaTime);
     }
 

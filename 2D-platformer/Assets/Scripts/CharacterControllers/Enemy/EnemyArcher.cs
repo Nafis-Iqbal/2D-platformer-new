@@ -10,13 +10,11 @@ public class EnemyArcher : EnemyBase
     private float height;
     private Vector3 startPos;
     [Header("ENEMY RANGED")]
-    public int enemyID;
     public Transform[] projectileSpawnPosition = new Transform[3];
     private EnemyAttackInfo[] enemyAttacks = new EnemyAttackInfo[3];
     public float arcShotFlightTime, powerShotFlightTime, normalShotFlightTime;
     public float arcShotTopHeight, powerShotTopHeight, normalShotTopHeight;
     private EnemyClassInfo enemyData;
-    public int currentAttackID;
     float currentTime;
 
     public override void OnEnable()
@@ -45,8 +43,6 @@ public class EnemyArcher : EnemyBase
         movesAwayAfterAttack = enemyData.movesAwayAfterAttack;
         changesDirectionDuringAttack = enemyData.changesDirectionDuringAttack;
 
-        enemyHealth = enemyData.enemyHealth;
-        enemyStamina = enemyData.enemyStamina;
         enemyBattleCryRange = enemyData.enemyBattleCryRange;
         playerContactAvoidRange = enemyData.playerAvoidRange;
 
@@ -101,7 +97,7 @@ public class EnemyArcher : EnemyBase
         if (!doingAttackMove) faceTowardsPlayer();//face player if not in attack animation
 
         //canAttack variable changed from animation
-        if (currentTime - lastAttackTime > minTimeBetweenAttacks)
+        if (currentTime - lastAttackTime > minTimeBetweenAttacks && !doingAttackMove)
         {
             if (currentAttackID < 0)
             {
@@ -129,7 +125,7 @@ public class EnemyArcher : EnemyBase
                         enemySpineAnimator.SetTrigger("Attack");
                         enemySpineAnimator.SetInteger("AttackID", currentAttackID);
                         enemySpineAnimator.SetInteger("MoveSpeed", 0);
-                        currentAttackID = -1;
+                        //currentAttackID = -1;
                     }
                     else
                     {
@@ -174,21 +170,21 @@ public class EnemyArcher : EnemyBase
     public void performArrowShot()
     {
         var arrowObject = ObjectPooler.Instance.SpawnFromPool("Arrow", projectileSpawnPosition[0].position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
-        arrowObject.GetComponent<Projectile>().initializeProjectile(projectileSpawnPosition[0].position, playerTransform.position, normalShotTopHeight, normalShotFlightTime);
+        arrowObject.GetComponent<ArcProjectile>().initializeProjectile(projectileSpawnPosition[0].position, playerTransform.position, normalShotTopHeight, normalShotFlightTime);
         arrowObject.SetActive(true);
     }
 
     public void performPowerShot()
     {
         var arrowObject = ObjectPooler.Instance.SpawnFromPool("Arrow", projectileSpawnPosition[0].position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
-        arrowObject.GetComponent<Projectile>().initializeProjectile(projectileSpawnPosition[0].position, playerTransform.position, powerShotTopHeight, powerShotFlightTime);
+        arrowObject.GetComponent<ArcProjectile>().initializeProjectile(projectileSpawnPosition[0].position, playerTransform.position, powerShotTopHeight, powerShotFlightTime);
         arrowObject.SetActive(true);
     }
 
     public void performArcShot()
     {
         var arrowObject = ObjectPooler.Instance.SpawnFromPool("Arrow", projectileSpawnPosition[0].position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
-        arrowObject.GetComponent<Projectile>().initializeProjectile(projectileSpawnPosition[0].position, playerTransform.position, arcShotTopHeight, arcShotFlightTime);
+        arrowObject.GetComponent<ArcProjectile>().initializeProjectile(projectileSpawnPosition[0].position, playerTransform.position, arcShotTopHeight, arcShotFlightTime);
         arrowObject.SetActive(true);
     }
 
