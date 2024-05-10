@@ -20,7 +20,7 @@
                     "id": "763f0c83-e363-4ba5-88db-85571445337f",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold(duration=0.15)",
+                    "interactions": "Hold(duration=0.001)",
                     "initialStateCheck": false
                 },
                 {
@@ -36,6 +36,15 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "1057672f-6211-472a-bb63-3ed8dfc5ce46",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SlideJump",
+                    "type": "Button",
+                    "id": "9b25f4ee-1400-4fd4-abe1-1979d1445991",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -96,12 +105,12 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "WeaponAttack1MultiTapAttack2RollAttack",
+                    "name": "WeaponLightAttack",
                     "type": "Button",
-                    "id": "1a99b950-8ed6-4ee9-8e9f-aeb9d7e88dd0",
+                    "id": "50dd5746-88af-433e-9178-08f5a86a94ee",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "MultiTap(tapDelay=0.1)",
+                    "interactions": "",
                     "initialStateCheck": false
                 },
                 {
@@ -168,18 +177,45 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Walk(isMaintainedByOldInput)",
+                    "name": "Interact",
                     "type": "Button",
-                    "id": "12bb4e08-927e-4555-bc24-ddd006ba339b",
+                    "id": "ba333fb3-a831-46cc-a323-218e8f06ee43",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "LookDown",
+                    "type": "Value",
+                    "id": "452ddd81-ce2d-4649-b4b3-3a658051590b",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LookMouse",
+                    "type": "Value",
+                    "id": "17a16a0f-2b55-40f0-bca0-36aec5a5a185",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LookGamepad",
+                    "type": "Value",
+                    "id": "b2b2d7f4-8945-48ce-b7e8-e886ccc80231",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
                 {
-                    "name": "WASD",
+                    "name": "AD",
                     "id": "00ca640b-d935-4593-8157-c05846ea39b3",
                     "path": "1DAxis",
                     "interactions": "",
@@ -422,28 +458,6 @@
                 },
                 {
                     "name": "",
-                    "id": "27cfbf27-93fe-4926-aa34-08a67be31d1b",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "WeaponAttack1MultiTapAttack2RollAttack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "75ab55f6-751e-4038-b184-58ef7799185e",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "WeaponAttack1MultiTapAttack2RollAttack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "920ea07e-c232-45dc-a14a-eb71a2a6c1d4",
                     "path": "<Keyboard>/g",
                     "interactions": "",
@@ -620,17 +634,6 @@
                 },
                 {
                     "name": "",
-                    "id": "b8ff550b-16e7-4f75-b1e7-c1d21bf4c135",
-                    "path": "<HID:: USB Gamepad          >/button5",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Walk(isMaintainedByOldInput)",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "ab3f7161-9296-458f-b428-cb757b1953e0",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -780,6 +783,116 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2c4450ad-a35a-4a28-b273-e2a1cb9836f4",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SlideJump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "deb25f56-e793-4f1c-8e1f-78e78688f4be",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "SlideJump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e313f930-3dee-4c78-911d-2af4369732bd",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "55b1ab13-c40f-4d6d-84c9-44b8b9dbb756",
+                    "path": "<XInputController>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "43bfd364-41e2-4fea-8801-618d27a32428",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "WeaponLightAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5ad71106-45fe-46f5-973f-2a53f7e110de",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "WeaponLightAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cba4e5dc-e17b-4d30-a3e4-71d66bf240dc",
+                    "path": "<Keyboard>/s",
+                    "interactions": "Hold(duration=0.2)",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "LookDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "752901be-d140-498e-9bac-d1ef28b18b9d",
+                    "path": "<Gamepad>/rightStick/down",
+                    "interactions": "Hold(duration=0.2)",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LookDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4cd4d34-f4c8-414c-960b-447e0dbda139",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "LookMouse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ceb1deb-73ce-4bc2-94cd-b4dfa249fa9b",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LookGamepad",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

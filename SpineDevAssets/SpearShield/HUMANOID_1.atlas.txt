@@ -1,789 +1,796 @@
 
 HUMANOID_1.png
-size: 2026,1201
+size: 1994,1264
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 Accessories/SwordCover
   rotate: true
-  xy: 410, 408
+  xy: 393, 471
   size: 52, 421
   orig: 52, 421
   offset: 0, 0
   index: -1
 FortArcher/FistClosedInHand6
-  rotate: false
-  xy: 1848, 188
+  rotate: true
+  xy: 1300, 2
   size: 107, 90
   orig: 107, 90
   offset: 0, 0
   index: -1
 FortArcher/FistClosedObjectInHand6
-  rotate: true
-  xy: 1638, 191
+  rotate: false
+  xy: 1404, 111
   size: 106, 96
   orig: 106, 96
   offset: 0, 0
   index: -1
 FortArcher/FistClosedObjectOutHand6
-  rotate: true
-  xy: 1412, 195
+  rotate: false
+  xy: 1709, 5
   size: 110, 100
   orig: 110, 100
   offset: 0, 0
   index: -1
 FortArcher/FistClosedOutHand6
   rotate: false
-  xy: 1736, 197
+  xy: 1772, 262
   size: 110, 92
   orig: 110, 92
   offset: 0, 0
   index: -1
 FortArcher/FistOpenInHand6
-  rotate: false
-  xy: 608, 91
+  rotate: true
+  xy: 930, 454
   size: 139, 95
   orig: 139, 95
   offset: 0, 0
   index: -1
 FortArcher/FistOpenOutHand6
   rotate: false
-  xy: 1884, 728
+  xy: 1174, 410
   size: 140, 100
   orig: 140, 100
   offset: 0, 0
   index: -1
 FortArcher/FortArcherArmour
   rotate: true
-  xy: 1508, 1027
+  xy: 1538, 1090
   size: 172, 360
   orig: 172, 360
   offset: 0, 0
   index: -1
 FortArcher/FortArcherInArm
   rotate: false
-  xy: 1030, 730
+  xy: 1148, 314
   size: 137, 94
   orig: 137, 94
   offset: 0, 0
   index: -1
 FortArcher/FortArcherInShoulderPad
-  rotate: false
-  xy: 1630, 2
+  rotate: true
+  xy: 740, 119
   size: 46, 42
   orig: 46, 42
   offset: 0, 0
   index: -1
 FortArcher/FortArcherOutArm
-  rotate: true
-  xy: 862, 2
+  rotate: false
+  xy: 1013, 31
   size: 88, 134
   orig: 88, 134
   offset: 0, 0
   index: -1
 FortArcher/FortArcherOutShoulderPad
   rotate: false
-  xy: 1678, 2
+  xy: 1684, 681
   size: 46, 42
   orig: 46, 42
   offset: 0, 0
   index: -1
 FortArcher/FortArcherQuiver
   rotate: true
-  xy: 1702, 688
+  xy: 1027, 447
   size: 116, 145
   orig: 116, 145
   offset: 0, 0
   index: -1
 FortArcher/LedgeGrabInHand6
-  rotate: true
-  xy: 1875, 655
+  rotate: false
+  xy: 711, 2
   size: 71, 114
   orig: 71, 114
   offset: 0, 0
   index: -1
 FortArcher/LedgeGrabOutHand6
   rotate: true
-  xy: 1401, 29
+  xy: 1725, 551
   size: 71, 111
   orig: 71, 111
   offset: 0, 0
   index: -1
 FortCommander/FistClosedInHand3
   rotate: false
-  xy: 1412, 102
+  xy: 1672, 458
   size: 110, 91
   orig: 110, 91
   offset: 0, 0
   index: -1
 FortCommander/FistClosedObjectInHand3
-  rotate: true
-  xy: 1524, 144
+  rotate: false
+  xy: 1625, 107
   size: 109, 97
   orig: 109, 97
   offset: 0, 0
   index: -1
 FortCommander/FistClosedObjectOutHand3
   rotate: false
-  xy: 930, 407
+  xy: 799, 167
   size: 121, 110
   orig: 121, 110
   offset: 0, 0
   index: -1
 FortCommander/FistClosedOutHand3
-  rotate: false
-  xy: 1289, 262
+  rotate: true
+  xy: 1340, 487
   size: 121, 102
   orig: 121, 102
   offset: 0, 0
   index: -1
 FortCommander/FistOpenInHand3
   rotate: false
-  xy: 1003, 64
+  xy: 1142, 212
   size: 134, 100
   orig: 134, 100
   offset: 0, 0
   index: -1
 FortCommander/FistOpenOutHand3
   rotate: false
-  xy: 862, 190
+  xy: 1538, 668
   size: 144, 100
   orig: 144, 100
   offset: 0, 0
   index: -1
 FortCommander/FortCommanderArmour
-  rotate: true
-  xy: 410, 91
+  rotate: false
+  xy: 930, 595
   size: 95, 196
   orig: 95, 196
   offset: 0, 0
   index: -1
 FortCommander/FortCommanderInArm
-  rotate: true
-  xy: 663, 201
+  rotate: false
+  xy: 1538, 891
   size: 205, 197
   orig: 205, 197
   offset: 0, 0
   index: -1
 FortCommander/FortCommanderInShoulderPad
   rotate: true
-  xy: 1153, 79
+  xy: 1287, 309
   size: 91, 132
   orig: 91, 132
   offset: 0, 0
   index: -1
 FortCommander/FortCommanderOutArm
-  rotate: false
-  xy: 930, 519
+  rotate: true
+  xy: 1236, 840
   size: 120, 209
   orig: 120, 209
   offset: 0, 0
   index: -1
 FortCommander/FortCommanderOutShoulderPad
-  rotate: false
-  xy: 1544, 855
+  rotate: true
+  xy: 1745, 911
   size: 177, 170
   orig: 177, 170
   offset: 0, 0
   index: -1
 FortCommander/FortCommanderTrouser
-  rotate: false
-  xy: 1052, 542
+  rotate: true
+  xy: 377, 47
   size: 124, 186
   orig: 124, 186
   offset: 0, 0
   index: -1
 FortCommander/LedgeGrabInHand3
-  rotate: true
-  xy: 1405, 521
+  rotate: false
+  xy: 1370, 725
   size: 74, 113
   orig: 74, 113
   offset: 0, 0
   index: -1
 FortCommander/LedgeGrabOutHand3
   rotate: true
-  xy: 1287, 79
+  xy: 1516, 206
   size: 77, 112
   orig: 77, 112
   offset: 0, 0
   index: -1
 FortHeavy/FistClosedInHand7
   rotate: false
-  xy: 1550, 457
+  xy: 1547, 285
   size: 111, 90
   orig: 111, 90
   offset: 0, 0
   index: -1
 FortHeavy/FistClosedObjectInHand7
   rotate: false
-  xy: 1776, 385
+  xy: 1512, 107
   size: 111, 97
   orig: 111, 97
   offset: 0, 0
   index: -1
 FortHeavy/FistClosedObjectOutHand7
   rotate: false
-  xy: 1405, 419
+  xy: 1484, 5
   size: 111, 100
   orig: 111, 100
   offset: 0, 0
   index: -1
 FortHeavy/FistClosedOutHand7
-  rotate: false
-  xy: 1889, 374
+  rotate: true
+  xy: 1900, 1151
   size: 111, 92
   orig: 111, 92
   offset: 0, 0
   index: -1
 FortHeavy/FistOpenInHand7
-  rotate: false
-  xy: 1008, 166
+  rotate: true
+  xy: 899, 22
   size: 143, 112
   orig: 143, 112
   offset: 0, 0
   index: -1
 FortHeavy/FistOpenOutHand7
   rotate: false
-  xy: 1405, 597
+  xy: 1732, 696
   size: 143, 112
   orig: 143, 112
   offset: 0, 0
   index: -1
 FortHeavy/FortHeavyArmour
   rotate: false
-  xy: 2, 5
+  xy: 1030, 852
   size: 204, 410
   orig: 204, 410
   offset: 0, 0
   index: -1
 FortHeavy/FortHeavyInArm
   rotate: true
-  xy: 1053, 395
+  xy: 799, 279
   size: 145, 118
   orig: 145, 118
   offset: 0, 0
   index: -1
 FortHeavy/FortHeavyInShoulderPad
-  rotate: false
-  xy: 1948, 122
+  rotate: true
+  xy: 1815, 198
   size: 62, 64
   orig: 62, 64
   offset: 0, 0
   index: -1
 FortHeavy/FortHeavyOutArm
   rotate: true
-  xy: 1544, 752
+  xy: 215, 2
   size: 101, 156
   orig: 101, 156
   offset: 0, 0
   index: -1
 FortHeavy/FortHeavyOutShoulderPad
   rotate: false
-  xy: 1941, 582
+  xy: 1884, 258
   size: 76, 71
   orig: 76, 71
   offset: 0, 0
   index: -1
 FortHeavy/LedgeGrabInHand7
   rotate: true
-  xy: 1173, 374
+  xy: 1421, 288
   size: 83, 124
   orig: 83, 124
   offset: 0, 0
   index: -1
 FortHeavy/LedgeGrabOutHand7
   rotate: true
-  xy: 539, 3
+  xy: 1277, 111
   size: 86, 125
   orig: 86, 125
   offset: 0, 0
   index: -1
 FortMelee/FistClosedInHand5
-  rotate: false
-  xy: 1524, 52
+  rotate: true
+  xy: 1446, 595
   size: 106, 90
   orig: 106, 90
   offset: 0, 0
   index: -1
 FortMelee/FistClosedObjectInHand5
-  rotate: false
-  xy: 1917, 830
+  rotate: true
+  xy: 1202, 2
   size: 107, 96
   orig: 107, 96
   offset: 0, 0
   index: -1
 FortMelee/FistClosedObjectOutHand5
   rotate: false
-  xy: 1518, 356
+  xy: 1664, 357
   size: 110, 99
   orig: 110, 99
   offset: 0, 0
   index: -1
 FortMelee/FistClosedOutHand5
   rotate: false
-  xy: 1742, 291
+  xy: 1776, 356
   size: 110, 92
   orig: 110, 92
   offset: 0, 0
   index: -1
 FortMelee/FistOpenInHand5
   rotate: false
-  xy: 1153, 172
+  xy: 1538, 567
   size: 133, 99
   orig: 133, 99
   offset: 0, 0
   index: -1
 FortMelee/FistOpenOutHand5
   rotate: false
-  xy: 1681, 587
+  xy: 1745, 810
   size: 143, 99
   orig: 143, 99
   offset: 0, 0
   index: -1
 FortMelee/FortMeleeArmour
-  rotate: true
-  xy: 1030, 826
+  rotate: false
+  xy: 215, 105
   size: 160, 373
   orig: 160, 373
   offset: 0, 0
   index: -1
 FortMelee/FortMeleeInArm
-  rotate: true
-  xy: 1302, 592
+  rotate: false
+  xy: 1197, 512
   size: 141, 101
   orig: 141, 101
   offset: 0, 0
   index: -1
 FortMelee/FortMeleeInShoulderPad
   rotate: true
-  xy: 1514, 5
+  xy: 1881, 165
   size: 45, 69
   orig: 45, 69
   offset: 0, 0
   index: -1
 FortMelee/FortMeleeOutArm
-  rotate: true
-  xy: 1169, 735
+  rotate: false
+  xy: 1447, 809
   size: 89, 151
   orig: 89, 151
   offset: 0, 0
   index: -1
 FortMelee/FortMeleeOutShoulderPad
   rotate: true
-  xy: 1632, 46
+  xy: 1808, 151
   size: 45, 70
   orig: 45, 70
   offset: 0, 0
   index: -1
 FortMelee/LedgeGrabInHand5
-  rotate: true
-  xy: 1254, 2
+  rotate: false
+  xy: 1917, 921
   size: 75, 113
   orig: 75, 113
   offset: 0, 0
   index: -1
 FortMelee/LedgeGrabOutHand5
-  rotate: false
-  xy: 1935, 468
+  rotate: true
+  xy: 1630, 206
   size: 77, 112
   orig: 77, 112
   offset: 0, 0
   index: -1
 FortSpearShield/FistClosedInHand8
   rotate: false
-  xy: 1663, 393
+  xy: 1847, 577
   size: 111, 91
   orig: 111, 91
   offset: 0, 0
   index: -1
 FortSpearShield/FistClosedObjectInHand8
   rotate: false
-  xy: 1821, 484
+  xy: 816, 426
   size: 112, 97
   orig: 112, 97
   offset: 0, 0
   index: -1
 FortSpearShield/FistClosedObjectOutHand8
   rotate: false
-  xy: 1178, 459
+  xy: 1278, 199
   size: 122, 108
   orig: 122, 108
   offset: 0, 0
   index: -1
 FortSpearShield/FistClosedOutHand8
-  rotate: false
-  xy: 1288, 158
+  rotate: true
+  xy: 1890, 787
   size: 122, 102
   orig: 122, 102
   offset: 0, 0
   index: -1
 FortSpearShield/FistOpenInHand8
   rotate: false
-  xy: 862, 292
+  xy: 565, 3
   size: 144, 113
   orig: 144, 113
   offset: 0, 0
   index: -1
 FortSpearShield/FistOpenOutHand8
-  rotate: false
-  xy: 1008, 280
+  rotate: true
+  xy: 784, 21
   size: 144, 113
   orig: 144, 113
   offset: 0, 0
   index: -1
 FortSpearShield/FortSpearArmour
-  rotate: true
-  xy: 1030, 988
+  rotate: false
+  xy: 2, 2
   size: 211, 476
   orig: 211, 476
   offset: 0, 0
   index: -1
 FortSpearShield/FortSpearInArm
-  rotate: true
-  xy: 1178, 569
+  rotate: false
+  xy: 1204, 716
   size: 164, 122
   orig: 164, 122
   offset: 0, 0
   index: -1
 FortSpearShield/FortSpearOutArm
   rotate: true
-  xy: 1723, 906
+  xy: 1538, 770
   size: 119, 192
   orig: 119, 192
   offset: 0, 0
   index: -1
 FortSpearShield/FortSpearShieldOutShoulderPad
   rotate: false
-  xy: 1322, 744
+  xy: 1888, 331
   size: 81, 80
   orig: 81, 80
   offset: 0, 0
   index: -1
 FortSpearShield/LedgeGrabInHand8
   rotate: true
-  xy: 1550, 549
+  xy: 1316, 402
   size: 83, 125
   orig: 83, 125
   offset: 0, 0
   index: -1
 FortSpearShield/LedgeGrabOutHand8
   rotate: true
-  xy: 325, 2
+  xy: 1537, 377
   size: 87, 125
   orig: 87, 125
   offset: 0, 0
   index: -1
 Hairs/BaldFace
-  rotate: false
-  xy: 1908, 45
+  rotate: true
+  xy: 1744, 201
   size: 59, 69
   orig: 59, 69
   offset: 0, 0
   index: -1
 Hairs/BrownHair10
   rotate: false
-  xy: 1105, 17
+  xy: 1960, 623
   size: 32, 45
   orig: 32, 45
   offset: 0, 0
   index: -1
 Hairs/BrownHair2
-  rotate: false
-  xy: 1884, 858
+  rotate: true
+  xy: 1810, 118
   size: 31, 46
   orig: 31, 46
   offset: 0, 0
   index: -1
 Hairs/BrownHair4
   rotate: false
-  xy: 1836, 64
+  xy: 1736, 149
   size: 70, 50
   orig: 70, 50
   offset: 0, 0
   index: -1
 Hairs/BrownHair5
   rotate: false
-  xy: 833, 416
+  xy: 1881, 212
   size: 76, 44
   orig: 76, 44
   offset: 0, 0
   index: -1
 Hairs/Face1Blonde
-  rotate: false
-  xy: 1870, 1027
+  rotate: true
+  xy: 1030, 704
   size: 146, 172
   orig: 146, 172
   offset: 0, 0
   index: -1
 Hairs/Face1Brown
-  rotate: false
-  xy: 1405, 818
+  rotate: true
+  xy: 1027, 565
   size: 137, 168
   orig: 137, 168
   offset: 0, 0
   index: -1
 Hairs/FaceBoxcutHair
-  rotate: false
-  xy: 1957, 221
+  rotate: true
+  xy: 740, 167
   size: 49, 57
   orig: 49, 57
   offset: 0, 0
   index: -1
 Hairs/MohawkHairFace
   rotate: false
-  xy: 452, 2
+  xy: 1894, 488
   size: 85, 87
   orig: 85, 87
   offset: 0, 0
   index: -1
 Hairs/PonytailFace
-  rotate: false
-  xy: 666, 3
+  rotate: true
+  xy: 1894, 413
   size: 73, 86
   orig: 73, 86
   offset: 0, 0
   index: -1
 HeroCaped/Armour2InArm
   rotate: false
-  xy: 393, 730
+  xy: 393, 793
   size: 635, 469
   orig: 635, 469
   offset: 0, 0
   index: -1
 HeroCaped/Armour2OutArm
   rotate: true
-  xy: 1723, 806
+  xy: 579, 118
   size: 98, 159
   orig: 98, 159
   offset: 0, 0
   index: -1
 HeroCaped/BodyArmour2
   rotate: true
-  xy: 393, 462
+  xy: 393, 525
   size: 266, 535
   orig: 266, 535
   offset: 0, 0
   index: -1
 HeroCaped/CapedArmourInShoulderPad
   rotate: false
-  xy: 749, 83
+  xy: 922, 167
   size: 111, 116
   orig: 111, 116
   offset: 0, 0
   index: -1
 HeroCaped/CapedArmourOutShoulderPad
   rotate: false
-  xy: 208, 2
+  xy: 1877, 670
   size: 115, 115
   orig: 115, 115
   offset: 0, 0
   index: -1
 HeroCaped/FistClosedInHand
-  rotate: false
-  xy: 1299, 366
+  rotate: true
+  xy: 1446, 703
   size: 104, 90
   orig: 104, 90
   offset: 0, 0
   index: -1
 HeroCaped/FistClosedObjectInHand
-  rotate: false
-  xy: 1638, 93
+  rotate: true
+  xy: 1348, 610
   size: 104, 96
   orig: 104, 96
   offset: 0, 0
   index: -1
 HeroCaped/FistClosedObjectOutHand
   rotate: false
-  xy: 1514, 255
+  xy: 1784, 450
   size: 108, 99
   orig: 108, 99
   offset: 0, 0
   index: -1
 HeroCaped/FistClosedOutHand
-  rotate: false
-  xy: 1854, 280
+  rotate: true
+  xy: 1444, 485
   size: 108, 92
   orig: 108, 92
   offset: 0, 0
   index: -1
 HeroCaped/FistOpenInHand
-  rotate: true
-  xy: 1302, 458
+  rotate: false
+  xy: 1538, 466
   size: 132, 99
   orig: 132, 99
   offset: 0, 0
   index: -1
 HeroCaped/FistOpenOutHand
-  rotate: false
-  xy: 862, 92
+  rotate: true
+  xy: 919, 285
   size: 139, 96
   orig: 139, 96
   offset: 0, 0
   index: -1
 HeroCaped/LedgeGrabInHand
   rotate: true
-  xy: 1826, 583
+  xy: 1732, 624
   size: 70, 113
   orig: 70, 113
   offset: 0, 0
   index: -1
 HeroCaped/LedgeGrabOutHand
   rotate: true
-  xy: 1836, 116
+  xy: 1660, 285
   size: 70, 110
   orig: 70, 110
   offset: 0, 0
   index: -1
 HeroUncaped/Armour1InArm
-  rotate: false
-  xy: 410, 188
+  rotate: true
+  xy: 579, 218
   size: 251, 218
   orig: 251, 218
   offset: 0, 0
   index: -1
 HeroUncaped/BodyArmour1
   rotate: false
-  xy: 2, 417
+  xy: 2, 480
   size: 389, 782
   orig: 389, 782
   offset: 0, 0
   index: -1
 HeroUncaped/FistClosedInHand2
   rotate: true
-  xy: 1744, 88
+  xy: 1392, 2
   size: 107, 90
   orig: 107, 90
   offset: 0, 0
   index: -1
 HeroUncaped/FistClosedObjectInHand2
-  rotate: false
-  xy: 1917, 928
+  rotate: true
+  xy: 1103, 2
   size: 107, 97
   orig: 107, 97
   offset: 0, 0
   index: -1
 HeroUncaped/FistClosedObjectOutHand2
-  rotate: true
-  xy: 1412, 307
+  rotate: false
+  xy: 1597, 5
   size: 110, 100
   orig: 110, 100
   offset: 0, 0
   index: -1
 HeroUncaped/FistClosedOutHand2
-  rotate: false
-  xy: 1630, 299
+  rotate: true
+  xy: 1443, 373
   size: 110, 92
   orig: 110, 92
   offset: 0, 0
   index: -1
 HeroUncaped/FistOpenInHand2
   rotate: false
-  xy: 1154, 273
+  xy: 1142, 111
   size: 133, 99
   orig: 133, 99
   offset: 0, 0
   index: -1
 HeroUncaped/FistOpenOutHand2
   rotate: false
-  xy: 1677, 486
+  xy: 1204, 615
   size: 142, 99
   orig: 142, 99
   offset: 0, 0
   index: -1
 HeroUncaped/LeatherArmourInShoulderPad
-  rotate: true
-  xy: 1405, 711
+  rotate: false
+  xy: 1035, 190
   size: 105, 137
   orig: 105, 137
   offset: 0, 0
   index: -1
 HeroUncaped/LeatherArmourOutArm
   rotate: false
-  xy: 208, 119
+  xy: 377, 173
   size: 200, 296
   orig: 200, 296
   offset: 0, 0
   index: -1
 HeroUncaped/LeatherArmourOutShoulderPad
   rotate: false
-  xy: 1550, 634
+  xy: 1017, 329
   size: 129, 116
   orig: 129, 116
   offset: 0, 0
   index: -1
 HeroUncaped/LedgeGrabInHand2
-  rotate: true
-  xy: 1139, 2
+  rotate: false
+  xy: 1917, 1036
   size: 75, 113
   orig: 75, 113
   offset: 0, 0
   index: -1
 HeroUncaped/LedgeGrabOutHand2
   rotate: true
-  xy: 741, 4
+  xy: 1402, 209
   size: 77, 112
   orig: 77, 112
   offset: 0, 0
   index: -1
+OldManNPC/Legs
+  rotate: false
+  xy: 1236, 962
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
 RangedWeapons/ARROW
   rotate: true
-  xy: 998, 2
+  xy: 1917, 911
   size: 8, 54
   orig: 8, 54
   offset: 0, 0
   index: -1
 RangedWeapons/BOW5
-  rotate: false
-  xy: 1520, 523
+  rotate: true
+  xy: 1736, 119
   size: 28, 72
   orig: 28, 72
   offset: 0, 0
   index: -1
 RangedWeapons/STRING
-  rotate: false
-  xy: 1681, 688
+  rotate: true
+  xy: 784, 2
   size: 2, 62
   orig: 2, 62
   offset: 0, 0
   index: -1
 Weapons/SHIELD
-  rotate: true
-  xy: 1585, 4
+  rotate: false
+  xy: 1684, 725
   size: 46, 43
   orig: 46, 43
   offset: 0, 0
   index: -1
 Weapons/SHIELD6
-  rotate: false
-  xy: 1964, 296
+  rotate: true
+  xy: 483, 4
   size: 41, 76
   orig: 41, 76
   offset: 0, 0
   index: -1
 Weapons/weapon16
-  rotate: false
-  xy: 1849, 696
+  rotate: true
+  xy: 373, 21
   size: 24, 108
   orig: 24, 108
   offset: 0, 0
   index: -1
 Weapons/weapon18
-  rotate: true
-  xy: 998, 12
+  rotate: false
+  xy: 1673, 561
   size: 50, 105
   orig: 50, 105
   offset: 0, 0
   index: -1
 Weapons/weapon19
-  rotate: false
-  xy: 1623, 144
+  rotate: true
+  xy: 784, 6
   size: 13, 109
   orig: 13, 109
   offset: 0, 0
   index: -1
 Weapons/weapon8
-  rotate: false
-  xy: 1969, 56
+  rotate: true
+  xy: 1880, 109
   size: 54, 64
   orig: 54, 64
   offset: 0, 0

@@ -62,6 +62,8 @@ public class ObjectPooler : MonoBehaviour
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();
 
+            if (pool.prefab == null) continue;
+
             for (int i = 0; i < pool.size; i++)
             {
                 GameObject obj = Instantiate(pool.prefab);

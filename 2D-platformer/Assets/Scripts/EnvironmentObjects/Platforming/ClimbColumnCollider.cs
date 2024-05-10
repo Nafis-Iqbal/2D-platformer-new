@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class ClimbColumnCollider : MonoBehaviour
 {
+    public bool isSlipperyCollider;
     public bool isRightCollider;
     public bool hasClimbableLedge;
     private Transform playerTransform;

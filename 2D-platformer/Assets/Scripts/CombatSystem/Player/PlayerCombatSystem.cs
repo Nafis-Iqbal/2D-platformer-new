@@ -23,9 +23,16 @@ public class PlayerCombatSystem : MonoBehaviour
     [Header("Combat State")]
     public bool combatMode = false;
     public bool weaponInLethalState = false;
+    public bool inKnockedOffAnim = false;
     public bool isKnockedOffGround = false;
     public float knockedOffVelocity;
+    public bool isPlayerRolling;
+    public bool isHurt;
+    public bool isDead;
+    public bool isPoiseBroken;
     bool playHitEffectOnScale;
+    public bool canChangeDirectionDuringAttack;
+
     [Header("Combat Item Details")]
     public bool usingCombatItem = false;
     public bool usingUtilityItem = false;
@@ -34,10 +41,14 @@ public class PlayerCombatSystem : MonoBehaviour
     public string combatItemName = "ThrowingKnife";
 
     [Header("Light Attack Details")]
+    public bool nextLightAttackQueued;
+    [HideInInspector]
+    public int activeLightAttackID;
     public float playerScaleShrinkSpeed;
     public float shrinkSizeMultiplier;
     float initialPlayerYScale;
     bool playerScaleDecreasing;
+    public bool rollAttackInProgress;
     public int currentPlayerAttackID;
     public bool lightAttackExecuting = false;
 
@@ -82,6 +93,11 @@ public class PlayerCombatSystem : MonoBehaviour
         combatMode = false;
         playHitEffectOnScale = playerScaleDecreasing = false;
         knockedOffVelocity = 0.0f;
+        activeLightAttackID = 0;
+        nextLightAttackQueued = false;
+        rollAttackInProgress = false;
+        isDead = false;
+        canChangeDirectionDuringAttack = true;
     }
 
     private void Start()
@@ -98,6 +114,7 @@ public class PlayerCombatSystem : MonoBehaviour
 
     private void Update()
     {
+        isPlayerRolling = playerRoll.isExecuting;
         #region Blocking
         if (isBlockingRequested && playerHealthStaminaScript.currentStamina >= minimumStaminaToBlock)
         {
@@ -191,7 +208,8 @@ public class PlayerCombatSystem : MonoBehaviour
     #region Player Defence
     public void OnBlockDefense(InputAction.CallbackContext context)
     {
-        // Debug.Log($"block: {context}");
+        if (combatMode == false) return;
+
         if (context.phase == InputActionPhase.Started)
         {
             isBlockingRequested = true;
@@ -218,50 +236,61 @@ public class PlayerCombatSystem : MonoBehaviour
             {
                 combatMode = playerJump.combatMode = false;
 
-                GameManager.Instance.playerSpineAnimator.SetBool("CombatMode", false);
+                playerSpineAnimator.SetBool("CombatMode", false);
             }
             else
             {
                 combatMode = playerJump.combatMode = true;
 
-                GameManager.Instance.playerSpineAnimator.SetBool("CombatMode", true);
-                GameManager.Instance.playerSpineAnimator.SetInteger("WeaponID", 1);
+                playerSpineAnimator.SetBool("CombatMode", true);
+                playerSpineAnimator.SetInteger("WeaponID", 1);
             }
         }
     }
 
-    public void OnWeaponAttack1RollAttack(InputAction.CallbackContext context)
+    public void OnWeaponLightAttack(InputAction.CallbackContext context)
     {
-        if (combatMode == false || playerMovementScript.isSprinting == true || MovementLimiter.instance.playerCanAttack == false) return;
+        if (combatMode == false || MovementLimiter.instance.playerCanAttack == false || nextLightAttackQueued || rollAttackInProgress) return;
 
-        if (!lightAttackExecuting && !playerColumn.hasGrabbedColumn)
+        if (!playerRoll.isExecuting && playerMovementScript.isSprinting == true) return;
+
+        if (playerColumn.hasGrabbedColumn) return;
+
+        if (isPlayerRolling == true)
         {
-            if (playerRoll.isExecuting == true)
+            rollAttackInProgress = true;
+            currentPlayerAttackID = 5;
+            playerSpineAnimator.SetTrigger("Attack");
+            playerSpineAnimator.SetInteger("AttackID", 5);
+        }
+        else
+        {
+            if (activeLightAttackID == 0)//Light Attack started
             {
-                playerRoll.isExecuting = false;
-                currentPlayerAttackID = 5;
-                GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
-                GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 5);
+                activeLightAttackID++;
+                currentPlayerAttackID = activeLightAttackID;
+                playerSpineAnimator.SetTrigger("Attack");
+                playerSpineAnimator.SetInteger("AttackID", 1);
             }
-            else
+            else if (activeLightAttackID == 1)//First Repeating Attack queued, currentAttackID not updated
             {
-                currentPlayerAttackID = 1;
-                GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
-                GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 1);
+                activeLightAttackID++;
+                nextLightAttackQueued = true;
+                playerSpineAnimator.SetBool("LAttackQueued", true);
+            }
+            else if (activeLightAttackID > 1 && activeLightAttackID < 4)//Second and further repeating attacks queued, currentAttackID always 1 behind lightAttackID
+            {
+                activeLightAttackID++;
+                currentPlayerAttackID = activeLightAttackID - 1;
+                nextLightAttackQueued = true;
+                playerSpineAnimator.SetBool("LAttackQueued", true);
+            }
+            else if (activeLightAttackID == 4)
+            {
+                return;
             }
         }
-    }
 
-    public void OnWeaponAttack2(InputAction.CallbackContext context)
-    {
-        if (combatMode == false || playerMovementScript.isSprinting == true || MovementLimiter.instance.playerCanAttack == false) return;
-
-        if (!lightAttackExecuting && !playerColumn.hasGrabbedColumn)
-        {
-            currentPlayerAttackID = 2;
-            GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
-            GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 2);
-        }
     }
 
     public void OnWeaponAttack3(InputAction.CallbackContext context)
@@ -271,20 +300,20 @@ public class PlayerCombatSystem : MonoBehaviour
         if (!lightAttackExecuting && !playerColumn.hasGrabbedColumn)
         {
             currentPlayerAttackID = 3;
-            GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
-            GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 3);
+            playerSpineAnimator.SetTrigger("Attack");
+            playerSpineAnimator.SetInteger("AttackID", 3);
         }
     }
 
     public void OnRunAttack(InputAction.CallbackContext context)
     {
-        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
+        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false || !playerMovementScript.isSprinting || playerRoll.isExecuting) return;
 
         if (!lightAttackExecuting && !playerColumn.hasGrabbedColumn)
         {
             currentPlayerAttackID = 4;
-            GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
-            GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 4);
+            playerSpineAnimator.SetTrigger("Attack");
+            playerSpineAnimator.SetInteger("AttackID", 4);
         }
     }
 
@@ -295,8 +324,8 @@ public class PlayerCombatSystem : MonoBehaviour
         if (!lightAttackExecuting && !playerColumn.hasGrabbedColumn)
         {
             currentPlayerAttackID = 5;
-            GameManager.Instance.playerSpineAnimator.SetTrigger("Attack");
-            GameManager.Instance.playerSpineAnimator.SetInteger("AttackID", 5);
+            playerSpineAnimator.SetTrigger("Attack");
+            playerSpineAnimator.SetInteger("AttackID", 5);
         }
     }
     #endregion
@@ -312,12 +341,14 @@ public class PlayerCombatSystem : MonoBehaviour
 
     public void OnChargedAttack(InputAction.CallbackContext context)
     {
+        if (MovementLimiter.instance.playerCanAttack == false || combatMode == false) return;
+
         if (context.phase == InputActionPhase.Started)
         {
             cutOffHeavyAttackCharge = currentHeavyAttackCharge = 0.0f;
             isHeavyAttackKeyPressed = true;
-            GameManager.Instance.playerSpineAnimator.ResetTrigger("ChargeAttack");
-            GameManager.Instance.playerSpineAnimator.SetBool("Charging", true);
+            playerSpineAnimator.ResetTrigger("ChargeAttack");
+            playerSpineAnimator.SetBool("Charging", true);
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
@@ -335,10 +366,11 @@ public class PlayerCombatSystem : MonoBehaviour
         heavyAttackDamageMultiplier = 1f;
         isHeavyAttackKeyPressed = false;
         currentHeavyAttackCharge = 0f;
-        GameManager.Instance.playerSpineAnimator.SetTrigger("ChargeAttack");
-        GameManager.Instance.playerSpineAnimator.SetBool("Charging", false);
+        playerSpineAnimator.SetTrigger("ChargeAttack");
+        playerSpineAnimator.SetBool("Charging", false);
         timeElapsedSinceHeavyAttack = 0f;
         heavyAttackDone = true;
+        //cutOffHeavyAttackCharge = 0.0f;
     }
 
     private void ExecuteLowPoweredAttack()
@@ -348,20 +380,16 @@ public class PlayerCombatSystem : MonoBehaviour
         heavyAttackDamageMultiplier = (float)failedHeavyAttackDamage / successfulHeavyAttackDamage;
         currentHeavyAttackCharge = 0f;
         isHeavyAttackKeyPressed = false;
-        GameManager.Instance.playerSpineAnimator.SetTrigger("ChargeAttack");
-        GameManager.Instance.playerSpineAnimator.SetBool("Charging", false);
+        playerSpineAnimator.SetTrigger("ChargeAttack");
+        playerSpineAnimator.SetBool("Charging", false);
         timeElapsedSinceHeavyAttack = 0f;
         heavyAttackDone = true;
     }
     #endregion
     public void TakeDamage(EnemyAttackInfo weaponAttackInfo, bool attackFromRight, bool isChargeAttack = false)
     {
-        if (playerRoll.isExecuting)
-        {
-            //More to be added
-            return;
-        }
-
+        if (isDead == true) return;
+        Debug.Log("Again1");
         //Debug.Log("dmgA: " + weaponAttackInfo.attackDamage + "stmA: " + weaponAttackInfo.attackStaminaDamage + "rightBool: " + attackFromRight);
         if (!isBlocking || (isBlocking && IncomingAttackDirectionFacingPlayer(attackFromRight) == false) || (isBlocking && playerHealthStaminaScript.staminaCompletelyDepleted == true))//i not blocking, or attacked from back
         {
@@ -369,12 +397,14 @@ public class PlayerCombatSystem : MonoBehaviour
             {
                 PlayOnHitEffect();
 
-                playerSpineAnimator.SetTrigger("KnockedOffGroundShort");
+                if (!isHurt && !isKnockedOffGround) playerSpineAnimator.SetTrigger("KnockedOffGroundShort");
+                //Debug.Log("fkn velocity is: " + weaponAttackInfo.attackKnockedOffVelocity);
                 knockedOffVelocity = weaponAttackInfo.attackKnockedOffVelocity;
 
                 if (playerHealthStaminaScript.modifyHealth(-weaponAttackInfo.attackDamage) < 0.03f)
                 {
                     playerSpineAnimator.SetTrigger("DeadOnGround");
+                    isDead = true;
                 }
 
                 playerHealthStaminaScript.modifyStamina(-999.0f);
@@ -386,11 +416,12 @@ public class PlayerCombatSystem : MonoBehaviour
                 if (playerHealthStaminaScript.modifyHealth(-weaponAttackInfo.attackDamage) < 0.03f)
                 {
                     playerSpineAnimator.SetTrigger("Death");
+                    isDead = true;
                 }
                 else if (playerHealthStaminaScript.poiseBroken == true)
                 {
                     //play hurt animation
-                    playerSpineAnimator.SetTrigger("Hurt");
+                    if (!isHurt && !isKnockedOffGround) playerSpineAnimator.SetTrigger("Hurt");
                     playerHealthStaminaScript.recoverPoise();
                 }
             }
@@ -406,18 +437,19 @@ public class PlayerCombatSystem : MonoBehaviour
                     {
                         HandleAttackDuringDefence(weaponAttackInfo.attackStaminaDamage);
                         //playerSpineAnimator.SetTrigger("DefenceChargeHit");
-                        playerSpineAnimator.SetTrigger("KnockedOffGroundShort");
+                        if (!isHurt && !isKnockedOffGround) playerSpineAnimator.SetTrigger("DefenceChargeHit");
                         knockedOffVelocity = weaponAttackInfo.defenceKnockedOffVelocity;
                     }
                     else
                     {
                         playerHealthStaminaScript.modifyStamina(-999.0f);
-                        playerSpineAnimator.SetTrigger("KnockedOffGroundShort");
+                        if (!isHurt && !isKnockedOffGround) playerSpineAnimator.SetTrigger("KnockedOffGroundShort");
                         knockedOffVelocity = weaponAttackInfo.attackKnockedOffVelocity;
 
                         if (playerHealthStaminaScript.modifyHealth(-(weaponAttackInfo.attackDamage - playerHealthStaminaScript.currentStamina)) < 0.10f)
                         {
                             playerSpineAnimator.SetTrigger("DeadOnGround");
+                            isDead = true;
                         }
                     }
                 }
@@ -437,6 +469,7 @@ public class PlayerCombatSystem : MonoBehaviour
                         if (playerHealthStaminaScript.modifyHealth(-(weaponAttackInfo.attackDamage - playerHealthStaminaScript.currentStamina)) < 0.10f)
                         {
                             playerSpineAnimator.SetTrigger("Death");
+                            isDead = true;
                         }
                     }
                 }
@@ -457,7 +490,7 @@ public class PlayerCombatSystem : MonoBehaviour
 
                 if (isChargeAttack)
                 {
-                    playerSpineAnimator.SetTrigger("KnockedOffGroundShort");
+                    if (!isHurt && !isKnockedOffGround) playerSpineAnimator.SetTrigger("KnockedOffGroundShort");
                     knockedOffVelocity = weaponAttackInfo.attackKnockedOffVelocity;
                 }
 
@@ -470,13 +503,14 @@ public class PlayerCombatSystem : MonoBehaviour
                     else
                     {
                         playerSpineAnimator.SetTrigger("Death");
+                        isDead = true;
                     }
                 }
                 else
                 {
                     if (!isChargeAttack)
                     {
-                        playerSpineAnimator.SetTrigger("Hurt");
+                        if (!isHurt && !isKnockedOffGround) playerSpineAnimator.SetTrigger("Hurt");
                     }
                 }
 
@@ -496,11 +530,22 @@ public class PlayerCombatSystem : MonoBehaviour
         isBlocking = false;
         lightAttackExecuting = heavyAttackExecuting = false;
         usingCombatItem = usingUtilityItem = false;
+        isHurt = true;
     }
 
     public void OnPlayerHurtEnd()
     {
+        isHurt = false;
+    }
 
+    public void OnPlayerPoiseBreakStart()
+    {
+        isPoiseBroken = true;
+    }
+
+    public void OnPlayerPoiseBreakEnd()
+    {
+        isPoiseBroken = false;
     }
 
     public bool IncomingAttackDirectionFacingPlayer(bool attackFromRight)
@@ -582,10 +627,47 @@ public class PlayerCombatSystem : MonoBehaviour
     }
     #endregion
 
+    #region Unused
     IEnumerator sampleCoRoutine()
     {
         yield return new WaitForSeconds(.1f);
         bool platChanged = false;
         //Do stuff here
     }
+
+    // public void OnWeaponAttack1RollAttack(InputAction.CallbackContext context)
+    // {
+    //     if (combatMode == false || MovementLimiter.instance.playerCanAttack == false) return;
+    //     else if (!playerRoll.isExecuting && playerMovementScript.isSprinting == true) return;
+
+    //     if (!lightAttackExecuting && !playerColumn.hasGrabbedColumn)
+    //     {
+    //         if (isPlayerRolling == true)
+    //         {
+    //             playerRoll.isExecuting = isPlayerRolling = false;
+    //             currentPlayerAttackID = 5;
+    //             playerSpineAnimator.SetTrigger("Attack");
+    //             playerSpineAnimator.SetInteger("AttackID", 5);
+    //         }
+    //         else
+    //         {
+    //             currentPlayerAttackID = 1;
+    //             playerSpineAnimator.SetTrigger("Attack");
+    //             playerSpineAnimator.SetInteger("AttackID", 1);
+    //         }
+    //     }
+    // }
+
+    // public void OnWeaponAttack2(InputAction.CallbackContext context)
+    // {
+    //     if (combatMode == false || playerMovementScript.isSprinting == true || MovementLimiter.instance.playerCanAttack == false || playerRoll.isExecuting) return;
+
+    //     if (!lightAttackExecuting && !playerColumn.hasGrabbedColumn)
+    //     {
+    //         currentPlayerAttackID = 2;
+    //         playerSpineAnimator.SetTrigger("Attack");
+    //         playerSpineAnimator.SetInteger("AttackID", 2);
+    //     }
+    // }
+    #endregion
 }

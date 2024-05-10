@@ -6,6 +6,7 @@ using UnityEngine.U2D;
 
 public class ProjectileWeapon : MonoBehaviour
 {
+    GameObject projectileOwnerObject;
     public string projectileName;
     protected WeaponClassInfo projectileInfo = null;
     public bool isProjectileActive, projectileHit;
@@ -17,12 +18,14 @@ public class ProjectileWeapon : MonoBehaviour
     protected Vector2 projectileDirection;
     public float timeToDisableAfterHit = 2.5f;
     public float timeToDisable = 4.5f;
+    protected Vector3 initialScale;
 
     // Start is called before the first frame update
     void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
         playerCombatSystemScript = GameManager.Instance.playerTransform.GetComponent<PlayerCombatSystem>();
+        initialScale = transform.localScale;
     }
 
     protected virtual void OnEnable()
@@ -31,21 +34,34 @@ public class ProjectileWeapon : MonoBehaviour
         {
             Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameManager.Instance.playerTransform.GetComponent<Collider2D>());
         }
+        // else
+        // {
+        //     Collider2D[] collidersArray = projectileOwnerObject.GetComponentsInChildren<Collider2D>();
+        //     for (int i = 0; i < collidersArray.Length; i++)
+        //     {
+        //         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), collidersArray[i]);
+        //     }
+        // }
 
         if (projectileInfo == null)
         {
             projectileInfo = WeaponsManager.Instance.getProjectileWeaponData(projectileName);
             timeToDisable = projectileInfo.timeToDisable;
         }
+
         spawnTime = Time.time;
         projectileHitTime = Time.time;
         isProjectileActive = true;
+
+        transform.localScale = initialScale;
     }
 
     void OnDisable()
     {
         isProjectileActive = false;
         rb2d.simulated = true;
+        transform.localScale = initialScale;
+        transform.parent = null;
     }
 
     // Update is called once per frame
@@ -65,7 +81,7 @@ public class ProjectileWeapon : MonoBehaviour
             gameObject.SetActive(false);
             return;
         }
-        else if (currentTime - projectileHitTime > timeToDisableAfterHit)
+        else if (projectileHit == true && currentTime - projectileHitTime > timeToDisableAfterHit)
         {
             Debug.Log("Arrow disabled2: " + (currentTime - projectileHitTime) + " " + timeToDisable);
             gameObject.SetActive(false);
@@ -75,8 +91,13 @@ public class ProjectileWeapon : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!isPlayerProjectile && collision.transform.CompareTag("Enemy"))
+        {
+            return;
+        }
+
         if (isProjectileActive && collision.transform.CompareTag("Platforms") || collision.transform.CompareTag("Shield") || collision.transform.CompareTag("Player")
-        || collision.transform.CompareTag("Objects") || collision.transform.CompareTag("Enemy"))
+        || collision.transform.CompareTag("Objects"))
         {
             Debug.Log("Arrow hit");
             projectileHit = true;
@@ -110,11 +131,12 @@ public class ProjectileWeapon : MonoBehaviour
     }
 
     //PROJECTILE WITH ARC TRAJECTORY
-    public virtual void initializeProjectile(Vector3 startPosition, Vector3 aimPosition, float projectileMaxHeight, float projectileFlightTime, bool playerProjectile = false)
+    public virtual void initializeProjectile(Vector3 startPosition, Vector3 aimPosition, float projectileMaxHeight, float projectileFlightTime, GameObject projectileOwner, bool shooterFacingRight = true, bool playerProjectile = false)
     {
         rb2d.simulated = true;
         transform.position = startPosition;
         isPlayerProjectile = playerProjectile;
+        projectileOwnerObject = projectileOwner;
 
         projectileHit = false;
     }

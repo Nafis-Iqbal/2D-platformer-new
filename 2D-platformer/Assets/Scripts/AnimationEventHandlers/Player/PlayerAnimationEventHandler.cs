@@ -74,11 +74,6 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     #endregion
 
     #region Movement Physics Tweaks
-    public void AddJumpForce()
-    {
-        playerJump.StartJump();
-    }
-
     public void DisableCharging()
     {
         playerJump.DisableCharging();
@@ -87,6 +82,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public void ResetRollingVariables()
     {
         playerRoll.DeactivateRolling();
+        playerCombatSystemScript.rollAttackInProgress = false;
     }
 
     public void ResetDodgingVariables()
@@ -103,17 +99,17 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     #region Combat Physics Tweaks
     public void ArmedWeaponsOnSwordSlash()
     {
-        playerMovement.applyPlayerMomentum(1.0f);
+        playerMovement.applyPlayerMomentum(.50f);
     }
 
     public void ArmedWeaponsOnSwordSwing()
     {
-        playerMovement.applyPlayerMomentum(1.0f);
+        playerMovement.applyPlayerMomentum(.50f);
     }
 
     public void ArmedWeaponsOnSwordThrust()
     {
-        playerMovement.applyPlayerMomentum(1.0f);
+        playerMovement.applyPlayerMomentum(1.25f);
     }
 
     public void ArmedWeaponsJumpAttackMomentum()
@@ -138,13 +134,25 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public void LightAttackStarted()
     {
         RestrictPlayerMovement();
+        playerCombatSystemScript.playerSpineAnimator.SetBool("LAttackQueued", false);
         playerCombatSystemScript.lightAttackExecuting = true;
+        if (playerCombatSystemScript.activeLightAttackID <= 1) playerCombatSystemScript.nextLightAttackQueued = false;
     }
 
     public void LightAttackEnded()
     {
         playerCombatSystemScript.lightAttackExecuting = false;
+        playerCombatSystemScript.nextLightAttackQueued = false;
+        playerCombatSystemScript.rollAttackInProgress = false;
+        playerCombatSystemScript.activeLightAttackID = 0;
+
+        playerRoll.isExecuting = playerCombatSystemScript.isPlayerRolling = false;
         EnablePlayerMovement();
+    }
+
+    public void LightAttackChunkEnded()
+    {
+        playerCombatSystemScript.nextLightAttackQueued = false;
     }
 
     public void HeavyAttackStarted()
@@ -193,9 +201,24 @@ public class PlayerAnimationEventHandler : MonoBehaviour
         playerCombatSystemScript.usingCombatItem = false;
     }
 
+    public void CombatPromptsKnockedOffAnimStart()
+    {
+        RestrictPlayerMovement();
+        playerCombatSystemScript.inKnockedOffAnim = true;
+        playerCombatSystemScript.lightAttackExecuting = false;
+    }
+
+    public void CombatPromptsKnockedOffAnimEnd()
+    {
+        EnablePlayerMovement();
+        playerCombatSystemScript.inKnockedOffAnim = false;
+    }
+
     public void CombatPromptsOnKnockedOffStart()
     {
         playerCombatSystemScript.isKnockedOffGround = true;
+        playerRoll.isExecuting = false;
+        playerDodge.isExecuting = false;
     }
 
     public void CombatPromptsOnKnockedOffMid()
@@ -227,12 +250,29 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public void MovementOnJumpAnimEnd()
     {
         playerJump.jumpAnimInProgress = false;
+        playerJump.wallJumpAnimInProgress = false;
     }
 
     public void MovementOnJumpEnd()
     {
         playerJump.jumpInProgress = false;
         RestrictPlayerMovement();
+    }
+
+    public void MovementOnSlideJump()
+    {
+        playerMovement.AddSlideJumpForce();
+    }
+
+    public void MovementOnWallLadderJumpStart()
+    {
+        playerJump.wallJumpAnimInProgress = true;
+    }
+
+    public void MovementOnWallLadderJumpEnd()
+    {
+        playerJump.wallJumpAnimInProgress = false;
+        playerJump.spineAnimator.SetBool("SlideJump", false);
     }
 
     public void ResetOnJumpDropEnd()
@@ -256,6 +296,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     {
         PlayerInputManager.Instance.playerInputActions.Player.GrapplingGun.Disable();
         playerJump.jumpAnimInProgress = false;
+        playerJump.wallJumpAnimInProgress = false;
     }
 
     public void MovementEnableGrappleBoost()
@@ -278,6 +319,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public void MovementOnClimbLedgeEnd()
     {
         playerColumn.isClimbingLedge = false;
+        playerJump.lastClimbUpTime = Time.time;
         MovementLimiter.instance.playerCanAttack = true;
         EnablePlayerRigidbody();
     }

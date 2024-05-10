@@ -46,7 +46,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.15021753, y: -3.1795917}
+  m_Offset: {x: 0.17441559, y: -1.6428846}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -57,7 +57,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 8.911431, y: 3.403472}
+  m_Size: {x: 13.605415, y: 10.879397}
   m_EdgeRadius: 0
 --- !u!114 &8269280305164374330
 MonoBehaviour:
@@ -73,10 +73,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grappleSpriteRenderer: {fileID: 8269280305195676251}
   grappleSpriteTransform: {fileID: 8269280305195676250}
-  grappleActiveColor: {r: 0, g: 0.9811321, b: 0.07907646, a: 1}
-  grappleInactiveColor: {r: 1, g: 1, b: 1, a: 1}
+  grappleActiveColor: {r: 1, g: 1, b: 1, a: 1}
+  grappleInactiveColor: {r: 0.7264151, g: 0.7229886, b: 0.7229886, a: 1}
   grappleActive: 0
-  grappleActiveScale: {x: 1.5, y: 1.5, z: 1}
+  grappleActiveScale: {x: 1.15, y: 1.15, z: 1}
   grappleActiveScaleSpeed: 10
   playerGrapplingGun: {fileID: 0}
 --- !u!1 &8269280305195676229
@@ -149,13 +149,13 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8628644080346509686, guid: c1b6c03b4a4084861b1212d027dbe50f,
+  m_Sprite: {fileID: 9188993890971629821, guid: a73ef6c735f09da4fa654b537b02e979,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 17.99, y: 14.34}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

@@ -44,8 +44,9 @@ public class PlayerColumn : MonoBehaviour
     [SerializeField] private LayerMask columnLayerMask;
     [SerializeField] private float columnMoveUpSpeed = 2.5f;
     [SerializeField] private float columnMoveDownSpeed = 4f;
-    [SerializeField] private float columnJumpForce = 3f;
+    [SerializeField] private float baseColumnJumpForce = 40f;
     public float columnJumpAngle = 50f;
+    public bool jumpUpwards;
     public float horizontalJumpForceMultiplier;
     private Vector3 jumpAngleVector;
     [SerializeField] private float holdColumnTime = 1f;
@@ -56,6 +57,7 @@ public class PlayerColumn : MonoBehaviour
     public bool insideColumnRange;
     public int inRangeWallLadderID;
     public float columnMoveDirection;
+    float finalColumnJumpForce;
 
     private void Awake()
     {
@@ -63,6 +65,7 @@ public class PlayerColumn : MonoBehaviour
         originalGravity = body.gravityScale;
         playerJump = GetComponent<PlayerJump>();
         playerMovement = GetComponent<PlayerMovement>();
+        ledgeColliderScript = null;
         disableColumnMechanics();
         canGrabColumn = true;
 
@@ -75,6 +78,7 @@ public class PlayerColumn : MonoBehaviour
         canGrabColumn = true;
         isHoldLooking = false;
         isClimbingLedge = false;
+        jumpUpwards = false;
 
         atColumnTop = false;
         atColumnBase = false;
@@ -135,12 +139,15 @@ public class PlayerColumn : MonoBehaviour
         {
             timeElapsedSinceColumnGrab = 0f;
             hasGrabbedColumn = false;
+            PlayerInputManager.Instance.lookDataRequired = false;
+
             atColumnBase = atColumnTop = false;
         }
 
         if (!canGrabColumn)
         {
             hasGrabbedColumn = false;
+            PlayerInputManager.Instance.lookDataRequired = false;
             atColumnBase = atColumnTop = false;
         }
 
@@ -148,7 +155,7 @@ public class PlayerColumn : MonoBehaviour
         {
             timeElapsedSinceColumnGrab += Time.deltaTime;
 
-            if (timeElapsedSinceColumnGrab > holdColumnTime)
+            if (timeElapsedSinceColumnGrab > holdColumnTime && ledgeColliderScript != null && ledgeColliderScript.isSlipperyCollider == true)
             {
                 startFalling();
             }
@@ -220,6 +227,7 @@ public class PlayerColumn : MonoBehaviour
         {
             MovementLimiter.instance.playerCanParkour = false;
             hasGrabbedColumn = true;
+            PlayerInputManager.Instance.lookDataRequired = true;
             playerSpineAnimator.ResetTrigger("Jump");
             playerSpineAnimator.SetTrigger("WallLadderClimb");
         }
@@ -231,42 +239,94 @@ public class PlayerColumn : MonoBehaviour
             lastColumnReleaseTime = Time.time;
             if (isHoldLooking == true)//JUMP FROM WALL
             {
+                playerJump.wallJumpAnimInProgress = true;
+                playerJump.wallJumpInProgress = true;
                 playerSpineAnimator.SetTrigger("Jump");
 
                 body.velocity = Vector2.zero;
                 columnMoveDirection = 0f;
                 body.gravityScale = originalGravity;
                 hasGrabbedColumn = false;
-                // isExecuting = false;
-                // disableColumnMechanics();
+
+                float aimAngle = Vector2.SignedAngle(PlayerInputManager.Instance.mousePosition.normalized, Vector2.right);
+                aimAngle = -aimAngle;
 
                 if (jumpDirection == Direction.left)
                 {
+                    if (aimAngle > 100.0f && aimAngle < 160.0f)
+                    {
+                        jumpUpwards = true;
+                    }
+                    else jumpUpwards = false;
+                }
+                else
+                {
+                    if (aimAngle > 20.0f && aimAngle < 70.0f)
+                    {
+                        jumpUpwards = true;
+                    }
+                    else jumpUpwards = false;
+                }
+
+                PlayerInputManager.Instance.lookDataRequired = false;
+
+                if (jumpDirection == Direction.left)
+                {
+                    if (jumpUpwards)
+                    {
+                        columnJumpAngle = 50.0f;
+                        finalColumnJumpForce = baseColumnJumpForce;
+                        //jumpAngleVector = new Vector2(-1.0f, 1.0f);
+                    }
+                    else
+                    {
+                        columnJumpAngle = 10.0f;
+                        finalColumnJumpForce = baseColumnJumpForce;
+                        //jumpAngleVector = Vector2.left;
+                    }
+
                     jumpAngleVector = Quaternion.AngleAxis(180.0f - columnJumpAngle, Vector3.forward) * new Vector3(1, 0, 0);
-                    //jumpAngleVector.x *= horizontalJumpForceMultiplier;
-                    body.AddForce(jumpAngleVector * columnJumpForce, ForceMode2D.Impulse);
+                    body.AddForce(jumpAngleVector * finalColumnJumpForce, ForceMode2D.Impulse);
                 }
                 else if (jumpDirection == Direction.right)
                 {
+                    if (jumpUpwards)
+                    {
+                        columnJumpAngle = 50.0f;
+                        finalColumnJumpForce = baseColumnJumpForce;
+                        //jumpAngleVector = new Vector2(1.0f, 1.0f);
+                    }
+                    else
+                    {
+                        columnJumpAngle = 10.0f;
+                        finalColumnJumpForce = baseColumnJumpForce;
+                        //jumpAngleVector = Vector2.right;
+                    }
+
                     jumpAngleVector = Quaternion.AngleAxis(columnJumpAngle, Vector3.forward) * new Vector3(1, 0, 0);
-                    //jumpAngleVector.x *= horizontalJumpForceMultiplier;
-                    body.AddForce(jumpAngleVector * columnJumpForce, ForceMode2D.Impulse);
+                    body.AddForce(jumpAngleVector * finalColumnJumpForce, ForceMode2D.Impulse);
                 }
             }
             else//CLIMB UP LEDGE
             {
-                hasGrabbedColumn = false;
-                isClimbingLedge = true;
                 if (atColumnTop && ledgeColliderScript.hasClimbableLedge)
                 {
                     ledgeColliderScript.triggerLedgeClimbAnim();
                     playerSpineAnimator.SetTrigger("WallLadderUpExit");
+                    hasGrabbedColumn = false;
+                    isClimbingLedge = true;
+                    PlayerInputManager.Instance.lookDataRequired = false;
                 }
                 else if (atColumnBase)
                 {
                     playerSpineAnimator.SetTrigger("WallLadderDownExit");
+                    hasGrabbedColumn = false;
+                    isClimbingLedge = true;
+                    PlayerInputManager.Instance.lookDataRequired = false;
                 }
             }
+
+            PlayerInputManager.Instance.playerInputActions.Player.ColumnMove.Enable();
         }
     }
 
@@ -282,6 +342,7 @@ public class PlayerColumn : MonoBehaviour
         if (playerMovement.playerFacingRight == true && contextValue < 0)
         {
             Debug.Log("baal val right: " + context.ReadValue<float>());
+
             jumpDirection = Direction.left;
             playerSpineAnimator.SetTrigger("WallLadderHoldLook");
             isHoldLooking = true;
@@ -289,6 +350,7 @@ public class PlayerColumn : MonoBehaviour
         else if (playerMovement.playerFacingRight == false && contextValue > 0)
         {
             Debug.Log("baal val left: " + context.ReadValue<float>());
+
             jumpDirection = Direction.right;
             playerSpineAnimator.SetTrigger("WallLadderHoldLook");
             isHoldLooking = true;
@@ -344,7 +406,6 @@ public class PlayerColumn : MonoBehaviour
 
     private void enableTiredMechanics()
     {
-        playerSpineAnimator.SetTrigger("ClimbHoldTired");
         PlayerInputManager.Instance.playerInputActions.Player.ColumnMove.Disable();
     }
 

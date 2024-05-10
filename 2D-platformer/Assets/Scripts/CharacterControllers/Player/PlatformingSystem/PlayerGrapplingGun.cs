@@ -57,6 +57,7 @@ public class PlayerGrapplingGun : MonoBehaviour
     [SerializeField] private float jumpButtonHoldTime = 0.5f;
     [SerializeField, Range(0f, 15.0f)] private float minReleaseForceX = 1f;
     [SerializeField, Range(0f, 15.0f)] private float minReleaseForceY = 1f;
+    public float grappleJumpForce;
     [SerializeField] private float releaseRopeMovementDisableDuration = 1f;
 
     [Header("Swinging Tune")]
@@ -128,7 +129,7 @@ public class PlayerGrapplingGun : MonoBehaviour
             currentPlayerRotation.eulerAngles = new Vector3(0.0f, 0.0f, -angleWithGrapplePoint + playerTiltOffset);
             playerTransform.localRotation = currentPlayerRotation;
             playerTilted = true;
-            Debug.Log("Angle GGP" + angleWithGrapplePoint);
+            //Debug.Log("Angle GGP" + angleWithGrapplePoint);
         }
         else
         {
@@ -141,7 +142,7 @@ public class PlayerGrapplingGun : MonoBehaviour
         }
     }
 
-    public void OnGrapplingGun(InputAction.CallbackContext context)
+    public void OnGrapplingGun(InputAction.CallbackContext context)//grapple & release
     {
         if (!grapplingRope.isGrappling)
         {
@@ -165,21 +166,32 @@ public class PlayerGrapplingGun : MonoBehaviour
             //     m_rigidbody.velocity.x + minReleaseForceX,
             //     m_rigidbody.velocity.y + minReleaseForceY),
             //     ForceMode2D.Impulse);
+            Vector2 grappleJumpDirection = Vector2.Perpendicular(m_springJoint2D.connectedAnchor - new Vector2(gunPivot.position.x, gunPivot.position.y)).normalized;
+
             if (m_rigidbody.velocity.x > 0f)
             {
                 playerMovement.rotateRight();
-                m_rigidbody.AddForce(new Vector2(
-                m_rigidbody.velocity.x + minReleaseForceX,
-                m_rigidbody.velocity.y + minReleaseForceY),
-                ForceMode2D.Impulse);
+
+                // m_rigidbody.AddForce(new Vector2(
+                // m_rigidbody.velocity.x + minReleaseForceX,
+                // m_rigidbody.velocity.y + minReleaseForceY),
+                // ForceMode2D.Impulse);
+                m_rigidbody.velocity = -grappleJumpDirection * grappleJumpForce;
+
+                // m_rigidbody.AddForce(-grappleJumpDirection * grappleJumpForce,
+                // ForceMode2D.Impulse);
             }
             else if (m_rigidbody.velocity.x < 0f)
             {
                 playerMovement.rotateLeft();
-                m_rigidbody.AddForce(new Vector2(
-                m_rigidbody.velocity.x - minReleaseForceX,
-                m_rigidbody.velocity.y + minReleaseForceY),
-                ForceMode2D.Impulse);
+
+                // m_rigidbody.AddForce(new Vector2(
+                // m_rigidbody.velocity.x - minReleaseForceX,
+                // m_rigidbody.velocity.y + minReleaseForceY),
+                m_rigidbody.velocity = grappleJumpDirection * grappleJumpForce;
+
+                // m_rigidbody.AddForce(grappleJumpDirection * grappleJumpForce,
+                // ForceMode2D.Impulse);
             }
             isExecuting = false;
         }

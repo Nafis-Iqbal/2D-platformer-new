@@ -15,6 +15,8 @@ TagManager:
   - EnemyCollider
   - Shield
   - Projectile
+  - Knife
+  - Traps
   layers:
   - Default
   - TransparentFX
@@ -31,7 +33,7 @@ TagManager:
   - EnemyWeapon
   - Reposition
   - CombatInfo
-  - 
+  - PlayerWeapon
   - 
   - 
   - 
@@ -52,7 +54,7 @@ TagManager:
   - name: FarBackGround
     uniqueID: 196701375
     locked: 0
-  - name: MidBackGround
+  - name: MidGround
     uniqueID: 3043512885
     locked: 0
   - name: PathLayer
@@ -67,7 +69,7 @@ TagManager:
   - name: FrontPropsLayer
     uniqueID: 2954137767
     locked: 0
-  - name: CloseBackground
+  - name: ForeGround
     uniqueID: 2374500207
     locked: 0
   - name: Default

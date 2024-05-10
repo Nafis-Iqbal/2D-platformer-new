@@ -1,0 +1,20 @@
+
+WHEEL_3D.png
+size: 641,373
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+WheelRim
+  rotate: false
+  xy: 375, 107
+  size: 264, 264
+  orig: 264, 264
+  offset: 0, 0
+  index: -1
+WheelTyre
+  rotate: true
+  xy: 2, 2
+  size: 369, 371
+  orig: 369, 371
+  offset: 0, 0
+  index: -1

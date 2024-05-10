@@ -18,10 +18,15 @@ public class EnemyClassInfo
     [Header("COMBAT PROPERTIES")]
     public bool canBlock;
     public bool hasToAndFroMovement;
+    public bool hasBackWalkAnimationStates;
     public bool movesAwayAfterAttack;
     public bool changesDirectionDuringAttack;
     public float toAndFroMoveFrequency;
+    public bool hasBattleCry;
+    public bool hasAlertStates;
+    public bool canRestartPatrol;
     public float battleCryFrequency;
+    public float turnToPlayerTime;
     public float defensiveStanceHealthLimit;
 
     [Header("SPEED")]

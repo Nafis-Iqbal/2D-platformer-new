@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class HealthStaminaSystem : MonoBehaviour
 {
     #region Health Stamina Panel
+    public bool hideHealthStaminaPanel;
     public float panelFadeOutInterval;
     public float panelFadeOutSpeed;
     float lastHealthStaminaUsedTime;
@@ -129,10 +130,10 @@ public class HealthStaminaSystem : MonoBehaviour
     public float modifyHealth(float healthAmount)
     {
         showHealthStaminaPanel();
-        Debug.Log("Before kochi: " + healthAmount + "bichi: " + currentHealth + "kechi: " + healthLeftTillPoiseBreak);
+        //Debug.Log("Before kochi: " + healthAmount + "bichi: " + currentHealth + "kechi: " + healthLeftTillPoiseBreak);
         currentHealth += healthAmount;
         healthLeftTillPoiseBreak += healthAmount;
-        Debug.Log("After kochi: " + healthAmount + "bichi: " + currentHealth + "kechi: " + healthLeftTillPoiseBreak);
+        //Debug.Log("After kochi: " + healthAmount + "bichi: " + currentHealth + "kechi: " + healthLeftTillPoiseBreak);
 
         if (healthLeftTillPoiseBreak < 0.03f)
         {
@@ -160,10 +161,10 @@ public class HealthStaminaSystem : MonoBehaviour
     public float modifyStamina(float staminaAmount)
     {
         showHealthStaminaPanel();
-        Debug.Log("Before kochi: " + staminaAmount + "bichi: " + currentStamina);
+        //Debug.Log("Before kochi: " + staminaAmount + "bichi: " + currentStamina);
         currentStamina += staminaAmount;
-        Debug.Log("After kochi: " + staminaAmount + "bichi: " + currentHealth);
-        if (currentStamina < 0.0f) staminaCompletelyDepleted = true;
+        //Debug.Log("After kochi: " + staminaAmount + "bichi: " + currentHealth);
+        if (currentStamina <= 0.0f) staminaCompletelyDepleted = true;
         else if (currentStamina > totalStamina) currentStamina = totalStamina;
 
         applyStaminaUIBarEffect(currentStamina);

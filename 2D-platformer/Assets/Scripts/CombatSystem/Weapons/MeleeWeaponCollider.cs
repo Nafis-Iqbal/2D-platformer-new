@@ -69,8 +69,9 @@ public class MeleeWeaponCollider : MonoBehaviour
             var force = Vector2.right * playerCombatSystemScript.transform.localScale * meleeWeaponData.enemyCollisionForce;
             other.transform.GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
         }
-        else if (other.transform.CompareTag("Player") && isEnemyWeapon)
+        else if (other.transform.CompareTag("Player") && isEnemyWeapon && other.isTrigger == false)
         {
+            if (playerCombatSystemScript.isKnockedOffGround == true) return;
             lastObjectHitTime = Time.time;
             debugColliderColor = Color.blue;
             int currentAttackID = enemyBaseScript.currentAttackID;
@@ -87,7 +88,7 @@ public class MeleeWeaponCollider : MonoBehaviour
         else if (other.transform.CompareTag("Objects"))
         {
             lastObjectHitTime = Time.time;
-
+            other.transform.GetComponent<BreakableObjects>().TakeDamage(30.0f);
         }
     }
 }

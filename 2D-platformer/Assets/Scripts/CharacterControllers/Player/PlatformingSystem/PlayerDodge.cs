@@ -8,7 +8,7 @@ public class PlayerDodge : MonoBehaviour
     private Rigidbody2D body;
     private PlayerJump playerJump;
     private PlayerMovement playerMovement;
-    private PlayerCombatSystem playerCombatSystemScript;
+    private PlayerCombatSystem playerCombatScript;
 
     [Header("Roll")]
     private Animator playerSpineAnimator;
@@ -25,7 +25,14 @@ public class PlayerDodge : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         playerMovement = GetComponent<PlayerMovement>();
         playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
-        playerCombatSystemScript = GetComponent<PlayerCombatSystem>();
+        playerCombatScript = GetComponent<PlayerCombatSystem>();
+    }
+
+    void OnEnable()
+    {
+        isExecuting = false;
+        canDodge = true;
+        DeactivateDodging();
     }
 
     private void Update()
@@ -53,7 +60,9 @@ public class PlayerDodge : MonoBehaviour
 
     public void OnDodge(InputAction.CallbackContext context)
     {
-        if (onGround && canDodge && !isExecuting && playerCombatSystemScript.combatMode == true)
+        if (onGround && canDodge && !isExecuting && !playerMovement.isSprinting && 
+        playerCombatScript.combatMode == true && !playerCombatScript.isHurt && !playerCombatScript.isKnockedOffGround && !playerCombatScript.inKnockedOffAnim && 
+        !playerCombatScript.isHeavyAttackKeyPressed &&!playerCombatScript.lightAttackExecuting)
         {
             Debug.Log($"val: {context.ReadValue<float>()}");
             isExecuting = true;

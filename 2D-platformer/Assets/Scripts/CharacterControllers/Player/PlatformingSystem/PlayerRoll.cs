@@ -8,6 +8,7 @@ public class PlayerRoll : MonoBehaviour
     private Rigidbody2D body;
     private PlayerJump playerJump;
     private PlayerMovement playerMovement;
+    private PlayerCombatSystem playerCombatScript;
 
     [Header("Roll")]
     private Animator playerSpineAnimator;
@@ -23,7 +24,15 @@ public class PlayerRoll : MonoBehaviour
         playerJump = GetComponent<PlayerJump>();
         body = GetComponent<Rigidbody2D>();
         playerMovement = GetComponent<PlayerMovement>();
+        playerCombatScript = GetComponent<PlayerCombatSystem>();
         playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
+    }
+
+    void OnEnable()
+    {
+        DeactivateRolling();
+        isExecuting = false;
+        canRoll = true;
     }
 
     private void Update()
@@ -49,7 +58,9 @@ public class PlayerRoll : MonoBehaviour
 
     public void OnRoll(InputAction.CallbackContext context)
     {
-        if (onGround && canRoll && !isExecuting)
+        if (onGround && canRoll && !isExecuting && 
+        !playerCombatScript.isHurt && !playerCombatScript.isKnockedOffGround && !playerCombatScript.inKnockedOffAnim && 
+        !playerCombatScript.isHeavyAttackKeyPressed && !playerCombatScript.lightAttackExecuting)
         {
             Debug.Log($"val: {context.ReadValue<float>()}");
             isExecuting = true;

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
   m_Name: SPEAR_SHIELD_Atlas
   m_EditorClassIdentifier: 
-  atlasFile: {fileID: 4900000, guid: aeb3c4c2aa6654f4aaa35832aca3401b, type: 3}
+  atlasFile: {fileID: 4900000, guid: e18e041c9c838fe4c976f8cc94d11fd1, type: 3}
   materials:
-  - {fileID: 2100000, guid: 565f6852b4960c7488b976f632da7afd, type: 2}
+  - {fileID: 2100000, guid: bbb5dd6548d297b4a8fa5c1ff432b6cf, type: 2}

@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Spine.Unity;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public Transform playerTransform;
+    public PlayerMovement playerMovementScript;
     public int playerCurrentPlatformID = -1, playerCurrentPlatformLevel = -1;
     public CinemachineVirtualCamera virtualCamera;
     public Animator playerSpineAnimator;
+    public Rigidbody2D playerRB2D;
     public static GameManager Instance;
+    public int playerSortOrderInLayer;
 
     private void Start()
     {
@@ -25,6 +29,8 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("playerSpineAnimator is required. Drag and drop player spine animator.");
         }
+
+        playerMovementScript = playerTransform.GetComponent<PlayerMovement>();
     }
 
     private void Awake()

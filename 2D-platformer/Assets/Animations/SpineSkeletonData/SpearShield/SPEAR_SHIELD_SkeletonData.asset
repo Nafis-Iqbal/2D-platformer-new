@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: SPEAR_SHIELD_SkeletonData
   m_EditorClassIdentifier: 
   atlasAssets:
-  - {fileID: 11400000, guid: 8f8e0d538aca3b24dae49e410d240763, type: 2}
+  - {fileID: 11400000, guid: b4d4148fddf91a045b97a521bf1c9bfa, type: 2}
   scale: 0.01
-  skeletonJSON: {fileID: 4900000, guid: 4761b5849f0ee5f4b835b74c2d79b1f6, type: 3}
+  skeletonJSON: {fileID: 4900000, guid: 0c05d7031ad57974cbfa3e4190de7e8a, type: 3}
   isUpgradingBlendModeMaterials: 0
   blendModeMaterials:
     requiresBlendModeMaterials: 0

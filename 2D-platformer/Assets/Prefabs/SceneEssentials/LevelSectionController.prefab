@@ -1,0 +1,128 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2107307057786335336
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2107307057786335343}
+  - component: {fileID: 2107307057786335342}
+  m_Layer: 0
+  m_Name: LevelSectionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2107307057786335343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107307057786335336}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2107307057786335342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107307057786335336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 790af57b28883a64c829459b19c03d6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInteractionEnabled: 0
+  targetObjectID: 0
+  targetSpawnPositionID: 0
+  levelSections:
+  - sectionID: 0
+    sectionInActiveScale: {x: 0.8, y: 0.8, z: 0.8}
+    spawnPlayerFacingRight: 0
+    isBackgroundSection: 0
+    isBuildingInterior: 0
+    buildingInteriorLightIntensity: 0
+    sceneDefaultCameraLensValue: 0
+    cameraBackgroundColor: {r: 0.0005483088, g: 0.1509434, b: 0, a: 0}
+    sectionObject: {fileID: 0}
+    midBackgroundObjectCollection: {fileID: 0}
+    backPropsLayerObjectCollection: {fileID: 0}
+    playerLayerObjectCollection: {fileID: 0}
+    playerLayerShapeObjectCollection: {fileID: 0}
+    pathLayerObjectCollection: {fileID: 0}
+    frontPropsLayerObjectCollection: {fileID: 0}
+    foreGroundLayerObjectCollection: {fileID: 0}
+    foreGroundLayerShapeObjectCollection: {fileID: 0}
+    objectWithColliders:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    playerSpawnPositions:
+    - {fileID: 0}
+    - {fileID: 0}
+  - sectionID: 1
+    sectionInActiveScale: {x: 0.675, y: 0.675, z: 0.675}
+    spawnPlayerFacingRight: 0
+    isBackgroundSection: 1
+    isBuildingInterior: 0
+    buildingInteriorLightIntensity: 0
+    sceneDefaultCameraLensValue: 0
+    cameraBackgroundColor: {r: 0, g: 0.103773594, b: 0.03072871, a: 0}
+    sectionObject: {fileID: 0}
+    midBackgroundObjectCollection: {fileID: 0}
+    backPropsLayerObjectCollection: {fileID: 0}
+    playerLayerObjectCollection: {fileID: 0}
+    playerLayerShapeObjectCollection: {fileID: 0}
+    pathLayerObjectCollection: {fileID: 0}
+    frontPropsLayerObjectCollection: {fileID: 0}
+    foreGroundLayerObjectCollection: {fileID: 0}
+    foreGroundLayerShapeObjectCollection: {fileID: 0}
+    objectWithColliders:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    playerSpawnPositions:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - sectionID: 2
+    sectionInActiveScale: {x: 0.675, y: 0.675, z: 0.675}
+    spawnPlayerFacingRight: 1
+    isBackgroundSection: 0
+    isBuildingInterior: 1
+    buildingInteriorLightIntensity: 0.75
+    sceneDefaultCameraLensValue: 0
+    cameraBackgroundColor: {r: 0.103773594, g: 0.023944732, b: 0, a: 0}
+    sectionObject: {fileID: 0}
+    midBackgroundObjectCollection: {fileID: 0}
+    backPropsLayerObjectCollection: {fileID: 0}
+    playerLayerObjectCollection: {fileID: 0}
+    playerLayerShapeObjectCollection: {fileID: 0}
+    pathLayerObjectCollection: {fileID: 0}
+    frontPropsLayerObjectCollection: {fileID: 0}
+    foreGroundLayerObjectCollection: {fileID: 0}
+    foreGroundLayerShapeObjectCollection: {fileID: 0}
+    objectWithColliders:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    playerSpawnPositions:
+    - {fileID: 0}
+    - {fileID: 0}
+  startActiveLevelSection: 0
+  currentActiveLevelSection: 0
+  isLevelTransitionControlEnabled: 0
+  isPlayerOutdoors: 1

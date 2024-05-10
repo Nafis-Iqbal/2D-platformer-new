@@ -1,0 +1,76 @@
+
+Carnivore Plant Bud.png
+size: 1318,188
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+BackLeafLeft
+  rotate: true
+  xy: 1284, 136
+  size: 50, 32
+  orig: 50, 32
+  offset: 0, 0
+  index: -1
+BackLeafRight
+  rotate: true
+  xy: 1284, 84
+  size: 50, 32
+  orig: 50, 32
+  offset: 0, 0
+  index: -1
+Body
+  rotate: false
+  xy: 1067, 12
+  size: 91, 174
+  orig: 91, 174
+  offset: 0, 0
+  index: -1
+FrontLeafLeft
+  rotate: false
+  xy: 1160, 95
+  size: 122, 91
+  orig: 122, 91
+  offset: 0, 0
+  index: -1
+FrontLeafRight
+  rotate: false
+  xy: 1160, 2
+  size: 122, 91
+  orig: 122, 91
+  offset: 0, 0
+  index: -1
+PetalBackLeft
+  rotate: false
+  xy: 914, 6
+  size: 151, 180
+  orig: 151, 180
+  offset: 0, 0
+  index: -1
+PetalBackRight
+  rotate: true
+  xy: 722, 24
+  size: 162, 190
+  orig: 162, 190
+  offset: 0, 0
+  index: -1
+PetalLeft
+  rotate: false
+  xy: 257, 11
+  size: 237, 175
+  orig: 237, 175
+  offset: 0, 0
+  index: -1
+PetalRight
+  rotate: false
+  xy: 496, 34
+  size: 224, 152
+  orig: 224, 152
+  offset: 0, 0
+  index: -1
+Stalk
+  rotate: false
+  xy: 2, 2
+  size: 253, 184
+  orig: 253, 184
+  offset: 0, 0
+  index: -1

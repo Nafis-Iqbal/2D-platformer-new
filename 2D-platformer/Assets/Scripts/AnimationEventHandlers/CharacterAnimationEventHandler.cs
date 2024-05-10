@@ -128,6 +128,18 @@ public class CharacterAnimationEventHandler : MonoBehaviour
         enemyBaseScript.battleCryInProgress = false;
     }
 
+    public void BlockingStart()
+    {
+        RestrictCharacterMovement();
+        enemyBaseScript.isCharacterBlocking = true;
+    }
+
+    public void BlockingEnd()
+    {
+        EnableCharacterMovement();
+        enemyBaseScript.isCharacterBlocking = false;
+    }
+
     public void CombatPromptsHurtStart()
     {
         RestrictCharacterMovement();
