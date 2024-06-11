@@ -23,7 +23,7 @@ public class PlatformData : MonoBehaviour
 
         if (other.CompareTag("Enemy"))
         {
-            other.gameObject.transform.GetComponent<EnemyBase>().setEnemyPlatform(leftEndPosition.position, rightEndPosition.position, platformID, platformLevel);
+            other.gameObject.transform.GetComponent<EnemyBase>().setEnemyPlatform(platformID, platformLevel);
         }
     }
 }

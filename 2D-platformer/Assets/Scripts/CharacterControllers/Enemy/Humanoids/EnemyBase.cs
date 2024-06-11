@@ -7,6 +7,7 @@ using Microsoft.Unity.VisualStudio.Editor;
 public class EnemyBase : MonoBehaviour
 {
     public int enemyID;
+    public bool AllStatesResetEnable;
     [Header("DRAG AND DROPS")]
     public Animator enemySpineAnimator;
     public GameObject colliderObject;
@@ -23,6 +24,7 @@ public class EnemyBase : MonoBehaviour
     public GameObject checkHeightObject1, checkHeightObject2;
     public LayerMask environmentMask;
     public LayerMask repositionLayer;
+    public Collider2D[] collidersToDisableCollisionWithPlayer;
 
     [Header("MOVEMENT SYSTEM")]
     public float minLandHeight;
@@ -41,6 +43,8 @@ public class EnemyBase : MonoBehaviour
     public float jumpCheckOffset = .1f;//What is this?
 
     [Header("PATROLLING SYSTEM")]
+    public bool hasStationaryPatrolling;
+    public int patrolSystemInd;
     public float patrolDirectionalDuration;
     float lastPatrolTurnTime;
     bool turnCharacterNow;
@@ -49,18 +53,21 @@ public class EnemyBase : MonoBehaviour
     [Header("ENEMY MOVEMENT STATES")]
     public bool canMove = true;
     public bool canBlock;
-    public bool initialCharacterFacingRight;
+    public bool initialCharacterFacingRight = true;
     public bool characterFacingRight;
     public bool isGrounded;
     public bool isPatrolling;//false means combat mode
     public bool isAlerted;
     public bool isChangingCombatMode;
     public bool isRepositioning;
+    public bool isHurting;
     bool cachedIsRepositioning;
     public bool isFleeingFromPlayer;
     public bool isChangingPlatform;
     public bool isReadyToClimb;
     [Header("ENEMY COMBAT STATES")]
+    public bool stationaryCombatModeActive;
+    public bool playerInsideStationaryCombatRange;
     public bool isDead;
     public bool canAttackPlayer = true;
     public bool isAttacking;//in close combat range and performing attacks
@@ -84,9 +91,11 @@ public class EnemyBase : MonoBehaviour
     public bool groundBasedEnemy;
     public bool canChangePlatform;
     int enemyPlatformLevel, playerPlatformLevel;
+    float lastPlatformDataTime;
     public int enemyPlatformID, playerPlatformID;
     public bool targetInHorizontalRange = false;
     public bool targetInVerticalRange = false;
+    public float initialHorizontalDetectionDistance;
     public float playerHorizontalDetectionDistance;
     public int playerVerticalDetectionLevels;
     public float minimumDistanceForReposition = 50f;
@@ -156,43 +165,63 @@ public class EnemyBase : MonoBehaviour
     protected float hitByProjectileTime;
     protected bool blockingStanceVelocityUpdated;
 
+    void Awake()
+    {
+        AllStatesResetEnable = true;
+    }
+
     public virtual void OnEnable()
     {
         Physics2D.IgnoreCollision(transform.GetComponent<Collider2D>(), colliderObject.GetComponent<Collider2D>());
 
         //SYSTEM SETUP
         acquireDependencies();
-        resetAnimationsSystem();
+
+        for (int i = 0; i < collidersToDisableCollisionWithPlayer.Length; i++)
+        {
+            collidersToDisableCollisionWithPlayer[i].enabled = true;
+        }
+        rb2d.simulated = true;
+
+        //ALL STATES RESET ENABLE
+        if (AllStatesResetEnable == true)
+        {
+            resetAnimationsSystem();
+
+            isDead = false;
+            enemyAlreadyAlerted = false;
+            lastAttackTime = Time.time;
+            doingAttackMove = false;
+
+            isTurningTowardsPlayer = false;
+            isDefensive = false;
+            hitByProjectile = false;
+            hitByProjectileTime = Time.time;
+            isCharacterBlocking = false;
+            closeInForAttack = false;
+            isReadyToClimb = false;
+            isAIRoutineInterrupted = false;
+            isGrounded = true;
+            isPoiseBroken = isHurting = isStunned = isKnockedOffGround = false;
+            isFleeingFromPlayer = false;
+            weaponInLethalState = false;
+            charScaleDecreasing = false;
+            playHitEffectOnScale = false;
+            initialCharacterYScale = transform.localScale.y;
+            previousPlayerMoveDirection = 0;
+
+            isPatrolling = true;
+            canAttackPlayer = true;
+            blockingStanceVelocityUpdated = false;
+            lastPlatformDataTime = Time.time;
+            playerInsideStationaryCombatRange = false;
+
+            lastToFroCheckTime = Time.time;
+            currentAttackID = -1;
+        }
 
         playerPlatformID = GameManager.Instance.playerCurrentPlatformID;
         playerPlatformLevel = GameManager.Instance.playerCurrentPlatformLevel;
-
-        isDead = false;
-        enemyAlreadyAlerted = false;
-        lastAttackTime = Time.time;
-        doingAttackMove = false;
-
-        isTurningTowardsPlayer = false;
-        isDefensive = false;
-        hitByProjectile = false;
-        hitByProjectileTime = Time.time;
-        isCharacterBlocking = false;
-        closeInForAttack = false;
-        isReadyToClimb = false;
-        isAIRoutineInterrupted = false;
-        isGrounded = true;
-        isPoiseBroken = isStunned = isKnockedOffGround = false;
-        isFleeingFromPlayer = false;
-        isDead = false;
-        weaponInLethalState = false;
-        charScaleDecreasing = false;
-        playHitEffectOnScale = false;
-        initialCharacterYScale = transform.localScale.y;
-        previousPlayerMoveDirection = 0;
-
-        isPatrolling = true;
-        canAttackPlayer = true;
-        blockingStanceVelocityUpdated = false;
 
         //GATHER ENEMY UNIQUE INFO
         enemyData = EnemyManager.Instance.enemyData[enemyID];
@@ -207,7 +236,7 @@ public class EnemyBase : MonoBehaviour
 
         hasAlertStates = enemyData.hasAlertStates;
         canRestartPatrol = enemyData.canRestartPatrol;
-        playerHorizontalDetectionDistance = enemyData.enemyHorizontalDetectionDistance;
+        initialHorizontalDetectionDistance = playerHorizontalDetectionDistance = enemyData.enemyHorizontalDetectionDistance;
         playerVerticalDetectionLevels = enemyData.enemyVerticalDetectionLevels;
         enemyTrackingRange = enemyData.enemyTrackingRange;
         enemyAttackRange = enemyData.enemyAttackRange;
@@ -229,8 +258,11 @@ public class EnemyBase : MonoBehaviour
 
         enemyAttacks = enemyData.enemyAttacks;
 
-        lastToFroCheckTime = Time.time;
-        currentAttackID = -1;
+        if (hasStationaryPatrolling)
+        {
+            initialHorizontalDetectionDistance /= 2.0f;
+            playerHorizontalDetectionDistance /= 2.0f;
+        }
     }
 
     public void acquireDependencies()
@@ -295,7 +327,6 @@ public class EnemyBase : MonoBehaviour
                         isPatrolling = false;
                         if (hasAlertStates)
                         {
-                            isAlerted = true;
                             canMove = false;
                             enemySpineAnimator.SetTrigger("Alerted");
 
@@ -321,7 +352,7 @@ public class EnemyBase : MonoBehaviour
                         canMove = false;
                     }
                     //(MOST IMPORTANT STATE LOGIC)
-                    else if (isRepositioning == false && doingAttackMove == false)//In Attacking distance
+                    else if (isRepositioning == false && doingAttackMove == false && isHurting == false)//In Attacking distance
                     {
                         if (playerDistanceFromEnemy < playerContactAvoidRange)//Avoid
                         {
@@ -385,6 +416,10 @@ public class EnemyBase : MonoBehaviour
             {
                 isPatrolling = true;
             }
+            else
+            {
+                playerHorizontalDetectionDistance = initialHorizontalDetectionDistance * 2.5f;
+            }
         }
     }
     void Update()
@@ -395,7 +430,11 @@ public class EnemyBase : MonoBehaviour
             return;
         }
 
-        if (playerPlatformID < 0) getPlayerPlatformInfo();
+        if (Time.time - lastPlatformDataTime > 1.0f)
+        {
+            lastPlatformDataTime = Time.time;
+            getPlayerPlatformInfo();
+        }
 
         #region Player Detection
         if (playerTransform == null)
@@ -405,7 +444,12 @@ public class EnemyBase : MonoBehaviour
         }
         else
         {
-            checkPlayerPositionUpdateData();
+            if (stationaryCombatModeActive == false) checkPlayerPositionUpdateData();
+            else if (stationaryCombatModeActive == true)
+            {
+                if (playerInsideStationaryCombatRange == true) HandleAttackPlayerAnimation();
+                return;
+            }
         }
         #endregion
 
@@ -543,6 +587,12 @@ public class EnemyBase : MonoBehaviour
         if (canMove == false && isGrounded == true || isDead == true || isAlerted)
         {
             rb2d.velocity = Vector2.zero;
+            return;
+        }
+
+        if (stationaryCombatModeActive == true)
+        {
+            if (playerInsideStationaryCombatRange == true) HandleAttackPlayerMovement();
             return;
         }
 
@@ -706,7 +756,7 @@ public class EnemyBase : MonoBehaviour
         if (groundBasedEnemy == true)
         {
             //Check if bothe player and enemy are on same platform and within range
-            if (enemyPlatformID == playerPlatformID && Mathf.Abs(transform.position.x - playerTransform.position.x) < playerHorizontalDetectionDistance)
+            if (enemyPlatformID == playerPlatformID && enemyPlatformLevel == playerPlatformLevel && Mathf.Abs(transform.position.x - playerTransform.position.x) < playerHorizontalDetectionDistance)
             {
                 targetInHorizontalRange = true;
             }
@@ -1009,7 +1059,7 @@ public class EnemyBase : MonoBehaviour
     #endregion
 
     #region Routine Enemy Behaviour Methods
-    public void setEnemyPlatform(Vector2 platformLeftEndPosition, Vector2 platformRightEndPosition, int platformID, int platformLevel)//Setting up objects for tracking player around Platforms
+    public void setEnemyPlatformNew(Vector2 platformLeftEndPosition, Vector2 platformRightEndPosition, int platformID, int platformLevel)//Setting up objects for tracking player around Platforms
     {
         enemyPlatformID = platformID;
         enemyPlatformLevel = platformLevel;
@@ -1023,29 +1073,39 @@ public class EnemyBase : MonoBehaviour
             isReadyToClimb = false;
         }
     }
+
+    public void setEnemyPlatform(int platformID, int platformLevel)//Setting up objects for tracking player around Platforms
+    {
+        enemyPlatformID = platformID;
+        enemyPlatformLevel = platformLevel;
+    }
+
     void HandlePatrollingAnimation()//This method takes care of the enemy movement itself
     {
         enemySpineAnimator.SetBool("PatrolMode", true);
+        enemySpineAnimator.SetInteger("PatrolInd", patrolSystemInd);
 
-        if (characterFacingRight == true) characterMovementDirection.x = 1.0f;
-        else characterMovementDirection.x = -1.0f;
-
-        if (turnCharacterNow == false && Time.time - lastPatrolTurnTime > patrolDirectionalDuration)
+        if (hasStationaryPatrolling == false)
         {
-            stopCharacterCompletely();
-            lastPatrolTurnTime = Time.time;
-            turnCharacterNow = true;
-            canMove = false;
-            enemySpineAnimator.SetInteger("MoveSpeed", 0);
-            enemyCurrentMovementSpeed = 0.0f;
-        }
-        else if (turnCharacterNow == false)
-        {
-            canMove = true;
-            enemySpineAnimator.SetInteger("MoveSpeed", 1);
-            enemyCurrentMovementSpeed = enemyClassSpeed * enemyPatrolSpeedMultiplier;
-        }
+            if (characterFacingRight == true) characterMovementDirection.x = 1.0f;
+            else characterMovementDirection.x = -1.0f;
 
+            if (turnCharacterNow == false && Time.time - lastPatrolTurnTime > patrolDirectionalDuration)
+            {
+                stopCharacterCompletely();
+                lastPatrolTurnTime = Time.time;
+                turnCharacterNow = true;
+                canMove = false;
+                enemySpineAnimator.SetInteger("MoveSpeed", 0);
+                enemyCurrentMovementSpeed = 0.0f;
+            }
+            else if (turnCharacterNow == false)
+            {
+                canMove = true;
+                enemySpineAnimator.SetInteger("MoveSpeed", 1);
+                enemyCurrentMovementSpeed = enemyClassSpeed * enemyPatrolSpeedMultiplier;
+            }
+        }
     }
 
     void HandleBattleCryAnimation()
@@ -1123,8 +1183,15 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void HandlePatrollingMovement()
     {
-        enemyCurrentMovementSpeed = enemyClassSpeed * enemyPatrolSpeedMultiplier;
-        rb2d.velocity = new Vector2(enemyCurrentMovementSpeed * characterMovementDirection.x, rb2d.velocity.y);
+        if (hasStationaryPatrolling == false)
+        {
+            enemyCurrentMovementSpeed = enemyClassSpeed * enemyPatrolSpeedMultiplier;
+            rb2d.velocity = new Vector2(enemyCurrentMovementSpeed * characterMovementDirection.x, rb2d.velocity.y);
+        }
+        else
+        {
+            rb2d.velocity = Vector2.zero;
+        }
     }
 
     public virtual void HandleBattleCryMovement()
@@ -1194,6 +1261,7 @@ public class EnemyBase : MonoBehaviour
     public void onCharacterHurtStart()
     {
         canMove = false;
+        isHurting = true;
 
         cachedIsAttacking = isAttacking;
         isAttacking = false;
@@ -1207,6 +1275,7 @@ public class EnemyBase : MonoBehaviour
     public void onCharacterHurtEnd()
     {
         canMove = true;
+        isHurting = false;
         isAttacking = cachedIsAttacking;
         isRepositioning = cachedIsRepositioning;
     }
@@ -1286,9 +1355,9 @@ public class EnemyBase : MonoBehaviour
         {
             if (characterHealthStaminaScript.modifyHealth(-finalDamage) < 0.15f)
             {
-                enemySpineAnimator.SetTrigger("Death");
                 isDead = true;
-                deathTime = Time.time;
+
+                OnEnemyDeath();
             }
             else if (characterHealthStaminaScript.poiseBroken == true)
             {
@@ -1322,8 +1391,9 @@ public class EnemyBase : MonoBehaviour
                 {
                     if (characterHealthStaminaScript.modifyHealth(-(weaponAttackInfo.attackDamage - characterHealthStaminaScript.currentStamina)) < 0.10f)
                     {
-                        enemySpineAnimator.SetTrigger("Death");
                         isDead = true;
+
+                        OnEnemyDeath();
                     }
                 }
             }
@@ -1361,9 +1431,9 @@ public class EnemyBase : MonoBehaviour
         {
             if (characterHealthStaminaScript.modifyHealth(-damageAmount) < 0.15f)
             {
-                enemySpineAnimator.SetTrigger("Death");
                 isDead = true;
-                deathTime = Time.time;
+
+                OnEnemyDeath();
             }
             else if (characterHealthStaminaScript.poiseBroken == true)
             {
@@ -1416,6 +1486,20 @@ public class EnemyBase : MonoBehaviour
     {
         playHitEffectOnScale = true;
         charScaleDecreasing = true;
+    }
+
+    void OnEnemyDeath()
+    {
+        characterHealthStaminaScript.hideHealthStaminaPanelOnDeath();
+
+        deathTime = Time.time;
+        enemySpineAnimator.SetTrigger("Death");
+
+        for (int i = 0; i < collidersToDisableCollisionWithPlayer.Length; i++)
+        {
+            collidersToDisableCollisionWithPlayer[i].enabled = false;
+        }
+        rb2d.simulated = false;
     }
     #endregion
 }

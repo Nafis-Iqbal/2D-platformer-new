@@ -43,7 +43,7 @@ public class GrappleCollider : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            GrappleActivate();
+            if (other.transform.GetComponent<PlayerJump>().onGround == false) GrappleActivate();
         }
     }
 

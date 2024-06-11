@@ -1,0 +1,27 @@
+
+Carnivore Plant Traps.png
+size: 392,48
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Base
+  rotate: false
+  xy: 319, 2
+  size: 71, 44
+  orig: 71, 44
+  offset: 0, 0
+  index: -1
+LeftSide_Front
+  rotate: false
+  xy: 2, 2
+  size: 156, 44
+  orig: 156, 44
+  offset: 0, 0
+  index: -1
+RightSide_Front
+  rotate: false
+  xy: 160, 4
+  size: 157, 42
+  orig: 157, 42
+  offset: 0, 0
+  index: -1

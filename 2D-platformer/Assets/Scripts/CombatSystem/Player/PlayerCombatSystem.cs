@@ -17,7 +17,6 @@ public class PlayerCombatSystem : MonoBehaviour
     private PlayerJump playerJump;
     private PlayerRoll playerRoll;
     private PlayerDodge playerDodge;
-    public GameObject blockDefenseObject;
     public GameObject meleeWeaponObject;
 
     [Header("Combat State")]
@@ -106,10 +105,6 @@ public class PlayerCombatSystem : MonoBehaviour
         {
             Debug.LogError("playerHealthStaminaScript is required. Drag and drop stamina slider object.");
         }
-        if (blockDefenseObject == null)
-        {
-            Debug.LogError("blockDefenseObject is required. Drag and drop block defense object.");
-        }
     }
 
     private void Update()
@@ -119,14 +114,12 @@ public class PlayerCombatSystem : MonoBehaviour
         if (isBlockingRequested && playerHealthStaminaScript.currentStamina >= minimumStaminaToBlock)
         {
             isBlocking = true;
-            blockDefenseObject.SetActive(true);
             playerSpineAnimator.SetBool("Defence", true);
             // playerSpineAnimator.SetTrigger("blockTrigger");
         }
         else
         {
             isBlocking = false;
-            blockDefenseObject.SetActive(false);
             playerSpineAnimator.SetBool("Defence", false);
             // playerSpineAnimator.ResetTrigger("blockTrigger");
         }
@@ -230,7 +223,7 @@ public class PlayerCombatSystem : MonoBehaviour
     #region Light Attack Variants
     public void OnWeaponHolsterPrompted(InputAction.CallbackContext context)
     {
-        if (!lightAttackExecuting && !playerColumn.hasGrabbedColumn)
+        if (!lightAttackExecuting && !playerColumn.hasGrabbedColumn && !playerMovementScript.isSprinting)
         {
             if (combatMode == true)
             {
@@ -389,10 +382,11 @@ public class PlayerCombatSystem : MonoBehaviour
     public void TakeDamage(EnemyAttackInfo weaponAttackInfo, bool attackFromRight, bool isChargeAttack = false)
     {
         if (isDead == true) return;
-        Debug.Log("Again1");
+        //Debug.Log("Dam");
         //Debug.Log("dmgA: " + weaponAttackInfo.attackDamage + "stmA: " + weaponAttackInfo.attackStaminaDamage + "rightBool: " + attackFromRight);
         if (!isBlocking || (isBlocking && IncomingAttackDirectionFacingPlayer(attackFromRight) == false) || (isBlocking && playerHealthStaminaScript.staminaCompletelyDepleted == true))//i not blocking, or attacked from back
         {
+            //Debug.Log("Dam1");
             if (isChargeAttack == true)
             {
                 PlayOnHitEffect();
@@ -405,6 +399,8 @@ public class PlayerCombatSystem : MonoBehaviour
                 {
                     playerSpineAnimator.SetTrigger("DeadOnGround");
                     isDead = true;
+
+                    GameController.Instance.OnPlayerDead();
                 }
 
                 playerHealthStaminaScript.modifyStamina(-999.0f);
@@ -417,6 +413,8 @@ public class PlayerCombatSystem : MonoBehaviour
                 {
                     playerSpineAnimator.SetTrigger("Death");
                     isDead = true;
+
+                    GameController.Instance.OnPlayerDead();
                 }
                 else if (playerHealthStaminaScript.poiseBroken == true)
                 {
@@ -428,8 +426,10 @@ public class PlayerCombatSystem : MonoBehaviour
         }
         else if (isBlocking && playerHealthStaminaScript.staminaCompletelyDepleted == false)
         {
+            //Debug.Log("Dam2");
             if (weaponAttackInfo.isBlockable)
             {
+                //Debug.Log("Dam3");
                 //charging blockable attacks
                 if (isChargeAttack)
                 {
@@ -450,19 +450,24 @@ public class PlayerCombatSystem : MonoBehaviour
                         {
                             playerSpineAnimator.SetTrigger("DeadOnGround");
                             isDead = true;
+
+                            GameController.Instance.OnPlayerDead();
                         }
                     }
                 }
                 else
                 {
+                    //Debug.Log("Dam4");
                     // normal blockable attacks
                     if (playerHealthStaminaScript.currentStamina >= weaponAttackInfo.attackStaminaDamage)
                     {
+                        //Debug.Log("Dam5");
                         HandleAttackDuringDefence(weaponAttackInfo.attackStaminaDamage);
                         playerSpineAnimator.SetTrigger("DefenceHit");
                     }
                     else
                     {
+                        //Debug.Log("Dam6");
                         playerHealthStaminaScript.modifyStamina(-999.0f);
                         playerSpineAnimator.SetTrigger("PoiseBreak");
 
@@ -470,21 +475,26 @@ public class PlayerCombatSystem : MonoBehaviour
                         {
                             playerSpineAnimator.SetTrigger("Death");
                             isDead = true;
+
+                            GameController.Instance.OnPlayerDead();
                         }
                     }
                 }
             }
             else
             {
+                //Debug.Log("Dam7");
                 float finalDamageAmount;
                 PlayOnHitEffect();
                 // if current stamina more than half of total stamina, damage will be reduced to half
                 if (playerHealthStaminaScript.currentStamina >= playerHealthStaminaScript.totalStamina / 2f)
                 {
+                    //Debug.Log("Dam8");
                     finalDamageAmount = weaponAttackInfo.attackDamage * .6f;
                 }
                 else // else will get full damage
                 {
+                    //Debug.Log("Dam9");
                     finalDamageAmount = weaponAttackInfo.attackDamage;
                 }
 
@@ -504,10 +514,13 @@ public class PlayerCombatSystem : MonoBehaviour
                     {
                         playerSpineAnimator.SetTrigger("Death");
                         isDead = true;
+
+                        GameController.Instance.OnPlayerDead();
                     }
                 }
                 else
                 {
+                    //Debug.Log("Dam10");
                     if (!isChargeAttack)
                     {
                         if (!isHurt && !isKnockedOffGround) playerSpineAnimator.SetTrigger("Hurt");
@@ -527,10 +540,14 @@ public class PlayerCombatSystem : MonoBehaviour
 
     public void OnPlayerHurtStart()
     {
-        isBlocking = false;
-        lightAttackExecuting = heavyAttackExecuting = false;
-        usingCombatItem = usingUtilityItem = false;
         isHurt = true;
+        isBlocking = false;
+
+        lightAttackExecuting = heavyAttackExecuting = false;
+        nextLightAttackQueued = false;
+        activeLightAttackID = 0;
+
+        usingCombatItem = usingUtilityItem = false;
     }
 
     public void OnPlayerHurtEnd()
@@ -558,16 +575,39 @@ public class PlayerCombatSystem : MonoBehaviour
 
     public void TakeProjectileDamage(float damageAmount)
     {
+        if (isDead == true) return;
+        Debug.Log("PDam");
         PlayOnHitEffect();
         // !blocking
         if (playerHealthStaminaScript.modifyHealth(-damageAmount) < 0.10f)
         {
             playerSpineAnimator.SetTrigger("Death");
+            isDead = true;
+
+            GameController.Instance.OnPlayerDead();
+        }
+    }
+
+    public void TakeEnvironmentDamage(float damageAmount)
+    {
+        if (isDead == true) return;
+
+        PlayOnHitEffect();
+        // !blocking
+        if (playerHealthStaminaScript.modifyHealth(-damageAmount) < 0.10f)
+        {
+            playerSpineAnimator.SetTrigger("Death");
+            isDead = true;
+
+            GameController.Instance.OnPlayerDead();
         }
     }
 
     public void TakeProjectileShieldDamage(float damageAmount, float staminaDamageAmount, bool isBlockableAttack = true)
     {
+        if (isDead == true) return;
+        Debug.Log("PSDam");
+
         if (isBlockableAttack)
         {
             // blocking and blockable attack
@@ -580,6 +620,9 @@ public class PlayerCombatSystem : MonoBehaviour
                 if (playerHealthStaminaScript.modifyHealth(-damageAmount / 2.0f) < 0.10f)
                 {
                     playerSpineAnimator.SetTrigger("Death");
+                    isDead = true;
+
+                    GameController.Instance.OnPlayerDead();
                 }
             }
         }

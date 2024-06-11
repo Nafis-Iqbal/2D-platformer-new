@@ -31,7 +31,6 @@ public class UI_ManagerInGame : MonoBehaviour
     [Header("Dependencies")]
     public UI_FeedbackScript UIFeedback;
     public UI_GameNotifications gameNotifications;
-    public InMapGameController mapGameController;
     #endregion
 
     // Start is called before the first frame update

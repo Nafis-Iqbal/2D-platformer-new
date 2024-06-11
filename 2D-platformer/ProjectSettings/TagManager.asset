@@ -5,18 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
-  - Grapple point
-  - RepositionBox
   - Column
   - Platforms
   - PlayerWeapon
   - ObjectTracker
   - Objects
   - EnemyCollider
-  - Shield
   - Projectile
-  - Knife
+  - Vehicle
   - Traps
+  - Knife
   layers:
   - Default
   - TransparentFX
@@ -34,8 +32,8 @@ TagManager:
   - Reposition
   - CombatInfo
   - PlayerWeapon
-  - 
-  - 
+  - IgnorePlayer
+  - Objects
   - 
   - 
   - 
@@ -56,6 +54,9 @@ TagManager:
     locked: 0
   - name: MidGround
     uniqueID: 3043512885
+    locked: 0
+  - name: CloseBackGround
+    uniqueID: 3223184035
     locked: 0
   - name: PathLayer
     uniqueID: 2476495797

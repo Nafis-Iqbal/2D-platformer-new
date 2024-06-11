@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class MeleeWeaponCollider : MonoBehaviour
@@ -88,7 +89,19 @@ public class MeleeWeaponCollider : MonoBehaviour
         else if (other.transform.CompareTag("Objects"))
         {
             lastObjectHitTime = Time.time;
-            other.transform.GetComponent<BreakableObjects>().TakeDamage(30.0f);
+
+            if (other.transform.GetComponent<BreakableObjects>() != null)
+            {
+                other.transform.GetComponent<BreakableObjects>().TakeDamage(30.0f);
+            }
+            else if (other.transform.GetComponent<PropsControllerBase>() != null)
+            {
+                if (playerCombatSystemScript.transform.position.x > other.transform.position.x)
+                {
+                    other.transform.GetComponent<PropsControllerBase>().triggerInteractRight();
+                }
+                else other.transform.GetComponent<PropsControllerBase>().triggerInteractLeft();
+            }
         }
     }
 }

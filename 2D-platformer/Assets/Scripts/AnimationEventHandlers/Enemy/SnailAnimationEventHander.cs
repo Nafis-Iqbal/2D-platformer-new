@@ -10,4 +10,9 @@ public class SnailAnimationEventHander : MonoBehaviour
     {
         enemySnailScript.performAcidProjectileAttack();
     }
+
+    public void CombatPromptsOnGasAttack()
+    {
+        enemySnailScript.performPoisonGasAttack();
+    }
 }

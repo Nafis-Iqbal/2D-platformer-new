@@ -26,12 +26,12 @@ public class ProjectileDetector : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Cocks");
+        //Debug.Log("Cocks");
         if (isEnemy)
         {
             if (other.transform.CompareTag("Projectile") == true)
             {
-                Debug.Log("Balls");
+                //Debug.Log("Balls");
                 projectileWeaponScript = other.transform.GetComponent<ProjectileWeapon>();
 
                 if (projectileWeaponScript.isPlayerProjectile == true)

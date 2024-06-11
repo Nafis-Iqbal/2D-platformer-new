@@ -1,0 +1,225 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1698440542640572847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1698440542640572846}
+  - component: {fileID: 1698440542640572840}
+  - component: {fileID: 1698440542640572841}
+  m_Layer: 0
+  m_Name: PlantBudSingleVine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1698440542640572846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698440542640572847}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2910.4, y: -137, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3645089497254686518}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1971053207 &1698440542640572840
+SpriteShapeRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698440542640572847}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -1251454411
+  m_SortingLayer: -7
+  m_SortingOrder: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_MaskInteraction: 0
+  m_ShapeTexture: {fileID: 0}
+  m_Sprites:
+  - {fileID: -406496011657995516, guid: 5306a7cea9ad87c4dbd1fb092a6a10d2, type: 3}
+  m_LocalAABB:
+    m_Center: {x: 6.599933, y: -8.264862, z: -0.00005}
+    m_Extent: {x: 7.5905433, y: 16.060835, z: 0.00005}
+--- !u!114 &1698440542640572841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698440542640572847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90539df1cd5704abcb25fec9f3f5f84b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Spline:
+    m_IsOpenEnded: 1
+    m_ControlPoints:
+    - position: {x: 9.424316, y: -9.994186, z: 0}
+      leftTangent: {x: -3.6938477, y: -4.163437, z: 0}
+      rightTangent: {x: 1.8395996, y: 2.07341, z: 0}
+      mode: 1
+      height: 1.29
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 1
+    - position: {x: 4.536621, y: -2.5822449, z: 0}
+      leftTangent: {x: -0.030517578, y: -3.6290894, z: 0}
+      rightTangent: {x: 0.03491211, y: 4.139099, z: 0}
+      mode: 1
+      height: 1.59
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 1
+    - position: {x: 12.040527, y: 4.373886, z: 0}
+      leftTangent: {x: -5.0197754, y: -2.0716705, z: 0}
+      rightTangent: {x: 0, y: 0, z: 0}
+      mode: 2
+      height: 1
+      bevelCutoff: 0
+      bevelSize: 0
+      spriteIndex: 0
+      corner: 1
+  m_SpriteShape: {fileID: 11400000, guid: eaa0a2d9cb8df924586d1db80ef93b1a, type: 2}
+  m_FillPixelPerUnit: 100
+  m_StretchTiling: 1
+  m_SplineDetail: 16
+  m_AdaptiveUV: 0
+  m_StretchUV: 0
+  m_WorldSpaceUV: 0
+  m_CornerAngleThreshold: 30
+  m_ColliderDetail: 16
+  m_ColliderOffset: 0
+  m_UpdateCollider: 1
+  m_OptimizeCollider: 1
+  m_OptimizeGeometry: 1
+  m_EnableTangents: 0
+  m_GeometryCached: 0
+--- !u!1001 &8571770684648887742
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1698440542640572846}
+    m_Modifications:
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.97
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.5822449
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.707477
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7067364
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 89.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212389495339702, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: spriteShapeController
+      value: 
+      objectReference: {fileID: 1698440542640572841}
+    - target: {fileID: 4927212389495339703, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_Name
+      value: PlantProjectileBud
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927212390304966148, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b4eaf90a33d9a53428db3d779b9e3f51, type: 3}
+--- !u!4 &3645089497254686518 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4927212389495339656, guid: b4eaf90a33d9a53428db3d779b9e3f51,
+    type: 3}
+  m_PrefabInstance: {fileID: 8571770684648887742}
+  m_PrefabAsset: {fileID: 0}

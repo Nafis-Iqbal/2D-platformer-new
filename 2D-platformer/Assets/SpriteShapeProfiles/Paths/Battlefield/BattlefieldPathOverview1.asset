@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af7181f404f1447c0a7a17b3070b952b, type: 3}
+  m_Name: BattlefieldPathOverview1
+  m_EditorClassIdentifier: 
+  m_Angles:
+  - m_Start: -30
+    m_End: 30
+    m_Order: 1
+    m_Sprites:
+    - {fileID: 5146365442718967268, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+    - {fileID: -7642860320978433871, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+    - {fileID: -5087619870220203601, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+    - {fileID: -5764522218537628108, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+    - {fileID: 0}
+  - m_Start: -60
+    m_End: -30
+    m_Order: 0
+    m_Sprites:
+    - {fileID: -2039931831272298580, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+  - m_Start: 60
+    m_End: 117
+    m_Order: 3
+    m_Sprites:
+    - {fileID: 5622330308951834454, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+    - {fileID: -7250808320507417177, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+    - {fileID: 0}
+  - m_Start: -243
+    m_End: -119
+    m_Order: 4
+    m_Sprites:
+    - {fileID: -8947397683946983279, guid: 3b1ed2b710d08024bae588c8c3852e43, type: 3}
+    - {fileID: -122445493622469158, guid: 3b1ed2b710d08024bae588c8c3852e43, type: 3}
+    - {fileID: 0}
+  - m_Start: -119
+    m_End: -60
+    m_Order: 5
+    m_Sprites:
+    - {fileID: 5622330308951834454, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+    - {fileID: -7250808320507417177, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+    - {fileID: 0}
+  - m_Start: 30
+    m_End: 60
+    m_Order: 2
+    m_Sprites:
+    - {fileID: -2039931831272298580, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+  m_FillTexture: {fileID: 2800000, guid: fa3b49a8c5eca184f80791485836fd49, type: 3}
+  m_CornerSprites:
+  - m_CornerType: 0
+    m_Sprites:
+    - {fileID: 8441698226582600830, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+  - m_CornerType: 1
+    m_Sprites:
+    - {fileID: -3096740033847848299, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+  - m_CornerType: 2
+    m_Sprites:
+    - {fileID: -831581935784847573, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+  - m_CornerType: 3
+    m_Sprites:
+    - {fileID: -2273190981833628868, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+  - m_CornerType: 4
+    m_Sprites:
+    - {fileID: 2552969503854419051, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+  - m_CornerType: 5
+    m_Sprites:
+    - {fileID: 2388388408465539608, guid: d37d8a0a3bdfd2b43825b722a089694e, type: 3}
+  - m_CornerType: 6
+    m_Sprites:
+    - {fileID: -7409411781073226403, guid: d09fea9f4ce829141b867f0721d4f9c8, type: 3}
+  - m_CornerType: 7
+    m_Sprites:
+    - {fileID: -3177785699022974631, guid: d09fea9f4ce829141b867f0721d4f9c8, type: 3}
+  m_FillOffset: 0
+  m_UseSpriteBorders: 1

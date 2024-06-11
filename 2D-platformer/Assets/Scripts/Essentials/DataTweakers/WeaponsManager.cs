@@ -9,6 +9,9 @@ public class WeaponsManager : MonoBehaviour
     public WeaponClassInfo[] meleeWeaponsData = new WeaponClassInfo[3];
     [Header("Projectiles")]
     public WeaponClassInfo[] projectilesData = new WeaponClassInfo[3];
+    [Header("Area Denial Weapons")]
+    public WeaponClassInfo[] areaDenialWeaponsData = new WeaponClassInfo[3];
+
     // Start is called before the first frame update
 
     private void Awake()
@@ -44,6 +47,19 @@ public class WeaponsManager : MonoBehaviour
             if (meleeWeaponsData[i].weaponName == weaponName)
             {
                 return meleeWeaponsData[i];
+            }
+        }
+
+        return null;
+    }
+
+    public WeaponClassInfo getAreaDenialWeaponsData(string weaponName)
+    {
+        for (int i = 0; i < areaDenialWeaponsData.Length; i++)
+        {
+            if (areaDenialWeaponsData[i].weaponName == weaponName)
+            {
+                return areaDenialWeaponsData[i];
             }
         }
 

@@ -1,0 +1,1351 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2833687525893316145
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2833687525893316159}
+  - component: {fileID: 2833687525893316157}
+  - component: {fileID: 2833687525893316158}
+  - component: {fileID: 845730343903960589}
+  m_Layer: 0
+  m_Name: CombatManagerV1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2833687525893316159
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2833687525893316145}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 219.7, y: 163.81837, z: -154.2218}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2833687525893316157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2833687525893316145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c91ca3be17e7234ba1638a903798b9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: 200
+  playerStamina: 200
+  staminaRegenRate: 75
+  poiseBreakHealthLimit: 60
+  poiseBreakHealthResetInterval: 8
+  activeMeleeWeapon: 
+  swordShieldAttacks:
+  - attackID: 0
+    attackName: 
+    attackDamage: 0
+    attackStaminaDamage: 0
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 0
+    isCombo: 0
+    isBlockable: 0
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 1
+    attackName: Thrust
+    attackDamage: 30
+    attackStaminaDamage: 40
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 1
+    isCombo: 0
+    isBlockable: 1
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 2
+    attackName: ArcSlash
+    attackDamage: 25
+    attackStaminaDamage: 40
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 1
+    isCombo: 0
+    isBlockable: 1
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 3
+    attackName: UpperCut
+    attackDamage: 60
+    attackStaminaDamage: 50
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 1
+    isCombo: 0
+    isBlockable: 1
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 4
+    attackName: JumpThrust
+    attackDamage: 50
+    attackStaminaDamage: 100
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 1
+    isCombo: 0
+    isBlockable: 1
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 5
+    attackName: RollAttack
+    attackDamage: 35
+    attackStaminaDamage: 75
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 1
+    isCombo: 0
+    isBlockable: 0
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 6
+    attackName: ChargeAttack
+    attackDamage: 90
+    attackStaminaDamage: 130
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 1
+    isCombo: 0
+    isBlockable: 0
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  dualSwordAttacks:
+  - attackID: 0
+    attackName: 
+    attackDamage: 0
+    attackStaminaDamage: 0
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 0
+    isCombo: 0
+    isBlockable: 0
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 0
+    attackName: 
+    attackDamage: 0
+    attackStaminaDamage: 0
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 0
+    isCombo: 0
+    isBlockable: 0
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 0
+    attackName: 
+    attackDamage: 0
+    attackStaminaDamage: 0
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 0
+    isCombo: 0
+    isBlockable: 0
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 0
+    attackName: 
+    attackDamage: 0
+    attackStaminaDamage: 0
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 0
+    isCombo: 0
+    isBlockable: 0
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 0
+    attackName: 
+    attackDamage: 0
+    attackStaminaDamage: 0
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 0
+    isCombo: 0
+    isBlockable: 0
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  - attackID: 0
+    attackName: 
+    attackDamage: 0
+    attackStaminaDamage: 0
+    attackMinCooldownTime: 0
+    attackKnockedOffVelocity: 0
+    defenceKnockedOffVelocity: 0
+    lastAttackUsedTime: -1
+    postAttackBehaviour: 
+    attackRange: 0
+    cancelAttackRange: 0
+    isRanged: 0
+    isMelee: 0
+    isCombo: 0
+    isBlockable: 0
+    isCustomAttack: 0
+    appliedAttackMomentum: 0
+  throwingBladeDamage: 0
+  throwingBladeRotationSpeed: 0
+  throwingBladeSpeed: 0
+  throwingBladeDisappearDelay: 0
+  bombDamage: 0
+  bombRotationSpeed: 0
+  bombSpeed: 0
+  bombDisappearDelay: 0
+--- !u!114 &2833687525893316158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2833687525893316145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3021acd400e3e734ca208a2a2584eb9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  basePatrolSpeedMultiplier: 0.5
+  baseCombatWalkSpeedMultiplier: 0.65
+  baseCombatRunSpeedMultiplier: 1
+  distanceScaler: 0
+  enemyData:
+  - enemyName: 
+    enemyID: 0
+    groundBased: 0
+    canChangePlatforms: 0
+    groundAirBased: 0
+    airBased: 0
+    canBlock: 0
+    hasToAndFroMovement: 0
+    hasBackWalkAnimationStates: 0
+    movesAwayAfterAttack: 0
+    changesDirectionDuringAttack: 0
+    toAndFroMoveFrequency: 0
+    hasBattleCry: 0
+    hasAlertStates: 0
+    canRestartPatrol: 0
+    battleCryFrequency: 0
+    turnToPlayerTime: 0
+    defensiveStanceHealthLimit: 0
+    enemyMovementSpeed: 0
+    enemyPatrolSpeedMultiplier: 0
+    enemyCombatWalkSpeedMultiplier: 0
+    enemyCombatRunSpeedMultiplier: 0
+    enemyHorizontalDetectionDistance: 8
+    enemyVerticalDetectionLevels: -1
+    enemyTrackingRange: 0
+    enemyAttackRange: 0.5
+    playerAvoidRange: 0
+    enemyMinTimeBetweenAttacks: 1
+    enemyHealth: 0
+    enemyStamina: 0
+    staminaRegenRate: 0
+    enemyBattleCryRange: 3.5
+    poiseBreakHealthLimit: 0
+    poiseBreakHealthResetInterval: 0
+    enemyAttacks:
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+  - enemyName: FootSoldier
+    enemyID: 1
+    groundBased: 1
+    canChangePlatforms: 0
+    groundAirBased: 0
+    airBased: 0
+    canBlock: 1
+    hasToAndFroMovement: 1
+    hasBackWalkAnimationStates: 1
+    movesAwayAfterAttack: 1
+    changesDirectionDuringAttack: 0
+    toAndFroMoveFrequency: 1
+    hasBattleCry: 1
+    hasAlertStates: 1
+    canRestartPatrol: 0
+    battleCryFrequency: 8
+    turnToPlayerTime: 0.25
+    defensiveStanceHealthLimit: 40
+    enemyMovementSpeed: 12.5
+    enemyPatrolSpeedMultiplier: 0.4
+    enemyCombatWalkSpeedMultiplier: 0.45
+    enemyCombatRunSpeedMultiplier: 1
+    enemyHorizontalDetectionDistance: 35
+    enemyVerticalDetectionLevels: -1
+    enemyTrackingRange: 23
+    enemyAttackRange: 4.5
+    playerAvoidRange: 7
+    enemyMinTimeBetweenAttacks: 1.5
+    enemyHealth: 100
+    enemyStamina: 90
+    staminaRegenRate: 3.5
+    enemyBattleCryRange: 16
+    poiseBreakHealthLimit: 60
+    poiseBreakHealthResetInterval: 5
+    enemyAttacks:
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 1
+      attackName: Slash
+      attackDamage: 40
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 1.5
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 7.5
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 1
+      isCombo: 0
+      isBlockable: 1
+      isCustomAttack: 0
+      appliedAttackMomentum: 4
+    - attackID: 2
+      attackName: Thrust
+      attackDamage: 40
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 1.5
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 8
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 1
+      isCombo: 0
+      isBlockable: 1
+      isCustomAttack: 0
+      appliedAttackMomentum: 4
+  - enemyName: Archer
+    enemyID: 2
+    groundBased: 1
+    canChangePlatforms: 0
+    groundAirBased: 0
+    airBased: 0
+    canBlock: 0
+    hasToAndFroMovement: 0
+    hasBackWalkAnimationStates: 0
+    movesAwayAfterAttack: 0
+    changesDirectionDuringAttack: 0
+    toAndFroMoveFrequency: 0
+    hasBattleCry: 0
+    hasAlertStates: 1
+    canRestartPatrol: 0
+    battleCryFrequency: 0
+    turnToPlayerTime: 0.25
+    defensiveStanceHealthLimit: 0
+    enemyMovementSpeed: 13.5
+    enemyPatrolSpeedMultiplier: 0.4
+    enemyCombatWalkSpeedMultiplier: 0.45
+    enemyCombatRunSpeedMultiplier: 1
+    enemyHorizontalDetectionDistance: 45
+    enemyVerticalDetectionLevels: -1
+    enemyTrackingRange: 70
+    enemyAttackRange: 65
+    playerAvoidRange: 20
+    enemyMinTimeBetweenAttacks: 1
+    enemyHealth: 80
+    enemyStamina: 100
+    staminaRegenRate: 0
+    enemyBattleCryRange: 8
+    poiseBreakHealthLimit: 0
+    poiseBreakHealthResetInterval: 0
+    enemyAttacks:
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 1
+      attackName: Normal Shot
+      attackDamage: 18
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 2
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 50
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 2
+      attackName: Power Shot
+      attackDamage: 30
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 2
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 58
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 3
+      attackName: Tripple Shot
+      attackDamage: 20
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 5
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 65
+      cancelAttackRange: 25
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+  - enemyName: Heavy
+    enemyID: 3
+    groundBased: 1
+    canChangePlatforms: 0
+    groundAirBased: 0
+    airBased: 0
+    canBlock: 1
+    hasToAndFroMovement: 1
+    hasBackWalkAnimationStates: 1
+    movesAwayAfterAttack: 0
+    changesDirectionDuringAttack: 0
+    toAndFroMoveFrequency: 1.8
+    hasBattleCry: 1
+    hasAlertStates: 1
+    canRestartPatrol: 0
+    battleCryFrequency: 6
+    turnToPlayerTime: 1
+    defensiveStanceHealthLimit: 60
+    enemyMovementSpeed: 9
+    enemyPatrolSpeedMultiplier: 0.35
+    enemyCombatWalkSpeedMultiplier: 0.45
+    enemyCombatRunSpeedMultiplier: 1
+    enemyHorizontalDetectionDistance: 35
+    enemyVerticalDetectionLevels: -1
+    enemyTrackingRange: 26
+    enemyAttackRange: 8.5
+    playerAvoidRange: 7
+    enemyMinTimeBetweenAttacks: 2.6
+    enemyHealth: 200
+    enemyStamina: 150
+    staminaRegenRate: 5
+    enemyBattleCryRange: 16
+    poiseBreakHealthLimit: 120
+    poiseBreakHealthResetInterval: 10
+    enemyAttacks:
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 1
+      attackName: Arc Slash
+      attackDamage: 60
+      attackStaminaDamage: 65
+      attackMinCooldownTime: 2.6
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 8.5
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 1
+      isCombo: 0
+      isBlockable: 1
+      isCustomAttack: 0
+      appliedAttackMomentum: 8
+    - attackID: 2
+      attackName: Charge Attack
+      attackDamage: 80
+      attackStaminaDamage: 100
+      attackMinCooldownTime: 5
+      attackKnockedOffVelocity: 23
+      defenceKnockedOffVelocity: 18
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 17
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 1
+      isCustomAttack: 0
+      appliedAttackMomentum: 12
+  - enemyName: SpearShield
+    enemyID: 4
+    groundBased: 1
+    canChangePlatforms: 0
+    groundAirBased: 0
+    airBased: 0
+    canBlock: 1
+    hasToAndFroMovement: 1
+    hasBackWalkAnimationStates: 1
+    movesAwayAfterAttack: 0
+    changesDirectionDuringAttack: 0
+    toAndFroMoveFrequency: 2.2
+    hasBattleCry: 1
+    hasAlertStates: 1
+    canRestartPatrol: 0
+    battleCryFrequency: 8
+    turnToPlayerTime: 1.3
+    defensiveStanceHealthLimit: 60
+    enemyMovementSpeed: 11
+    enemyPatrolSpeedMultiplier: 0.38
+    enemyCombatWalkSpeedMultiplier: 0.42
+    enemyCombatRunSpeedMultiplier: 1
+    enemyHorizontalDetectionDistance: 35
+    enemyVerticalDetectionLevels: -1
+    enemyTrackingRange: 26
+    enemyAttackRange: 11
+    playerAvoidRange: 7
+    enemyMinTimeBetweenAttacks: 3
+    enemyHealth: 200
+    enemyStamina: 200
+    staminaRegenRate: 1.5
+    enemyBattleCryRange: 16
+    poiseBreakHealthLimit: 75
+    poiseBreakHealthResetInterval: 12
+    enemyAttacks:
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 1
+      attackName: Spear Thrust
+      attackDamage: 35
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 3
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 11
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 1
+      isCombo: 0
+      isBlockable: 1
+      isCustomAttack: 0
+      appliedAttackMomentum: 6
+    - attackID: 2
+      attackName: Dual Spear Thrust
+      attackDamage: 35
+      attackStaminaDamage: 35
+      attackMinCooldownTime: 3
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 12
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 1
+      isCombo: 0
+      isBlockable: 1
+      isCustomAttack: 0
+      appliedAttackMomentum: 6
+    - attackID: 3
+      attackName: Spear Charge
+      attackDamage: 50
+      attackStaminaDamage: 75
+      attackMinCooldownTime: 6
+      attackKnockedOffVelocity: 23
+      defenceKnockedOffVelocity: 18
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 17
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 1
+      isCombo: 0
+      isBlockable: 1
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+  - enemyName: FortCommander
+    enemyID: 5
+    groundBased: 1
+    canChangePlatforms: 0
+    groundAirBased: 0
+    airBased: 0
+    canBlock: 1
+    hasToAndFroMovement: 1
+    hasBackWalkAnimationStates: 1
+    movesAwayAfterAttack: 1
+    changesDirectionDuringAttack: 0
+    toAndFroMoveFrequency: 0
+    hasBattleCry: 1
+    hasAlertStates: 0
+    canRestartPatrol: 0
+    battleCryFrequency: 0
+    turnToPlayerTime: 0
+    defensiveStanceHealthLimit: 0
+    enemyMovementSpeed: 0
+    enemyPatrolSpeedMultiplier: 0
+    enemyCombatWalkSpeedMultiplier: 0
+    enemyCombatRunSpeedMultiplier: 0
+    enemyHorizontalDetectionDistance: 8
+    enemyVerticalDetectionLevels: -1
+    enemyTrackingRange: 0
+    enemyAttackRange: 0.5
+    playerAvoidRange: 0
+    enemyMinTimeBetweenAttacks: 1
+    enemyHealth: 0
+    enemyStamina: 0
+    staminaRegenRate: 0
+    enemyBattleCryRange: 3.5
+    poiseBreakHealthLimit: 0
+    poiseBreakHealthResetInterval: 0
+    enemyAttacks:
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+  - enemyName: ForestSnail
+    enemyID: 6
+    groundBased: 1
+    canChangePlatforms: 0
+    groundAirBased: 0
+    airBased: 0
+    canBlock: 0
+    hasToAndFroMovement: 0
+    hasBackWalkAnimationStates: 0
+    movesAwayAfterAttack: 0
+    changesDirectionDuringAttack: 0
+    toAndFroMoveFrequency: 0
+    hasBattleCry: 0
+    hasAlertStates: 0
+    canRestartPatrol: 1
+    battleCryFrequency: 0
+    turnToPlayerTime: 1
+    defensiveStanceHealthLimit: 0
+    enemyMovementSpeed: 7.5
+    enemyPatrolSpeedMultiplier: 0.4
+    enemyCombatWalkSpeedMultiplier: 0.45
+    enemyCombatRunSpeedMultiplier: 1
+    enemyHorizontalDetectionDistance: 20
+    enemyVerticalDetectionLevels: -1
+    enemyTrackingRange: 18
+    enemyAttackRange: 18
+    playerAvoidRange: 0
+    enemyMinTimeBetweenAttacks: 3
+    enemyHealth: 150
+    enemyStamina: 0
+    staminaRegenRate: 0
+    enemyBattleCryRange: 0
+    poiseBreakHealthLimit: 0
+    poiseBreakHealthResetInterval: 0
+    enemyAttacks:
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 1
+      attackName: Acid Projectile
+      attackDamage: 20
+      attackStaminaDamage: 5
+      attackMinCooldownTime: 3
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 18
+      cancelAttackRange: 0
+      isRanged: 1
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 1
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 2
+      attackName: Gas Bomb
+      attackDamage: 20
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 4
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 14
+      cancelAttackRange: 0
+      isRanged: 1
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+  - enemyName: 
+    enemyID: 0
+    groundBased: 0
+    canChangePlatforms: 0
+    groundAirBased: 0
+    airBased: 0
+    canBlock: 0
+    hasToAndFroMovement: 0
+    hasBackWalkAnimationStates: 0
+    movesAwayAfterAttack: 0
+    changesDirectionDuringAttack: 0
+    toAndFroMoveFrequency: 0
+    hasBattleCry: 0
+    hasAlertStates: 0
+    canRestartPatrol: 0
+    battleCryFrequency: 0
+    turnToPlayerTime: 0
+    defensiveStanceHealthLimit: 0
+    enemyMovementSpeed: 0
+    enemyPatrolSpeedMultiplier: 0
+    enemyCombatWalkSpeedMultiplier: 0
+    enemyCombatRunSpeedMultiplier: 0
+    enemyHorizontalDetectionDistance: 8
+    enemyVerticalDetectionLevels: -1
+    enemyTrackingRange: 0
+    enemyAttackRange: 0.5
+    playerAvoidRange: 0
+    enemyMinTimeBetweenAttacks: 1
+    enemyHealth: 0
+    enemyStamina: 0
+    staminaRegenRate: 0
+    enemyBattleCryRange: 3.5
+    poiseBreakHealthLimit: 0
+    poiseBreakHealthResetInterval: 0
+    enemyAttacks:
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+  - enemyName: 
+    enemyID: 0
+    groundBased: 0
+    canChangePlatforms: 0
+    groundAirBased: 0
+    airBased: 0
+    canBlock: 0
+    hasToAndFroMovement: 0
+    hasBackWalkAnimationStates: 0
+    movesAwayAfterAttack: 0
+    changesDirectionDuringAttack: 0
+    toAndFroMoveFrequency: 0
+    hasBattleCry: 0
+    hasAlertStates: 0
+    canRestartPatrol: 0
+    battleCryFrequency: 0
+    turnToPlayerTime: 0
+    defensiveStanceHealthLimit: 0
+    enemyMovementSpeed: 0
+    enemyPatrolSpeedMultiplier: 0
+    enemyCombatWalkSpeedMultiplier: 0
+    enemyCombatRunSpeedMultiplier: 0
+    enemyHorizontalDetectionDistance: 8
+    enemyVerticalDetectionLevels: -1
+    enemyTrackingRange: 0
+    enemyAttackRange: 0.5
+    playerAvoidRange: 0
+    enemyMinTimeBetweenAttacks: 1
+    enemyHealth: 0
+    enemyStamina: 0
+    staminaRegenRate: 0
+    enemyBattleCryRange: 3.5
+    poiseBreakHealthLimit: 0
+    poiseBreakHealthResetInterval: 0
+    enemyAttacks:
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+  - enemyName: 
+    enemyID: 0
+    groundBased: 0
+    canChangePlatforms: 0
+    groundAirBased: 0
+    airBased: 0
+    canBlock: 0
+    hasToAndFroMovement: 0
+    hasBackWalkAnimationStates: 0
+    movesAwayAfterAttack: 0
+    changesDirectionDuringAttack: 0
+    toAndFroMoveFrequency: 0
+    hasBattleCry: 0
+    hasAlertStates: 0
+    canRestartPatrol: 0
+    battleCryFrequency: 0
+    turnToPlayerTime: 0
+    defensiveStanceHealthLimit: 0
+    enemyMovementSpeed: 0
+    enemyPatrolSpeedMultiplier: 0
+    enemyCombatWalkSpeedMultiplier: 0
+    enemyCombatRunSpeedMultiplier: 0
+    enemyHorizontalDetectionDistance: 8
+    enemyVerticalDetectionLevels: -1
+    enemyTrackingRange: 0
+    enemyAttackRange: 0.5
+    playerAvoidRange: 0
+    enemyMinTimeBetweenAttacks: 1
+    enemyHealth: 0
+    enemyStamina: 0
+    staminaRegenRate: 0
+    enemyBattleCryRange: 3.5
+    poiseBreakHealthLimit: 0
+    poiseBreakHealthResetInterval: 0
+    enemyAttacks:
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+    - attackID: 0
+      attackName: 
+      attackDamage: 0
+      attackStaminaDamage: 0
+      attackMinCooldownTime: 0
+      attackKnockedOffVelocity: 0
+      defenceKnockedOffVelocity: 0
+      lastAttackUsedTime: -1
+      postAttackBehaviour: 
+      attackRange: 0
+      cancelAttackRange: 0
+      isRanged: 0
+      isMelee: 0
+      isCombo: 0
+      isBlockable: 0
+      isCustomAttack: 0
+      appliedAttackMomentum: 0
+--- !u!114 &845730343903960589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2833687525893316145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7696c7353eec724097ef3c850c7ffc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeWeaponsData:
+  - weaponName: LightSword
+    damageToPlayer: 0
+    staminaDamageToPlayer: 0
+    damageToEnemy: 0
+    staminaDamageToEnemy: 0
+    damageToObjects: 0
+    enemyCollisionForce: 5
+    playerCollisionForce: 5
+    objectCollisionForce: 5
+    weaponDamageMultiplier: 1
+    rotationSpeed: 0
+    horizontalSpeed: 0
+    timeToDisable: 0
+    projectileHitForce: 0
+  - weaponName: BigAxe
+    damageToPlayer: 0
+    staminaDamageToPlayer: 0
+    damageToEnemy: 0
+    staminaDamageToEnemy: 0
+    damageToObjects: 0
+    enemyCollisionForce: 10
+    playerCollisionForce: 10
+    objectCollisionForce: 20
+    weaponDamageMultiplier: 1
+    rotationSpeed: 0
+    horizontalSpeed: 0
+    timeToDisable: 0
+    projectileHitForce: 0
+  - weaponName: LongSpear
+    damageToPlayer: 0
+    staminaDamageToPlayer: 0
+    damageToEnemy: 0
+    staminaDamageToEnemy: 0
+    damageToObjects: 0
+    enemyCollisionForce: 8
+    playerCollisionForce: 8
+    objectCollisionForce: 10
+    weaponDamageMultiplier: 1
+    rotationSpeed: 0
+    horizontalSpeed: 0
+    timeToDisable: 0
+    projectileHitForce: 0
+  projectilesData:
+  - weaponName: ThrowingKnife
+    damageToPlayer: 25
+    staminaDamageToPlayer: 30
+    damageToEnemy: 35
+    staminaDamageToEnemy: 70
+    damageToObjects: 0
+    enemyCollisionForce: 5
+    playerCollisionForce: 5
+    objectCollisionForce: 10
+    weaponDamageMultiplier: 1
+    rotationSpeed: 720
+    horizontalSpeed: 18
+    timeToDisable: 3.5
+    projectileHitForce: 30
+  - weaponName: Arrow
+    damageToPlayer: 30
+    staminaDamageToPlayer: 50
+    damageToEnemy: 30
+    staminaDamageToEnemy: 90
+    damageToObjects: 0
+    enemyCollisionForce: 30
+    playerCollisionForce: 40
+    objectCollisionForce: 20
+    weaponDamageMultiplier: 1
+    rotationSpeed: 0
+    horizontalSpeed: 0
+    timeToDisable: 12
+    projectileHitForce: 0
+  - weaponName: SnailAcidProjectile
+    damageToPlayer: 15
+    staminaDamageToPlayer: 15
+    damageToEnemy: 0
+    staminaDamageToEnemy: 0
+    damageToObjects: 0
+    enemyCollisionForce: 20
+    playerCollisionForce: 20
+    objectCollisionForce: 10
+    weaponDamageMultiplier: 1
+    rotationSpeed: 0
+    horizontalSpeed: 0
+    timeToDisable: 3
+    projectileHitForce: 0
+  - weaponName: BallistaSpear
+    damageToPlayer: 80
+    staminaDamageToPlayer: 15
+    damageToEnemy: 100
+    staminaDamageToEnemy: 100
+    damageToObjects: 100
+    enemyCollisionForce: 40
+    playerCollisionForce: 40
+    objectCollisionForce: 20
+    weaponDamageMultiplier: 1
+    rotationSpeed: 0
+    horizontalSpeed: 18
+    timeToDisable: 3
+    projectileHitForce: 60
+  areaDenialWeaponsData:
+  - weaponName: SnailAreaDenialGas
+    damageToPlayer: 10
+    staminaDamageToPlayer: 0
+    damageToEnemy: 0
+    staminaDamageToEnemy: 0
+    damageToObjects: 0
+    enemyCollisionForce: 0
+    playerCollisionForce: 0
+    objectCollisionForce: 0
+    weaponDamageMultiplier: 0
+    rotationSpeed: 0
+    horizontalSpeed: 0
+    timeToDisable: 0
+    projectileHitForce: 0
+  - weaponName: 
+    damageToPlayer: 0
+    staminaDamageToPlayer: 0
+    damageToEnemy: 0
+    staminaDamageToEnemy: 0
+    damageToObjects: 0
+    enemyCollisionForce: 0
+    playerCollisionForce: 0
+    objectCollisionForce: 0
+    weaponDamageMultiplier: 0
+    rotationSpeed: 0
+    horizontalSpeed: 0
+    timeToDisable: 0
+    projectileHitForce: 0
+  - weaponName: 
+    damageToPlayer: 0
+    staminaDamageToPlayer: 0
+    damageToEnemy: 0
+    staminaDamageToEnemy: 0
+    damageToObjects: 0
+    enemyCollisionForce: 0
+    playerCollisionForce: 0
+    objectCollisionForce: 0
+    weaponDamageMultiplier: 0
+    rotationSpeed: 0
+    horizontalSpeed: 0
+    timeToDisable: 0
+    projectileHitForce: 0

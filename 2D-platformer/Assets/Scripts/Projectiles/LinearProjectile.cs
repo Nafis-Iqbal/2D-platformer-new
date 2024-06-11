@@ -9,7 +9,13 @@ public class LinearProjectile : ProjectileWeapon
     [Header("Projectile Properties")]
     public bool rotatingProjectile;
     private float rotationSpeed = 450f;
-    private float horizontalSpeed = 10f;
+    public float horizontalSpeed = 10f;
+    public float appliedForce;
+    public bool forceMode = false;
+    public bool forceAlreadyApplied;
+    public bool lookAtTarget;
+    Vector2 tempVelocity;
+    float arrowOrientationAngle;
 
     protected override void OnEnable()
     {
@@ -17,20 +23,30 @@ public class LinearProjectile : ProjectileWeapon
 
         rotationSpeed = projectileInfo.rotationSpeed;
         horizontalSpeed = projectileInfo.horizontalSpeed;
+        forceAlreadyApplied = false;
     }
 
     protected override void Update()
     {
         base.Update();
 
-        if (!projectileHit)
+        if (!projectileHit && forceMode == false)
         {
             rb2d.velocity = projectileDirection * horizontalSpeed;
             if (rotatingProjectile) projectileSpriteTransform.Rotate(0f, 0f, -rotationSpeed * Time.deltaTime);
         }
-        else
+        else if (forceMode == true && forceAlreadyApplied == false)
         {
-            projectileSpriteTransform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            forceAlreadyApplied = true;
+            rb2d.AddForce(appliedForce * projectileDirection, ForceMode2D.Impulse);
+        }
+
+        tempVelocity = rb2d.velocity;
+
+        if (lookAtTarget == true && projectileHit == false)
+        {
+            arrowOrientationAngle = Mathf.Atan2(tempVelocity.y, tempVelocity.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(arrowOrientationAngle, Vector3.forward);
         }
     }
 }

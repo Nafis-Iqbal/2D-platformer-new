@@ -1,0 +1,34 @@
+
+MonsterSnail.png
+size: 471,155
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+SnailAntenna
+  rotate: false
+  xy: 431, 46
+  size: 38, 46
+  orig: 38, 46
+  offset: 0, 0
+  index: -1
+SnailBody
+  rotate: false
+  xy: 2, 2
+  size: 262, 151
+  orig: 262, 151
+  offset: 0, 0
+  index: -1
+SnailHead
+  rotate: true
+  xy: 431, 94
+  size: 59, 36
+  orig: 59, 36
+  offset: 0, 0
+  index: -1
+SnailShell
+  rotate: false
+  xy: 266, 12
+  size: 163, 141
+  orig: 163, 141
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &449211186019165301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6222826837556286753}
+  - component: {fileID: 3959870901543431549}
+  - component: {fileID: 4851620951217395866}
+  m_Layer: 2
+  m_Name: LevelSectionControllerObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6222826837556286753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449211186019165301}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 60.3, y: 12.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3959870901543431549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449211186019165301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a88ba7b16ec20b4fb581744ff14ac07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entryAtRight: 0
+  resetsEnemyStatesOnLeave: 0
+  spawnAllEnemiesInSection: 0
+  staticGameObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  enemyGameObjects:
+  - boolProperty: 0
+    gameObjectID: 0
+    intProperty: 0
+    gameObjectName: 
+    floatProperty: 0
+    gameObjectSpawnPosition: {fileID: 0}
+    structGameObject: {fileID: 0}
+  - boolProperty: 0
+    gameObjectID: 0
+    intProperty: 0
+    gameObjectName: 
+    floatProperty: 0
+    gameObjectSpawnPosition: {fileID: 0}
+    structGameObject: {fileID: 0}
+  - boolProperty: 0
+    gameObjectID: 0
+    intProperty: 0
+    gameObjectName: 
+    floatProperty: 0
+    gameObjectSpawnPosition: {fileID: 0}
+    structGameObject: {fileID: 0}
+  NPCGameObjects:
+  - boolProperty: 0
+    gameObjectID: 0
+    intProperty: 0
+    gameObjectName: 
+    floatProperty: 0
+    gameObjectSpawnPosition: {fileID: 0}
+    structGameObject: {fileID: 0}
+  - boolProperty: 0
+    gameObjectID: 0
+    intProperty: 0
+    gameObjectName: 
+    floatProperty: 0
+    gameObjectSpawnPosition: {fileID: 0}
+    structGameObject: {fileID: 0}
+  - boolProperty: 0
+    gameObjectID: 0
+    intProperty: 0
+    gameObjectName: 
+    floatProperty: 0
+    gameObjectSpawnPosition: {fileID: 0}
+    structGameObject: {fileID: 0}
+  enemySpawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  hasSpeedBoostRamps: 0
+  speedBoostRampScripts:
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!61 &4851620951217395866
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449211186019165301}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.7675781, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 20.228516, y: 18.295624}
+  m_EdgeRadius: 0

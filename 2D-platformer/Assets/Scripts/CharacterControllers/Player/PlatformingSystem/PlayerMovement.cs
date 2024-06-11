@@ -22,7 +22,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D playerRB2D;
     private Rigidbody2D pushPullObjectRB2D;
     private Animator playerSpineAnimator;
-    public GameObject checkSlopeObject;
+    public GameObject checkSlopeObject, checkSlopeObjectFront;
+    public DistanceJoint2D playerDistanceJoint;
     #endregion
 
     //[HideInInspector]
@@ -36,17 +37,21 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to reach max speed when in mid-air")] public float maxAirAcceleration;
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to stop in mid-air when no direction is used")] public float maxAirDeceleration;
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to stop when changing direction when in mid-air")] public float maxAirTurnSpeed = 80f;
-    [SerializeField, Range(0f, 5f)][Tooltip("How long strafe movement is possible after jump")] public float maxAirStrafeTime = 2.5f;
+    //[SerializeField, Range(0f, 5f)][Tooltip("How long strafe movement is possible after jump")] public float maxAirStrafeTime = 2.5f;
+    float maxAirStrafeTime = 999.0f;
     [SerializeField, Range(0f, 1f)] public float walkMultiplier = 0.1f;
     [SerializeField, Range(0f, 2f)] public float joggMultiplier = 1.0f;
+    [SerializeField, Range(0f, 2f)] public float combatSprintMultiplier = 1.0f;
     [SerializeField, Range(0f, 2f)] public float sprintMultiplier = 0.1f;
     public float movementSpeedMultiplier = 1f;
     [SerializeField] private float speedMultiplier;
-    public float slidingDownSpeed, slideJumpForce;
+    public float slidingDownSpeed, slideJumpForce, slideJumpMovementMultiplier;
+    public float horizontalJumpForceMultiplier = 1.35f, verticalJumpForceMultiplier = 1.0f;
     [SerializeField][Tooltip("Friction to apply against movement on stick")] private float friction;
     public float baseMomentumForce;
     public float objectPushForce, objectPullForce;
-    public float pushPullStateEnterTime;
+    public float objectPushPullGravityScale, objectPushPullStateHeightCheckMultiplier;
+    public float pushPullStateEnterTime, objectControlStateEnterTime;
     Vector2 pushPullVector;
 
     [Header("Options")]
@@ -69,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     Quaternion initialPlayerRotation;
 
     #region Slope Calculations
-    public float slopeAngleThreshold;
+    public float slopeMinAngleThreshold, slopeMaxAngleThreshold;
     public float slideDownAngleThreshold;
     public PhysicsMaterial2D fullFriction, zeroFriction;
     [SerializeField]
@@ -77,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 slopeNormalPerp;
     [HideInInspector]
     public Vector2 onSlopeJumpVector;
+    public float frontSlopeCheckLength;
     #endregion
 
     [Header("Current State")]
@@ -85,14 +91,24 @@ public class PlayerMovement : MonoBehaviour
     public bool isOnSlope;
     public bool isSliding;
     public bool isSlideJumping;
+    public bool slideJumpQueued;
     public bool isSprinting;
     public bool pressingKey;
+    public bool useObjectKeyPressed;
     public float movementValue;
     public bool objectPushPullState;
+    public bool objectControlState;
     public bool isPushing, isPulling;
+    public bool isSlopeAtFront;
 
     [Tooltip("Used in Animator to select jogg, sprint or walk animations")]
     public int playerMovementInd;
+    Vector3 initialPlayerScale;
+
+    private void Awake()
+    {
+        initialPlayerScale = transform.localScale;
+    }
 
     private void OnEnable()
     {
@@ -104,24 +120,34 @@ public class PlayerMovement : MonoBehaviour
         playerRoll = GetComponent<PlayerRoll>();
         playerGrapplingGun = GetComponent<PlayerGrapplingGun>();
         playerCombatSystemScript = GetComponent<PlayerCombatSystem>();
+        playerDistanceJoint = GetComponent<DistanceJoint2D>();
         playerSpineAnimator = GameManager.Instance.playerSpineAnimator;
         playerFacingRight = true;
         isOnSlope = false;
-        isSliding = isSlideJumping = false;
-        objectPushPullState = false;
+        slideJumpQueued = isSliding = isSlideJumping = false;
+        objectPushPullState = objectControlState = false;
         isPushing = isPulling = false;
-        pushPullStateEnterTime = Time.time;
+        pushPullStateEnterTime = objectControlStateEnterTime = Time.time;
         pushPullVector = platformAssistedVelocity = Vector2.zero;
+        isSlopeAtFront = false;
+
+        transform.localScale = initialPlayerScale;
     }
 
     private void Update()
     {
         #region HORIZONTAL MOVEMENT
+        if (objectControlState)
+        {
+            playerRB2D.sharedMaterial = fullFriction;
+            return;
+        }
+
         if (isSprinting == true)
         {
             if (playerCombatSystemScript.combatMode == true)
             {
-                speedMultiplier = joggMultiplier;
+                speedMultiplier = combatSprintMultiplier;
             }
             else
             {
@@ -201,7 +227,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         //FLIP PLAYER FACING DIRECTION
-        else if (directionX != 0)//Player moving
+        else if (directionX != 0 && isSliding == false)//Player moving
         {
             //Debug.Log("bichi");
             if (directionX > 0 && playerFacingRight == false)
@@ -235,6 +261,7 @@ public class PlayerMovement : MonoBehaviour
                 if (playerFacingRight)
                 {
                     isPushing = true;
+                    isPulling = false;
                     //desiredVelocity = new Vector2(objectPushVelocity, 0.0f);
                     playerSpineAnimator.SetBool("PushObject", true);
                     playerSpineAnimator.SetBool("PullObject", false);
@@ -242,6 +269,7 @@ public class PlayerMovement : MonoBehaviour
                 else
                 {
                     isPulling = true;
+                    isPushing = false;
                     //desiredVelocity = new Vector2(objectPullVelocity, 0.0f);
                     playerSpineAnimator.SetBool("PullObject", true);
                     playerSpineAnimator.SetBool("PushObject", false);
@@ -252,6 +280,7 @@ public class PlayerMovement : MonoBehaviour
                 if (playerFacingRight)
                 {
                     isPulling = true;
+                    isPushing = false;
                     //desiredVelocity = new Vector2(objectPullVelocity, 0.0f);
                     playerSpineAnimator.SetBool("PullObject", true);
                     playerSpineAnimator.SetBool("PushObject", false);
@@ -259,6 +288,7 @@ public class PlayerMovement : MonoBehaviour
                 else
                 {
                     isPushing = true;
+                    isPulling = false;
                     //desiredVelocity = new Vector2(objectPushVelocity, 0.0f);
                     playerSpineAnimator.SetBool("PushObject", true);
                     playerSpineAnimator.SetBool("PullObject", false);
@@ -278,6 +308,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (objectControlState)
+        {
+            return;
+        }
+
         if (playerDodge.isExecuting ||
             playerRoll.isExecuting ||
             playerGrapplingGun.grapplingRope.isGrappling || playerGrapplingGun.playerIsOnAir
@@ -304,13 +339,31 @@ public class PlayerMovement : MonoBehaviour
 
         if (isSliding && isSlideJumping == false)
         {
+            isSlopeAtFront = checkObjectAtFront(playerFacingRight);
+
             if (playerFacingRight)
             {
-                playerRB2D.velocity = -slopeNormalPerp * slidingDownSpeed * Mathf.Sin(Mathf.Deg2Rad * slopeDownAngle);
+                if (!isSlopeAtFront)
+                {
+                    playerRB2D.velocity = -slopeNormalPerp * slidingDownSpeed * Mathf.Sin(Mathf.Deg2Rad * slopeDownAngle);
+                }
+                else
+                {
+                    rotateLeft();
+                    playerRB2D.velocity = slopeNormalPerp * slidingDownSpeed * Mathf.Sin(Mathf.Deg2Rad * slopeDownAngle);
+                }
             }
             else
             {
-                playerRB2D.velocity = slopeNormalPerp * slidingDownSpeed * Mathf.Sin(Mathf.Deg2Rad * slopeDownAngle);
+                if (!isSlopeAtFront)
+                {
+                    playerRB2D.velocity = slopeNormalPerp * slidingDownSpeed * Mathf.Sin(Mathf.Deg2Rad * slopeDownAngle);
+                }
+                else
+                {
+                    rotateRight();
+                    playerRB2D.velocity = -slopeNormalPerp * slidingDownSpeed * Mathf.Sin(Mathf.Deg2Rad * slopeDownAngle);
+                }
             }
             return;
         }
@@ -329,7 +382,7 @@ public class PlayerMovement : MonoBehaviour
         onGround = playerJump.onGround;
         tempVelocity = playerRB2D.velocity;
 
-        if (playerCombatSystemScript.heavyAttackExecuting == false && playerCombatSystemScript.lightAttackExecuting == false)
+        if (playerCombatSystemScript.heavyAttackExecuting == false && playerCombatSystemScript.lightAttackExecuting == false && MovementLimiter.instance.playerCanMove == true)
         {
             if (objectPushPullState)
             {
@@ -375,15 +428,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (playerCombatSystemScript.lightAttackExecuting && playerCombatSystemScript.canChangeDirectionDuringAttack)
                 {
-                    Debug.Log("Behen");
                     if (context.ReadValue<float>() > 0f)
                     {
-                        Debug.Log("mami");
                         rotateRight();
                     }
                     else if (context.ReadValue<float>() < 0f)
                     {
-                        Debug.Log("boudi");
                         rotateLeft();
                     }
                 }
@@ -425,10 +475,18 @@ public class PlayerMovement : MonoBehaviour
             platformAssistedVelocity.x = movingPlatformRB2D.velocity.x;
         }
 
-        if (playerJump.jumpInProgress)//Use jump velocity along horizontal aksis
+        if (playerJump.jumpInProgress || onGround == false)//Use jump velocity along horizontal axis
         {
-            if (Time.time - playerJump.lastJumpStartTime > maxAirStrafeTime) tempVelocity.x = 0.0f;
-            else tempVelocity.x = tempVelocity.x * playerJump.finalJumpMovementMultiplier;
+            if (Time.time - playerJump.lastJumpStartTime > maxAirStrafeTime)
+            {
+                tempVelocity.x = 0.0f;
+                //Debug.Log("420 420");
+            }
+            else
+            {
+                tempVelocity.x = tempVelocity.x * playerJump.finalJumpMovementMultiplier;
+                //Debug.Log("mane ki bhai?");
+            }
 
             if (playerJump.onMovingPlatform) playerRB2D.velocity = (tempVelocity * movementSpeedMultiplier * tempSpeedWithoutAccel) + platformAssistedVelocity;
             else playerRB2D.velocity = tempVelocity * movementSpeedMultiplier * tempSpeedWithoutAccel;
@@ -566,13 +624,14 @@ public class PlayerMovement : MonoBehaviour
 
         //check if standing on slope
         RaycastHit2D Hit3 = Physics2D.Raycast(checkSlopeObject.transform.position, Vector3.down, 10.0f, mask);
-        if (onGround == true && Hit3.collider != null)
+        //Debug.Log("object: " + Hit3.collider.gameObject);
+        if (onGround == true && Hit3.collider != null && Hit3.collider.CompareTag("Platforms") == true)
         {
             onSlopeJumpVector = Hit3.normal;
             slopeNormalPerp = Vector2.Perpendicular(Hit3.normal).normalized;
             slopeDownAngle = Vector2.Angle(Hit3.normal, Vector2.up);
 
-            if (slopeDownAngle > slopeAngleThreshold) isOnSlope = true;
+            if (slopeDownAngle > slopeMinAngleThreshold && slopeDownAngle < slopeMaxAngleThreshold) isOnSlope = true;
             else isOnSlope = false;
 
             if (slopeDownAngle < slideDownAngleThreshold)
@@ -592,6 +651,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
+            //Debug.Log("object: " + Hit3.collider.gameObject + " Solop: " + slopeDownAngle);
             //Debug.DrawRay(Hit3.point, Hit3.normal, Color.green);
             //Debug.DrawRay(Hit3.point, slopeNormalPerp, Color.red);
         }
@@ -604,6 +664,21 @@ public class PlayerMovement : MonoBehaviour
 
         Debug.DrawRay(Hit3.point, Hit3.normal, Color.green);
         Debug.DrawRay(Hit3.point, slopeNormalPerp, Color.red);
+        Debug.DrawLine(checkSlopeObjectFront.transform.position, checkSlopeObjectFront.transform.position + new Vector3(frontSlopeCheckLength, 0.0f, 0.0f));
+    }
+
+    bool checkObjectAtFront(bool facingRight)
+    {
+        LayerMask mask = LayerMask.GetMask("Ground");
+        Vector2 raycastDirection;
+
+        if (facingRight) raycastDirection = Vector2.right;
+        else raycastDirection = Vector2.left;
+
+        RaycastHit2D raycastHit = Physics2D.Raycast(checkSlopeObjectFront.transform.position, raycastDirection, frontSlopeCheckLength, mask);
+        if (raycastHit) Debug.Log("hit gObject: " + raycastHit.collider.gameObject.name);
+
+        return raycastHit;
     }
 
     public void OnSlideJump(InputAction.CallbackContext context)
@@ -612,9 +687,11 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("seelaide");
             playerJump.wallJumpAnimInProgress = true;
+            playerJump.finalJumpMovementMultiplier = slideJumpMovementMultiplier;
             playerSpineAnimator.SetBool("SlideJump", true);
             playerSpineAnimator.SetBool("Sliding", false);
 
+            slideJumpQueued = true;
             isSliding = false;
             isSlideJumping = true;
         }
@@ -623,7 +700,23 @@ public class PlayerMovement : MonoBehaviour
     public void AddSlideJumpForce()
     {
         playerRB2D.velocity = Vector2.zero;
-        playerRB2D.AddForce(onSlopeJumpVector * slideJumpForce, ForceMode2D.Impulse);
+        playerRB2D.AddForce(new Vector2(onSlopeJumpVector.x * slideJumpForce * horizontalJumpForceMultiplier, onSlopeJumpVector.y * slideJumpForce * verticalJumpForceMultiplier), ForceMode2D.Impulse);
+    }
+
+    public void ResetJumpSlideVariables()
+    {
+        // if (onGround == false) Debug.Log("Jump Vars Reset");
+        // lastJumpStartTime = Time.time;
+        // groundCount = 1;
+
+        // isJumpPressed = jumpClimbInProgress = false;
+        // jumpAnimInProgress = jumpInProgress = wallJumpAnimInProgress = wallJumpInProgress = false;
+
+        // minLandHeight = movementMinimumLandHeight;
+
+        // spineAnimator.ResetTrigger("Jump");
+        // spineAnimator.SetBool("SlideJump", false);
+        // playerMovement.isSlideJumping = false;
     }
     #endregion
 
@@ -633,6 +726,40 @@ public class PlayerMovement : MonoBehaviour
         if (interactionObject != null)
         {
             interactionObject.interactionBaseScript.OnInteract();
+        }
+    }
+
+    public void OnUseObjectFunction1(InputAction.CallbackContext context)
+    {
+        if (interactionObject != null)
+        {
+            if (context.ReadValue<float>() >= 1)
+            {
+                useObjectKeyPressed = true;
+                interactionObject.interactionBaseScript.OnUseObjectFunction1(true);
+            }
+            else if (context.ReadValue<float>() < 1)
+            {
+                useObjectKeyPressed = false;
+                interactionObject.interactionBaseScript.OnUseObjectFunction1(false);
+            }
+        }
+    }
+
+    public void OnUseObjectFunction2(InputAction.CallbackContext context)
+    {
+        if (interactionObject != null)
+        {
+            if (context.ReadValue<float>() >= 1)
+            {
+                useObjectKeyPressed = true;
+                interactionObject.interactionBaseScript.OnUseObjectFunction2(true);
+            }
+            else if (context.ReadValue<float>() < 1)
+            {
+                useObjectKeyPressed = false;
+                interactionObject.interactionBaseScript.OnUseObjectFunction2(false);
+            }
         }
     }
 
@@ -650,9 +777,24 @@ public class PlayerMovement : MonoBehaviour
 
     public void exitPushPullObjectState()
     {
-        Debug.Log("KCHI");
         objectPushPullState = false;
         pushPullObjectRB2D = null;
+        isPulling = isPushing = false;
+
+        transform.rotation = initialPlayerRotation;
+    }
+
+    public void enterObjectControlState()
+    {
+        objectControlState = true;
+
+        objectControlStateEnterTime = Time.time;
+        initialPlayerRotation = transform.rotation;
+    }
+
+    public void exitObjectControlState()
+    {
+        objectControlState = false;
 
         transform.rotation = initialPlayerRotation;
     }

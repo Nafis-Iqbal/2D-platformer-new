@@ -9,15 +9,16 @@ public class CameraController : MonoBehaviour
 {
     public static CameraController Instance;
     Camera mainCamera;
-    public Transform camRef;
 
     #region Variables Declaration
 
     #region Assets and Dependencies
-    public GameObject playerVirtualCamera;
-    public GameObject overViewVirtualCamera;
     public GameObject player;
     public CinemachineVirtualCamera playerCameraBrain;
+    public CinemachineVirtualCamera overviewCameraBrain;
+    [HideInInspector]
+    public CinemachineVirtualCamera overrideCameraBrain;
+    public Transform farBackgroundObjects;
     private CinemachineFramingTransposer cameraBrainBodyProperties;
     private Transform playerTransform;
     private PlayerMovement playerMovementScript;
@@ -27,40 +28,50 @@ public class CameraController : MonoBehaviour
     private PlayerCombatSystem playerCombatSystemScript;
 
     [HideInInspector]
-    public bool cameraBrainStat, playerSpawned;
+    public bool playerSpawned;
     #endregion
 
-    #region Camera States & Mechanical Properties
-    [Header("CAMERA STATES & MECHANICAL PROPERTIES")]
-    private float lensLerpingTempValue, screenXTempValue, screenYTempValue;
+    [Header("CAMERA MECHANICAL PROPERTIES")]
+    public bool changeFarBackgroundScale;
     public float lensChangeSmoothingFloatValue;
     public float rightLookScreenXValue, leftLookScreenXValue;
-    public float lookDownScreenYValue, lookDefaultScreenYValue, lookUpScreenYValue;//lookDefaultScreenYValue depends on level section
     public float horizontalViewTransitionSpeed, verticalViewTransitionSpeed;
-    public bool playerLookingDown, lookDownHeld, lookDownDuringFall;
-    float shakeTime;
-    public Color defaultCameraBackground;
-    public bool cameraLookingAheadRight, cameraLookingDown;
-    float lastLookDownHeldTime, lastRightLookTime, lastLeftLookTime;
+    public float lookDownScreenYValue, lookDefaultScreenYValue, lookUpScreenYValue;//lookDefaultScreenYValue depends on level section
     public float cameraLookDownTime, waitTimeForViewDirectionChange;
+
+    [Header("Camera States")]
+    public bool defaultState;
+    public bool defaultCameraSettingsOverrideMode;
+    public bool combatState, sprintState, slidingState, climbState, grappleState, lookDownState, wideAngleObjectInUse;
+    public bool cameraZoomOverrideMode;
+    public bool cameraLookingAheadRight, cameraLookingDown;
+    public bool playerLookingDown, lookDownHeld, lookDownDuringFall;
     public bool screenXViewTransitionInProgress, screenYViewTransitionInProgress;
 
     [Header("CAMERA LENS ZOOM VALUES")]
-    public bool defaultState;
-    public bool combatState, sprintState, slidingState, climbState, grappleState, lookDownState;
+
     public float defaultZoomValue = 22.0f;
     public float defaultCombatModeZoomValue;
+    public float overrideCameraYValue;
     public float sprintZoomValue;
     public float slidingZoomValue;
     public float climbHoldZoomValue, climbIdleZoomValue;
     public float grappleSwingZoomValue;
     public float lookDownZoomValue;
+    public float objectInUseZoomValue;
+    public float farBackgroundMultiplier;//currentZoomValu/defaultZoomValue
+
+    #region Camera Level Section Override
+    public int activeCameraPriorityValue = 20, inactiveCameraPriorityValue = 15;
     #endregion
 
-    #region Scripting Variables
-    private Vector3 temp;
-    private int camStat, lastPlayerPosition, lastActiveCamera;//0 for player below ; 1 for player level ; 2 for player above
-    private bool turnCameraBrainOn;
+    #region Scripting Vars & Others
+    float shakeTime;
+    public Color defaultCameraBackground;
+    float lensLerpingTempValue, screenXTempValue, screenYTempValue;
+    float lastLookDownHeldTime, lastRightLookTime, lastLeftLookTime;
+    Vector3 initialFarBackgroundScale, tempFarBackgroundScale, scaleChangeMultiplier;
+    bool lensZoomReached;
     #endregion
 
     #endregion
@@ -83,16 +94,14 @@ public class CameraController : MonoBehaviour
     {
         mainCamera = GetComponent<Camera>();
 
-        cameraBrainStat = turnCameraBrainOn = true;
         playerSpawned = false;
         playerLookingDown = lookDownHeld = lookDownDuringFall = false;
         cameraLookingAheadRight = true;
         shakeTime = 0.0f;
         lastRightLookTime = lastLeftLookTime = Time.time;
 
-        overViewVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = defaultZoomValue;
+        overviewCameraBrain.m_Lens.OrthographicSize = defaultZoomValue;
         cameraBrainBodyProperties = playerCameraBrain.GetCinemachineComponent<CinemachineFramingTransposer>();
-        lastActiveCamera = 0;
 
         playerTransform = GameManager.Instance.playerTransform;
         playerMovementScript = playerTransform.GetComponent<PlayerMovement>();
@@ -101,20 +110,27 @@ public class CameraController : MonoBehaviour
         playerGrapplingGun = playerTransform.GetComponent<PlayerGrapplingGun>();
         playerCombatSystemScript = playerTransform.GetComponent<PlayerCombatSystem>();
 
+        playerCameraBrain.m_Follow = playerTransform;
+
         initStateVariables();
         defaultState = true;
+        defaultCameraSettingsOverrideMode = false;
         screenXViewTransitionInProgress = screenYViewTransitionInProgress = false;
+
+        //Variable having special function
+        cameraZoomOverrideMode = false;
+        lensZoomReached = false;
     }
 
     void initStateVariables()
     {
-        defaultState = combatState = sprintState = slidingState = climbState = grappleState = lookDownState = false;
+        defaultState = combatState = sprintState = slidingState = climbState = grappleState = lookDownState;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (LevelTransitionScript.Instance.isPlayerOutdoors)
+        if (LevelTransitionScript.Instance.isPlayerOutdoors && cameraZoomOverrideMode == false)
         {
             #region Lens Changing
             initStateVariables();
@@ -122,48 +138,62 @@ public class CameraController : MonoBehaviour
             {
                 //changeCameraLensForOutdoors(defaultCombatModeZoomValue);//Will be different for boss encounters, change later
                 cameraLensChangerNew(defaultCombatModeZoomValue);
+                farBackgroundScaleChange(defaultCombatModeZoomValue / defaultZoomValue);
                 combatState = true;
             }
             else if (playerMovementScript.isSprinting)
             {
                 //changeCameraLensForOutdoors(sprintZoomValue);
                 cameraLensChangerNew(sprintZoomValue);
+                farBackgroundScaleChange(sprintZoomValue / defaultZoomValue);
                 sprintState = true;
             }
             else if (playerMovementScript.isSliding || playerMovementScript.isSlideJumping)
             {
                 //changeCameraLensForOutdoors(slidingZoomValue);
                 cameraLensChangerNew(slidingZoomValue);
+                farBackgroundScaleChange(slidingZoomValue / defaultZoomValue);
                 slidingState = true;
             }
             else if (playerGrapplingGun.isExecuting || playerGrapplingGun.playerIsOnAir)
             {
                 //changeCameraLensForOutdoors(grappleSwingZoomValue);
                 cameraLensChangerNew(grappleSwingZoomValue);
+                farBackgroundScaleChange(grappleSwingZoomValue / defaultZoomValue);
                 grappleState = true;
             }
             else if (playerColumn.isExecuting)
             {
                 //changeCameraLensForOutdoors(climbIdleZoomValue);
                 cameraLensChangerNew(climbIdleZoomValue);
+                farBackgroundScaleChange(climbIdleZoomValue / defaultZoomValue);
                 climbState = true;
             }
             else if (playerColumn.isHoldLooking)
             {
                 //changeCameraLensForOutdoors(climbHoldZoomValue);
                 cameraLensChangerNew(climbHoldZoomValue);
+                farBackgroundScaleChange(climbHoldZoomValue / defaultZoomValue);
                 climbState = true;
             }
             else if (lookDownHeld || lookDownDuringFall)
             {
                 //changeCameraLensForOutdoors(lookDownZoomValue);
                 cameraLensChangerNew(lookDownZoomValue);
+                farBackgroundScaleChange(lookDownZoomValue / defaultZoomValue);
                 lookDownState = true;
+            }
+            else if (wideAngleObjectInUse)
+            {
+                cameraLensChangerNew(objectInUseZoomValue, 7.5f);
+                farBackgroundScaleChange(objectInUseZoomValue / defaultZoomValue, 7.5f);
+                defaultState = false;
             }
             else
             {
                 //changeCameraLensForOutdoors(defaultZoomValue);
-                cameraLensChangerNew(defaultZoomValue);
+                cameraLensChangerNew(defaultZoomValue, 7.5f);
+                farBackgroundScaleChange(1.0f, 7.5f);
                 defaultState = true;
             }
             #endregion
@@ -209,18 +239,11 @@ public class CameraController : MonoBehaviour
                 {
                     lastRightLookTime = Time.time;
 
-                    // if (cameraLookingAheadRight == false && triggerViewDirectionChange == false)
-                    // {
-                    //     triggerViewDirectionChange = true;
-                    // }
                     if (Time.time - lastLeftLookTime > waitTimeForViewDirectionChange)
                     {
                         changeCameraViewDirectionXNew(rightLookScreenXValue);
                         cameraLookingAheadRight = true;
                     }
-
-                    //changeCameraViewDirectionXNew(rightLookScreenXValue);
-                    //cameraLookingAheadRight = true;
                 }
                 else//ScreenX = .7 look left
                 {
@@ -231,14 +254,14 @@ public class CameraController : MonoBehaviour
                         changeCameraViewDirectionXNew(leftLookScreenXValue);
                         cameraLookingAheadRight = false;
                     }
-
-                    //changeCameraViewDirectionXNew(leftLookScreenXValue);
-                    //cameraLookingAheadRight = false;
                 }
 
-                if (lookDownHeld == true || lookDownDuringFall == true)//ScreenY = .25 look Down
+                if (defaultCameraSettingsOverrideMode)
                 {
-                    //screenYViewTransitionInProgress = true;
+                    changeCameraViewDirectionYNew(overrideCameraYValue);
+                }
+                else if (lookDownHeld == true || lookDownDuringFall == true)//ScreenY = .25 look Down
+                {
                     if (cameraBrainBodyProperties.m_ScreenY > lookDownScreenYValue)
                     {
                         cameraBrainBodyProperties.m_ScreenY -= Time.deltaTime * verticalViewTransitionSpeed;
@@ -260,21 +283,118 @@ public class CameraController : MonoBehaviour
                 if (shakeTime <= 0)
                 {
                     CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
-                        playerVirtualCamera.GetComponent<CinemachineVirtualCamera>().
+                        playerCameraBrain.
                         GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
                     cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0.0f;
                 }
             }
         }
-
     }
 
-    public void changeCameraBackgroundColor(Color newColor)
+    #region Camera Mechanical Methods
+    public void cameraLensChangerNew(float targetOrthographicValue, float zoomSpeedMultiplier = 1.0f)
     {
-        mainCamera.backgroundColor = newColor;
+        lensLerpingTempValue = playerCameraBrain.m_Lens.OrthographicSize;
+
+        if (Mathf.Abs(lensLerpingTempValue - targetOrthographicValue) > .35f)
+        {
+            if (lensLerpingTempValue > targetOrthographicValue)
+            {
+                lensLerpingTempValue -= Time.deltaTime * lensChangeSmoothingFloatValue * zoomSpeedMultiplier;
+                playerCameraBrain.m_Lens.OrthographicSize = lensLerpingTempValue;
+            }
+            else
+            {
+                lensLerpingTempValue += Time.deltaTime * lensChangeSmoothingFloatValue * zoomSpeedMultiplier;
+                playerCameraBrain.m_Lens.OrthographicSize = lensLerpingTempValue;
+            }
+        }
     }
 
+    public void farBackgroundScaleChange(float targetScaleValue, float scaleSpeedMultiplier = 1.0f)
+    {
+        if (changeFarBackgroundScale == false) return;
+
+        tempFarBackgroundScale = farBackgroundObjects.transform.localScale;
+
+        if (Mathf.Abs(tempFarBackgroundScale.x - targetScaleValue) > .05f)
+        {
+            if (tempFarBackgroundScale.x > targetScaleValue)
+            {
+                tempFarBackgroundScale -= Vector3.one * Time.deltaTime * lensChangeSmoothingFloatValue * scaleSpeedMultiplier;
+                farBackgroundObjects.transform.localScale = tempFarBackgroundScale;
+            }
+            else
+            {
+                tempFarBackgroundScale += Vector3.one * Time.deltaTime * lensChangeSmoothingFloatValue * scaleSpeedMultiplier;
+                farBackgroundObjects.transform.localScale = tempFarBackgroundScale;
+            }
+        }
+    }
+
+    public void changeCameraViewDirectionXNew(float targetScreenXValue)
+    {
+        //the script for replacing orthographic size
+        screenXTempValue = cameraBrainBodyProperties.m_ScreenX;
+        //Debug.Log("check val1 : " + screenXTempValue + " val2: " + targetScreenXValue);
+
+        if (Mathf.Abs(screenXTempValue - targetScreenXValue) > .035f)
+        {
+            if (screenXTempValue > targetScreenXValue)
+            {
+                screenXTempValue -= Time.deltaTime * horizontalViewTransitionSpeed;
+                cameraBrainBodyProperties.m_ScreenX = Mathf.Max(screenXTempValue, targetScreenXValue);
+            }
+            else
+            {
+                screenXTempValue += Time.deltaTime * horizontalViewTransitionSpeed;
+                cameraBrainBodyProperties.m_ScreenX = Mathf.Min(screenXTempValue, targetScreenXValue);
+            }
+        }
+    }
+
+    public void changeCameraViewDirectionYNew(float targetScreenYValue)
+    {
+        //the script for replacing orthographic size
+        screenYTempValue = cameraBrainBodyProperties.m_ScreenY;
+
+        if (Mathf.Abs(screenYTempValue - targetScreenYValue) > .035f)
+        {
+            if (screenYTempValue > targetScreenYValue)
+            {
+                screenYTempValue -= Time.deltaTime * verticalViewTransitionSpeed;
+                cameraBrainBodyProperties.m_ScreenY = Mathf.Max(screenYTempValue, targetScreenYValue);
+            }
+            else
+            {
+                screenYTempValue += Time.deltaTime * verticalViewTransitionSpeed;
+                cameraBrainBodyProperties.m_ScreenY = Mathf.Min(screenYTempValue, targetScreenYValue);
+            }
+        }
+    }
+
+    public void CameraSystemOverrideForLevelSection(CinemachineVirtualCamera overrideCamera)
+    {
+        cameraZoomOverrideMode = true;
+
+        overrideCameraBrain = overrideCamera;
+        overrideCameraBrain.m_Priority = activeCameraPriorityValue;
+
+        playerCameraBrain.m_Priority = inactiveCameraPriorityValue;
+    }
+
+    public void DisableCameraOverrideMode()
+    {
+        cameraZoomOverrideMode = false;
+        overrideCameraBrain.m_Priority = inactiveCameraPriorityValue;
+
+        playerCameraBrain.m_Priority = activeCameraPriorityValue;
+
+    }
+    #endregion
+
+    #region Camera Look Down Methods
     public void OnLookDown(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -303,115 +423,7 @@ public class CameraController : MonoBehaviour
         //Debug.Log("Look dooown!!!");
         lookDownDuringFall = false;
     }
-
-    public void changeCameraLensForOutdoors(float lensZoomValue)
-    {
-        //the script for replacing orthographic size
-        //Debug.Log("lens: " + lensZoomValue);
-        lensLerpingTempValue = playerVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize;
-        if (Mathf.Abs(lensLerpingTempValue - lensZoomValue) < .01f) return;
-
-        StartCoroutine(cameraLensChanger(lensZoomValue));
-    }
-
-    public void changeCameraLensForIndoors()
-    {
-        float targetZoomValue = LevelTransitionScript.Instance.levelSections[LevelTransitionScript.Instance.currentActiveLevelSection].sceneDefaultCameraLensValue;
-        //the script for replacing orthographic size
-        lensLerpingTempValue = playerVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize;
-        if (Mathf.Abs(lensLerpingTempValue - targetZoomValue) < .01f) return;
-
-        StartCoroutine(cameraLensChanger(targetZoomValue));
-    }
-
-    public void changeCameraLensDefault()
-    {
-        //the script for replacing orthographic size
-        lensLerpingTempValue = playerVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize;
-        StartCoroutine(cameraLensChanger(defaultZoomValue));
-    }
-
-    IEnumerator cameraLensChanger(float targetOrthographicValue)
-    {
-        if (lensLerpingTempValue > targetOrthographicValue)
-        {
-            while (lensLerpingTempValue > targetOrthographicValue)
-            {
-                lensLerpingTempValue -= Time.deltaTime * lensChangeSmoothingFloatValue;
-                playerVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = lensLerpingTempValue;
-                yield return null;
-            }
-        }
-        else
-        {
-            while (lensLerpingTempValue < targetOrthographicValue)
-            {
-                lensLerpingTempValue += Time.deltaTime * lensChangeSmoothingFloatValue;
-                playerVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = lensLerpingTempValue;
-                yield return null;
-            }
-        }
-    }
-
-    public void cameraLensChangerNew(float targetOrthographicValue)
-    {
-        lensLerpingTempValue = playerVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize;
-
-        if (Mathf.Abs(lensLerpingTempValue - targetOrthographicValue) > .01f)
-        {
-            if (lensLerpingTempValue > targetOrthographicValue)
-            {
-                lensLerpingTempValue -= Time.deltaTime * lensChangeSmoothingFloatValue;
-                playerVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = lensLerpingTempValue;
-            }
-            else
-            {
-                lensLerpingTempValue += Time.deltaTime * lensChangeSmoothingFloatValue;
-                playerVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = lensLerpingTempValue;
-            }
-        }
-    }
-
-    public void changeCameraViewDirectionXNew(float targetScreenXValue)
-    {
-        //the script for replacing orthographic size
-        screenXTempValue = cameraBrainBodyProperties.m_ScreenX;
-        //Debug.Log("check val1 : " + screenXTempValue + " val2: " + targetScreenXValue);
-
-        if (Mathf.Abs(screenXTempValue - targetScreenXValue) > .01f)
-        {
-            if (screenXTempValue > targetScreenXValue)
-            {
-                screenXTempValue -= Time.deltaTime * horizontalViewTransitionSpeed;
-                cameraBrainBodyProperties.m_ScreenX = Mathf.Max(screenXTempValue, targetScreenXValue);
-            }
-            else
-            {
-                screenXTempValue += Time.deltaTime * horizontalViewTransitionSpeed;
-                cameraBrainBodyProperties.m_ScreenX = Mathf.Min(screenXTempValue, targetScreenXValue);
-            }
-        }
-    }
-
-    public void changeCameraViewDirectionYNew(float targetScreenYValue)
-    {
-        //the script for replacing orthographic size
-        screenYTempValue = cameraBrainBodyProperties.m_ScreenY;
-
-        if (Mathf.Abs(screenYTempValue - targetScreenYValue) > .01f)
-        {
-            if (screenYTempValue > targetScreenYValue)
-            {
-                screenYTempValue -= Time.deltaTime * verticalViewTransitionSpeed;
-                cameraBrainBodyProperties.m_ScreenY = Mathf.Max(screenYTempValue, targetScreenYValue);
-            }
-            else
-            {
-                screenYTempValue += Time.deltaTime * verticalViewTransitionSpeed;
-                cameraBrainBodyProperties.m_ScreenY = Mathf.Min(screenYTempValue, targetScreenYValue);
-            }
-        }
-    }
+    #endregion
 
     #region Accessory Methods
     //Zoom IDs 1-4 for Titans, rest for pilot weapons
@@ -425,10 +437,82 @@ public class CameraController : MonoBehaviour
             changeCameraLensDefault();
         }
 
-        playerVirtualCamera.GetComponent<CinemachineVirtualCamera>().Follow = targetPlayer.transform;
+        playerCameraBrain.Follow = targetPlayer.transform;
+    }
+
+    public void changeCameraBackgroundColor(Color newColor)
+    {
+        mainCamera.backgroundColor = newColor;
     }
     #endregion
 
-    #region Camera Shake Effects
+    #region Camera Effects
+    public void triggerRespawnPlayerCameraTransition(Vector3 spawnPosition)
+    {
+        //trasition effect code
+        if (playerTransform.parent == null)
+        {
+            playerTransform.position = spawnPosition;
+            playerTransform.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        }
+        else
+        {
+            playerTransform.parent.transform.position = spawnPosition;
+            playerTransform.parent.transform.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        }
+
+        playerTransform.gameObject.SetActive(true);
+        MovementLimiter.instance.playerCanMove = true;
+    }
+    #endregion
+
+    #region Unused
+    public void changeCameraLensForOutdoors(float lensZoomValue)
+    {
+        //the script for replacing orthographic size
+        lensLerpingTempValue = playerCameraBrain.m_Lens.OrthographicSize;
+        if (Mathf.Abs(lensLerpingTempValue - lensZoomValue) < .01f) return;
+
+        StartCoroutine(cameraLensChanger(lensZoomValue));
+    }
+
+    public void changeCameraLensForIndoors()
+    {
+        float targetZoomValue = LevelTransitionScript.Instance.levelSections[LevelTransitionScript.Instance.currentActiveLevelSection].sceneDefaultCameraLensValue;
+        //the script for replacing orthographic size
+        lensLerpingTempValue = playerCameraBrain.m_Lens.OrthographicSize;
+        if (Mathf.Abs(lensLerpingTempValue - targetZoomValue) < .01f) return;
+
+        StartCoroutine(cameraLensChanger(targetZoomValue));
+    }
+
+    public void changeCameraLensDefault()
+    {
+        //the script for replacing orthographic size
+        lensLerpingTempValue = playerCameraBrain.m_Lens.OrthographicSize;
+        StartCoroutine(cameraLensChanger(defaultZoomValue));
+    }
+
+    IEnumerator cameraLensChanger(float targetOrthographicValue)
+    {
+        if (lensLerpingTempValue > targetOrthographicValue)
+        {
+            while (lensLerpingTempValue > targetOrthographicValue)
+            {
+                lensLerpingTempValue -= Time.deltaTime * lensChangeSmoothingFloatValue;
+                playerCameraBrain.m_Lens.OrthographicSize = lensLerpingTempValue;
+                yield return null;
+            }
+        }
+        else
+        {
+            while (lensLerpingTempValue < targetOrthographicValue)
+            {
+                lensLerpingTempValue += Time.deltaTime * lensChangeSmoothingFloatValue;
+                playerCameraBrain.m_Lens.OrthographicSize = lensLerpingTempValue;
+                yield return null;
+            }
+        }
+    }
     #endregion
 }

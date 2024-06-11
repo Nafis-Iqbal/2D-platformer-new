@@ -15,6 +15,7 @@ public class EnemyAttackInfo
     public float lastAttackUsedTime = -1.0f;
     public string postAttackBehaviour;
     public float attackRange;
+    public float cancelAttackRange;
     public bool isRanged;
     public bool isMelee;
     public bool isCombo;

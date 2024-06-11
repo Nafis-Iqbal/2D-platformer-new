@@ -1,0 +1,27 @@
+
+COMBAT_DUMMY.png
+size: 1015,186
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+DummyClean
+  rotate: true
+  xy: 2, 3
+  size: 181, 335
+  orig: 181, 335
+  offset: 0, 0
+  index: -1
+DummyCut
+  rotate: true
+  xy: 339, 3
+  size: 181, 335
+  orig: 181, 335
+  offset: 0, 0
+  index: -1
+DummyShot
+  rotate: true
+  xy: 676, 2
+  size: 182, 337
+  orig: 182, 337
+  offset: 0, 0
+  index: -1

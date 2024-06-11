@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +8,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerJump : MonoBehaviour
 {
-    //public float jumpMovementMultiplierY = 1f;
     [Header("Components")]
     public Animator spineAnimator;
     [HideInInspector] public Rigidbody2D body;
@@ -32,6 +32,7 @@ public class PlayerJump : MonoBehaviour
     [SerializeField, Range(0f, 20f)][Tooltip("Gravity multiplier to apply when coming down")] public float downwardMovementMultiplier = 6.17f;
     [SerializeField, Range(0, 1)][Tooltip("How many times can you jump in the air?")] public int maxAirJumps = 0;
     public float autoLookDownFallHeight;
+    List<Collider2D> groundCollidersInTouch = new List<Collider2D>();
 
     [Header("Ground Check Objects")]
     public GameObject checkHeightObject1;
@@ -76,12 +77,19 @@ public class PlayerJump : MonoBehaviour
 
     #region Slope Calculations
     public bool isOnSlope;
-    public float slopeAngleThreshold;
+    public float slopeMinAngleThreshold, slopeMaxAngleThreshold;
     [SerializeField]
     private float slopeDownAngle;
     private Vector2 slopeNormalPerp;
     [HideInInspector]
     public Vector2 onSlopeJumpVector;
+    #endregion
+
+    #region Fall Damage Calculations
+    public float maxFallDistance;
+    public bool wasGrounded;
+    public bool isFalling, wasFalling;
+    public float startOfFall;
     #endregion
 
     void Awake()
@@ -97,6 +105,7 @@ public class PlayerJump : MonoBehaviour
         playerGrapplingGun = GetComponent<PlayerGrapplingGun>();
         defaultGravityScale = 1f;
         combatMode = false;
+        startOfFall = transform.position.y;
     }
 
     private void OnEnable()
@@ -124,7 +133,7 @@ public class PlayerJump : MonoBehaviour
         //onGround = checkIfOnGroundHeight();
         if (playerMovement.objectPushPullState)
         {
-            onGround = checkIfOnGroundHeight();
+            onGround = checkIfOnGroundHeightPushPullState();
         }
 
         if (playerGrapplingGun.isExecuting == false && jumpAnimInProgress == false &&
@@ -145,6 +154,14 @@ public class PlayerJump : MonoBehaviour
             else spineAnimator.SetTrigger("Landed");
         }
 
+        if (onGround == false && body.velocity.y < 0.0f) isFalling = true;
+
+        if (!wasFalling && isFalling) startOfFall = transform.position.y;
+        if (!wasGrounded == onGround && onGround == true) takeFallDamage();
+
+        wasFalling = isFalling;
+        wasGrounded = onGround;
+
         if (heightFromGround > autoLookDownFallHeight)
         {
             CameraController.Instance.OnLookDownDuringFall();
@@ -154,7 +171,8 @@ public class PlayerJump : MonoBehaviour
             CameraController.Instance.OnLookDownDuringFallEnd();
         }
 
-        setPhysics();
+        //Exclude separate Physics calculations when in object push pull state
+        if (playerMovement.objectPushPullState == false) setPhysics();
 
         //Jump buffer allows us to queue up a jump, which will play when we next hit the ground
         if (jumpBuffer > 0)
@@ -229,7 +247,9 @@ public class PlayerJump : MonoBehaviour
             body.velocity = velocity;
         }
 
-        calculateGravity();
+        //Exclude separate Gravity calculations when in object push pull state
+        if (playerMovement.objectPushPullState == false) calculateGravity();
+        else body.gravityScale = playerMovement.objectPushPullGravityScale;
     }
 
     private void DoAJump()
@@ -275,7 +295,7 @@ public class PlayerJump : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         //Debug.Log("kire baal: " + context.phase + " Time: " + Time.time + "Value: " + context.ReadValue<float>());
-        if (playerMovement.isSliding) return;
+        if (playerMovement.isSliding || playerMovement.isSlideJumping || jumpInProgress || onGround == false) return;
 
         playerMoveInd = playerMovement.playerMovementInd;
 
@@ -378,7 +398,7 @@ public class PlayerJump : MonoBehaviour
             slopeNormalPerp = Vector2.Perpendicular(Hit3.normal).normalized;
             slopeDownAngle = Vector2.Angle(Hit3.normal, Vector2.up);
 
-            if (slopeDownAngle > slopeAngleThreshold)
+            if (slopeDownAngle > slopeMinAngleThreshold && slopeDownAngle < slopeMaxAngleThreshold)
             {
                 isOnSlope = true;
                 return true;
@@ -419,25 +439,58 @@ public class PlayerJump : MonoBehaviour
         Gizmos.DrawLine(checkHeightObject2.transform.position, checkHeightObject2.transform.position + new Vector3(0.0f, -finalMinLandHeight, 0.0f));
     }
 
+    void takeFallDamage()
+    {
+        float playerFullHealth = 200.0f;
+        float fallDistance = Mathf.Abs(startOfFall - transform.position.y);
+
+        float fallLimitDistanceRatio = fallDistance / maxFallDistance;
+        //Debug.Log("Fall ratio: " + fallLimitDistanceRatio + " fall distance: " + fallDistance + " maxFall: " + maxFallDistance);
+        //Calculating damage to apply
+        //Less ratio means less damage.
+        if (fallLimitDistanceRatio < .4f) return;
+        else if (fallLimitDistanceRatio < .65f)
+        {
+            playerCombatSystemScript.TakeEnvironmentDamage(playerFullHealth * .35f);
+            //apply 35% damage
+        }
+        else if (fallLimitDistanceRatio < .98f)
+        {
+            //apply 75% damage
+            playerCombatSystemScript.TakeEnvironmentDamage(playerFullHealth * .75f);
+        }
+        else if (fallLimitDistanceRatio >= .98f)
+        {
+            //death
+            playerCombatSystemScript.TakeEnvironmentDamage(playerFullHealth);
+        }
+    }
+
     public void ResetJumpVariables()
     {
-        lastJumpStartTime = Time.time;
+        if (playerMovement.slideJumpQueued == false)
+        {
+            lastJumpStartTime = Time.time;
 
-        isJumpPressed = jumpClimbInProgress = false;
-        jumpAnimInProgress = jumpInProgress = wallJumpAnimInProgress = wallJumpInProgress = false;
+            isJumpPressed = jumpClimbInProgress = false;
+            jumpAnimInProgress = jumpInProgress = wallJumpAnimInProgress = wallJumpInProgress = false;
 
-        minLandHeight = movementMinimumLandHeight;
+            minLandHeight = movementMinimumLandHeight;
 
-        spineAnimator.ResetTrigger("Jump");
-        spineAnimator.SetBool("SlideJump", false);
-        playerMovement.isSlideJumping = false;
+            spineAnimator.ResetTrigger("Jump");
+            spineAnimator.SetBool("SlideJump", false);
+            playerMovement.isSlideJumping = false;
+        }
+
+        isFalling = wasFalling = false;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Platforms"))
+        if (other.gameObject.CompareTag("Platforms") && other.enabled == true)
         {
-            onGround = true;
+            if (!groundCollidersInTouch.Contains(other)) groundCollidersInTouch.Add(other);
+            if (groundCollidersInTouch.Count > 0) onGround = true;
         }
     }
 
@@ -445,14 +498,28 @@ public class PlayerJump : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Platforms") && Time.time - playerMovement.pushPullStateEnterTime > 1.0f)
         {
-            Debug.Log("bichikechi: " + other.gameObject);
-            onGround = false;
+            if (groundCollidersInTouch.Contains(other))
+            {
+                Debug.Log("exit object name " + other.gameObject);
+                groundCollidersInTouch.Remove(other);
+                if (groundCollidersInTouch.Count <= 0) onGround = false;
+            }
+            //Forgot cause of logic will reintroduce when find bug 
+            //if (checkIfOnGroundHeight()) onGround = true;
         }
     }
 
+    // void OnTriggerExit2D(Collider2D other)
+    // {
+    //     if (other.gameObject.CompareTag("Platforms") && Time.time - playerMovement.pushPullStateEnterTime > 1.0f && groundCount < 2)
+    //     {
+    //         onGround = false;
+    //     }
+    // }
+
     #region UnUsed
     //Returns true if player i close enough to the ground for landing animation
-    private bool checkIfOnGroundHeight()
+    private bool checkIfOnGroundHeightPushPullState()
     {
         LayerMask mask = LayerMask.GetMask("Ground");
 
@@ -461,25 +528,61 @@ public class PlayerJump : MonoBehaviour
 
         finalMinLandHeight = minLandHeight;
         heightFromGround = Mathf.Min(Hit1.distance, Hit2.distance);
+        if (playerMovement.objectPushPullState) finalMinLandHeight = finalMinLandHeight * playerMovement.objectPushPullStateHeightCheckMultiplier;
 
-        // if (checkIfBaseOnSlope())
-        // {
-        //     if (playerMovement.isSliding == true)
-        //     {
-        //         finalMinLandHeight *= dropCorrectionMultiplierForSlope;
-        //     }
-        //     else
-        //     {
-        //         finalMinLandHeight *= dropCorrectionMultiplierForSlope * 2.5f;
-        //     }
-        // }
+        //Debug.Log("H1: " + Hit1.collider.gameObject + " dist: " + Hit1.distance + " H2: " + Hit2.collider.gameObject + " dist: " + Hit2.distance);
+        if (Hit1.collider == null && Hit2.collider == null)
+        {
+            return false;
+        }
+        else if (Hit1.collider == null && Hit2.collider.CompareTag("Platforms") == true)
+        {
+            if (Hit2.distance > finalMinLandHeight)
+            {
+                return false;
+            }
+            else return true;
+        }
+        else if (Hit2.collider == null && Hit1.collider.CompareTag("Platforms") == true)
+        {
+            if (Hit1.distance > finalMinLandHeight)
+            {
+                return false;
+            }
+            else return true;
+        }
+        else if (Hit1.collider.CompareTag("Platforms") == true && Hit2.collider.CompareTag("Platforms") == true)
+        {
+            if (Hit1.distance > finalMinLandHeight && Hit2.distance > finalMinLandHeight)//if high on ground
+            {
+                //Debug.Log("On Air: " + Hit1.distance + " " + Hit2.distance + "lH: " + finalMinLandHeight);
+                return false;
+            }
+            else
+            {
+                return true;//On Ground
+            }
+        }
+        else
+        {
+            //Debug.Log("On bichi Ground: " + Hit1.distance + " gb " + Hit1.collider.gameObject);
+            return false;//On Air
+        }
+    }
 
-        // if (onMovingPlatform)
-        // {
-        //     finalMinLandHeight = minLandHeight * 10.0f;
-        // }
+    private bool checkIfOnGroundHeight()
+    {
+        LayerMask mask = LayerMask.GetMask("Ground");
 
-        //Debug.Log("H1: " + Hit1.collider.gameObject + "H2: " + Hit2.collider.gameObject);
+        finalMinLandHeight = minLandHeight;
+        if (playerMovement.objectPushPullState) finalMinLandHeight = finalMinLandHeight * playerMovement.objectPushPullStateHeightCheckMultiplier;
+
+        RaycastHit2D Hit1 = Physics2D.Raycast(checkHeightObject1.transform.position, Vector2.down, finalMinLandHeight, mask);
+        RaycastHit2D Hit2 = Physics2D.Raycast(checkHeightObject2.transform.position, Vector2.down, finalMinLandHeight, mask);
+
+        heightFromGround = Mathf.Min(Hit1.distance, Hit2.distance);
+
+        //Debug.Log("H1: " + Hit1.collider.gameObject + " dist: " + Hit1.distance + " H2: " + Hit2.collider.gameObject + " dist: " + Hit2.distance);
         if (Hit1.collider == null && Hit2.collider == null)
         {
             return false;

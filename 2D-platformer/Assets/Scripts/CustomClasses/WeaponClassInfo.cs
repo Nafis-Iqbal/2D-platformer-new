@@ -11,6 +11,8 @@ public class WeaponClassInfo
     public float staminaDamageToPlayer;
     public float damageToEnemy;
     public float staminaDamageToEnemy;
+
+    public float damageToObjects;
     [Header("ENVIRONMENT INTERACTIONS")]
     public float enemyCollisionForce;
     public float playerCollisionForce;

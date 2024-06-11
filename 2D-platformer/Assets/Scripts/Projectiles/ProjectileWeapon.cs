@@ -78,6 +78,7 @@ public class ProjectileWeapon : MonoBehaviour
         if (!projectileHit && currentTime - spawnTime > timeToDisable)
         {
             Debug.Log("Arrow disabled1: " + projectileName + " " + (currentTime - spawnTime) + " " + timeToDisable);
+            //Debug.Log("Arrow disabled1: " + projectileName + " current time " + currentTime + " spawntime " + spawnTime + " " + timeToDisable);
             gameObject.SetActive(false);
             return;
         }
@@ -96,8 +97,10 @@ public class ProjectileWeapon : MonoBehaviour
             return;
         }
 
-        if (isProjectileActive && collision.transform.CompareTag("Platforms") || collision.transform.CompareTag("Shield") || collision.transform.CompareTag("Player")
-        || collision.transform.CompareTag("Objects"))
+        if (collision.isTrigger) return;
+
+        if (isProjectileActive && (collision.transform.CompareTag("Platforms") || collision.transform.CompareTag("Player")
+        || collision.transform.CompareTag("Objects")))
         {
             Debug.Log("Arrow hit");
             projectileHit = true;
@@ -107,25 +110,28 @@ public class ProjectileWeapon : MonoBehaviour
             transform.parent = collision.transform;
 
             //Do Damage to player
-            if (collision.transform.CompareTag("Shield"))
+            if (collision.transform.CompareTag("Player"))
             {
-                if (collision.transform.root.transform.CompareTag("Player"))
+                if (playerCombatSystemScript.isBlocking)
                 {
                     playerCombatSystemScript.TakeProjectileShieldDamage(projectileInfo.damageToPlayer, projectileInfo.staminaDamageToPlayer);
                 }
                 else
                 {
-                    collision.transform.GetComponent<EnemyBase>().TakeProjectileDamage(projectileInfo.damageToEnemy, projectileInfo.staminaDamageToEnemy);
+                    playerCombatSystemScript.TakeProjectileDamage(projectileInfo.damageToPlayer);
                 }
-            }
-            else if (collision.transform.CompareTag("Player"))
-            {
-                playerCombatSystemScript.TakeProjectileDamage(projectileInfo.damageToPlayer);
             }
             else if (collision.transform.CompareTag("Enemy"))
             {
                 collision.transform.GetComponent<EnemyBase>().TakeProjectileDamage(projectileInfo.damageToEnemy, projectileInfo.staminaDamageToEnemy);
                 collision.transform.GetComponent<Rigidbody2D>().AddForce(projectileDirection * projectileInfo.projectileHitForce, ForceMode2D.Impulse);
+            }
+            else if (collision.transform.CompareTag("Objects"))
+            {
+                if (collision.transform.GetComponent<BreakableObjects>() != null)
+                {
+                    collision.transform.GetComponent<BreakableObjects>().TakeDamage(projectileInfo.damageToObjects);
+                }
             }
         }
     }

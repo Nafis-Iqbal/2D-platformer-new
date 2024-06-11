@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7326713781152866617}
   - component: {fileID: 7326713781152866623}
   - component: {fileID: 7326713781152866622}
-  m_Layer: 8
+  m_Layer: 17
   m_Name: BlockSprite
   m_TagString: Platforms
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.30877686, y: -0.30687714}
+  m_Offset: {x: 0.09893179, y: -0.30687714}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -107,7 +107,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 6.9727783, y: 6.1000824}
+  m_Size: {x: 6.553088, y: 6.1000824}
   m_EdgeRadius: 0
 --- !u!1 &7326713781230816032
 GameObject:
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 7326713781230816039}
   m_Layer: 0
   m_Name: EarthBlockCube
-  m_TagString: Untagged
+  m_TagString: Objects
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -140,7 +140,7 @@ Transform:
   m_GameObject: {fileID: 7326713781230816032}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 129.64, y: -88.92, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.18, y: 1.52, z: 1}
   m_Children:
   - {fileID: 7326713782271800654}
   - {fileID: 7326713781152866617}
@@ -165,8 +165,8 @@ Rigidbody2D:
   m_GravityScale: 2
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &7326713781230816043
 BoxCollider2D:
@@ -181,7 +181,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -4.7216797, y: 1.0011063}
+  m_Offset: {x: -3.7073743, y: -0.5490024}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -192,7 +192,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.6274414, y: 3.4854584}
+  m_Size: {x: 0.84168196, y: 2.72401}
   m_EdgeRadius: 0
 --- !u!61 &7326713781230816042
 BoxCollider2D:
@@ -207,7 +207,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 5.352722, y: 1.0939789}
+  m_Offset: {x: 3.8884423, y: -0.51051927}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -218,7 +218,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.531128, y: 3.2997131}
+  m_Size: {x: 0.8450017, y: 2.7014337}
   m_EdgeRadius: 0
 --- !u!70 &7326713781230816037
 CapsuleCollider2D:
@@ -233,8 +233,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.1609498, y: -3.3527925}
-  m_Size: {x: 6.5277147, y: 2.2749326}
+  m_Offset: {x: 0.09580943, y: -3.2712073}
+  m_Size: {x: 6.5121546, y: 2.111764}
   m_Direction: 1
 --- !u!114 &7326713781230816033
 MonoBehaviour:
@@ -249,6 +249,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractionEnabled: 0
+  inCargoState: 0
+  defaultMass: 1000
   inUse: 0
   onGround: 0
   targetObjectID: 0
@@ -263,6 +265,8 @@ MonoBehaviour:
   rightCollider: {fileID: 7326713781230816042}
   defaultGravityScale: 2
   fallingGravityScale: 4
+  defaultMass: 1000
+  useStateMass: 100
 --- !u!114 &7326713781230816039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,6 +280,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiPrompt: {fileID: 7326713782271800649}
+  hasAmbiguousColliderChecks: 0
+  interactineReferenceObject: {fileID: 0}
+  maximumCheckDistance: 0
   promptFloatingSpace: 2
   floatSpeed: 2
   isPlayerInZone: 0

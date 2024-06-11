@@ -17,6 +17,7 @@ public class PlayerInputManager : MonoBehaviour
     private PlayerColumn playerColumn;
     private PlayerJump playerJump;
     private PlayerGrapplingGun playerGrapplingGun;
+    public bool playerControlsSuspended;
     //public LevelTransitionScript levelTransitionObject;
 
     public bool lookDataRequired = false;
@@ -129,10 +130,20 @@ public class PlayerInputManager : MonoBehaviour
         // player interact
         playerInputActions.Player.Interact.performed += OnInteract;
         playerInputActions.Player.Interact.Enable();
+
+        playerInputActions.Player.UseObjectFunction1.performed += OnUseObjectFunction1;
+        playerInputActions.Player.UseObjectFunction1.Disable();
+
+        playerInputActions.Player.UseObjectFunction2.performed += OnUseObjectFunction2;
+        playerInputActions.Player.UseObjectFunction2.Disable();
+
+        playerControlsSuspended = false;
     }
 
     private void Update()
     {
+        if (playerControlsSuspended) return;
+
         connectedGamepadCount = Gamepad.all.Count;
         // handle input interference
         if (lookDataRequired)
@@ -320,20 +331,10 @@ public class PlayerInputManager : MonoBehaviour
         playerCombatSystemScript.OnWeaponHolsterPrompted(context);
     }
 
-    // private void OnWeaponAttack1RollAttack(InputAction.CallbackContext context)
-    // {
-    //     playerCombatSystemScript.OnWeaponAttack1RollAttack(context);
-    // }
-
     private void OnWeaponLightAttack(InputAction.CallbackContext context)
     {
         playerCombatSystemScript.OnWeaponLightAttack(context);
     }
-
-    // private void OnWeaponAttack2(InputAction.CallbackContext context)
-    // {
-    //     playerCombatSystemScript.OnWeaponAttack2(context);
-    // }
 
     private void OnWeaponAttack3(InputAction.CallbackContext context)
     {
@@ -387,14 +388,6 @@ public class PlayerInputManager : MonoBehaviour
         playerRoll.OnRoll(context);
     }
 
-    private void OnWalk(InputAction.CallbackContext context)
-    {
-        playerInputActions.Player.Move.Disable();
-        playerInputActions.Player.Move.Enable();
-
-        playerMovement.OnWalk(context);
-    }
-
     public void OnMove(InputAction.CallbackContext context)
     {
         playerMovement.OnMovement(context);
@@ -418,15 +411,45 @@ public class PlayerInputManager : MonoBehaviour
             mousePosition.x = mousePosition.x - Screen.width / 2;
             mousePosition.y = mousePosition.y - Screen.height / 2;
         }
-        //Debug.Log("mP: " + mousePosition);
     }
+
     public void OnInteract(InputAction.CallbackContext context)
     {
         playerMovement.OnInteract();
+    }
+
+    public void OnUseObjectFunction1(InputAction.CallbackContext context)
+    {
+        playerMovement.OnUseObjectFunction1(context);
+    }
+
+    public void OnUseObjectFunction2(InputAction.CallbackContext context)
+    {
+        playerMovement.OnUseObjectFunction2(context);
+    }
+
+    public void DisablePlayerControls()
+    {
+        playerControlsSuspended = true;
+        playerInputActions.Player.Disable();
+    }
+
+    public void EnablePlayerControls()
+    {
+        playerControlsSuspended = false;
+        playerInputActions.Player.Enable();
     }
 
     // public void OnInteract(InputAction.CallbackContext context)
     // {
     //     LevelTransitionScript.Instance.OnInteract();
     // }
+
+    private void OnWalk(InputAction.CallbackContext context)
+    {
+        playerInputActions.Player.Move.Disable();
+        playerInputActions.Player.Move.Enable();
+
+        playerMovement.OnWalk(context);
+    }
 }

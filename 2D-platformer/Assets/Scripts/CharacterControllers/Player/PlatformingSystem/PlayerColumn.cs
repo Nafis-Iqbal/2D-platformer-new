@@ -111,7 +111,7 @@ public class PlayerColumn : MonoBehaviour
         {
             columnPositionInd = checkEndPositionsInColumn();
 
-            if (columnMoveDirection > 0.1f && columnPositionInd < 2)
+            if (columnMoveDirection > 0.1f && columnPositionInd < 2 && ledgeColliderScript.isSlipperyCollider == false)
             {
                 var movePos = new Vector2(transform.position.x, transform.position.y + columnMoveDirection * columnMoveUpSpeed * Time.fixedDeltaTime);
                 body.MovePosition(movePos);
@@ -168,7 +168,7 @@ public class PlayerColumn : MonoBehaviour
 
             columnPositionInd = checkEndPositionsInColumn();
 
-            if (columnMoveDirection > 0.1f && columnPositionInd < 2)
+            if (columnMoveDirection > 0.1f && columnPositionInd < 2 && ledgeColliderScript.isSlipperyCollider == false)
             {
                 playerSpineAnimator.SetInteger("WallLadderClimbDirection", 1);
             }
@@ -230,6 +230,23 @@ public class PlayerColumn : MonoBehaviour
             PlayerInputManager.Instance.lookDataRequired = true;
             playerSpineAnimator.ResetTrigger("Jump");
             playerSpineAnimator.SetTrigger("WallLadderClimb");
+
+            if (ledgeColliderScript.isRightCollider)
+            {
+                if (playerMovement.playerFacingRight)
+                {
+                    playerMovement.playerFacingRight = false;
+                    playerMovement.rotateLeft();
+                }
+            }
+            else
+            {
+                if (playerMovement.playerFacingRight == false)
+                {
+                    playerMovement.playerFacingRight = true;
+                    playerMovement.rotateRight();
+                }
+            }
         }
     }
     public void OnColumnJumpClimb(InputAction.CallbackContext context)

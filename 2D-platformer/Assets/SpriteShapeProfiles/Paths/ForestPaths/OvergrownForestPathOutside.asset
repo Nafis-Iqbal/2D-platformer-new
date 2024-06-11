@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af7181f404f1447c0a7a17b3070b952b, type: 3}
+  m_Name: OvergrownForestPathOutside
+  m_EditorClassIdentifier: 
+  m_Angles:
+  - m_Start: -30
+    m_End: 30
+    m_Order: 1
+    m_Sprites:
+    - {fileID: -9169653039104848483, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+    - {fileID: -5747232870821565748, guid: 75b34a4ab66208e48992f5d5dd095247, type: 3}
+    - {fileID: -1505134290367268709, guid: 6cf11a3c68109844780bf6cc651437c2, type: 3}
+    - {fileID: 0}
+  - m_Start: -60
+    m_End: -30
+    m_Order: 0
+    m_Sprites:
+    - {fileID: -5731569254208665919, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+  - m_Start: 60
+    m_End: 120
+    m_Order: 3
+    m_Sprites:
+    - {fileID: 0}
+    - {fileID: -8254638662602116451, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+  - m_Start: -240
+    m_End: -120
+    m_Order: 4
+    m_Sprites:
+    - {fileID: 7380670734904635994, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+    - {fileID: 0}
+  - m_Start: -120
+    m_End: -60
+    m_Order: 5
+    m_Sprites:
+    - {fileID: -8254638662602116451, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+    - {fileID: 0}
+  - m_Start: 30
+    m_End: 60
+    m_Order: 2
+    m_Sprites:
+    - {fileID: -5731569254208665919, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+  m_FillTexture: {fileID: 2800000, guid: afe9ce4384685094e83a3e424383b646, type: 3}
+  m_CornerSprites:
+  - m_CornerType: 0
+    m_Sprites:
+    - {fileID: -8865215754577151884, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+  - m_CornerType: 1
+    m_Sprites:
+    - {fileID: -7804536002702942197, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+  - m_CornerType: 2
+    m_Sprites:
+    - {fileID: 383639624923033607, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+  - m_CornerType: 3
+    m_Sprites:
+    - {fileID: 4016357318642810942, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+  - m_CornerType: 4
+    m_Sprites:
+    - {fileID: -7181483790120488764, guid: 29eadba9168da9d4f92eb7bfb697cf3c, type: 3}
+  - m_CornerType: 5
+    m_Sprites:
+    - {fileID: 5268471506042054759, guid: 29eadba9168da9d4f92eb7bfb697cf3c, type: 3}
+  - m_CornerType: 6
+    m_Sprites:
+    - {fileID: -839784377304475253, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+  - m_CornerType: 7
+    m_Sprites:
+    - {fileID: -5223661201367068362, guid: 87e125841e3b76b47974aac2ae8cce57, type: 3}
+  m_FillOffset: 0
+  m_UseSpriteBorders: 1

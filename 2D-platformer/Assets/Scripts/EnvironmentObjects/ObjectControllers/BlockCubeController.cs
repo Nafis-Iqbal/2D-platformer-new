@@ -9,16 +9,20 @@ public class BlockCubeController : InteractionBase
     public float pushForce, pullForce, maxBlockSpeed;
     public Collider2D leftCollider, rightCollider;
     public float defaultGravityScale, fallingGravityScale;
+    public float defaultMass, useStateMass;
     // Start is called before the first frame update
     void Start()
     {
         base.Start();
         rb2d = GetComponent<Rigidbody2D>();
+        rb2d.mass = defaultMass;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (inUse) rb2d.mass = useStateMass;
+
         if (isInteractionEnabled)
         {
             if (playerMovement.transform.position.x > transform.position.x)
@@ -78,6 +82,7 @@ public class BlockCubeController : InteractionBase
 
     public override void OnInteract()
     {
+        Debug.Log("bichi khule khel bhai!");
         if (!inUse)
         {
             inUse = true;
@@ -86,6 +91,7 @@ public class BlockCubeController : InteractionBase
 
             playerMovement.transform.SetParent(transform);
             GameManager.Instance.playerRB2D.simulated = false;
+            rb2d.mass = useStateMass;
             interactionStartTime = Time.time;
 
             playerMovement.enterPushPullObjectState(rb2d, pushForce, pullForce);
@@ -111,6 +117,7 @@ public class BlockCubeController : InteractionBase
         Debug.Log("Alr8");
         inUse = false;
         playerMovement.transform.SetParent(null);
+        rb2d.mass = defaultMass;
         GameManager.Instance.playerRB2D.simulated = true;
         interactionEndTime = Time.time;
 
@@ -134,6 +141,14 @@ public class BlockCubeController : InteractionBase
         if (other.transform.CompareTag("Platforms") && other != leftCollider && other != rightCollider && Time.time - interactionStartTime > 1.0f)
         {
             onGround = false;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            onGround = true;
         }
     }
 }

@@ -1,0 +1,13 @@
+
+Carnivore Plant Body.png
+size: 288,864
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+FlyTrapBody
+  rotate: false
+  xy: 2, 2
+  size: 284, 860
+  orig: 284, 860
+  offset: 0, 0
+  index: -1

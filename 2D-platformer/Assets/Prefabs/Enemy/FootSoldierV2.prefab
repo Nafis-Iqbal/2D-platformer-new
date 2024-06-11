@@ -1366,7 +1366,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyID: 1
+  AllStatesResetEnable: 0
   enemySpineAnimator: {fileID: 7996967098382435508}
+  colliderObject: {fileID: 7627291017146282725}
   characterHealthStaminaScript: {fileID: 0}
   projectileDetectorScript: {fileID: 8139830211808156107}
   playerTransform: {fileID: 0}
@@ -1379,6 +1381,9 @@ MonoBehaviour:
   repositionLayer:
     serializedVersion: 2
     m_Bits: 512
+  collidersToDisableCollisionWithPlayer:
+  - {fileID: 6473818202681456283}
+  - {fileID: 2340631487507469353}
   minLandHeight: 0.5
   projectedDistanceFromPlayer: 0
   playerContactAvoidRange: 0.6
@@ -1390,10 +1395,12 @@ MonoBehaviour:
   enemyAlreadyAlerted: 0
   canMove: 1
   canBlock: 0
+  initialCharacterFacingRight: 1
   characterFacingRight: 0
   isGrounded: 0
   isPatrolling: 0
   isAlerted: 0
+  isChangingCombatMode: 0
   isRepositioning: 0
   isFleeingFromPlayer: 0
   isChangingPlatform: 0
@@ -1407,11 +1414,13 @@ MonoBehaviour:
   moveAwayAfterAttack: 0
   isAIRoutineInterrupted: 0
   isCharacterBlocking: 0
-  isShielded: 0
   isPoiseBroken: 0
   isStunned: 0
+  isKnockedOffGround: 0
   weaponInLethalState: 0
   playHitEffectOnScale: 0
+  turnToPlayerTime: 0
+  isTurningTowardsPlayer: 0
   playerDistanceFromEnemy: 0
   groundBasedEnemy: 1
   canChangePlatform: 0
@@ -1436,8 +1445,11 @@ MonoBehaviour:
   followEnabled: 1
   jumpEnabled: 0
   lookAtPlayerEnabled: 1
-  hasBattleCry: 1
   hasComboAttack: 0
+  hasAutoBlock: 0
+  hasBackWalkAnimationStates: 0
+  hasAlertStates: 0
+  canRestartPatrol: 0
   movesAwayAfterAttack: 0
   changesDirectionDuringAttack: 0
   pathUpdateSeconds: 0.5
@@ -1460,6 +1472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20b479fd65503b14483069d33502e6d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hideHealthStaminaPanel: 0
   panelFadeOutInterval: 3.5
   panelFadeOutSpeed: 0.8
   playerInCombatMode: 1
@@ -1857,6 +1870,35 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 1601895185058574984}
+--- !u!114 &1601895185058574984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3850745772213183265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f726fb798ad621458c431cb9966d91d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneRoot: {fileID: 5713886717337210370}
+  flipBy180DegreeRotation: 0
+  skeletonRenderer: {fileID: 3366601588069756018}
+  skeletonGraphic: {fileID: 0}
+--- !u!114 &8139830211720111746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3850745772213183265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b54683045da32f5498806b0c6f28d9a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyBaseScript: {fileID: 4860103512417971924}
 --- !u!1 &3917420113808267677
 GameObject:
   m_ObjectHideFlags: 0
@@ -4085,35 +4127,6 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 1601895185058574984}
---- !u!114 &1601895185058574984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3850745772213183265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f726fb798ad621458c431cb9966d91d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneRoot: {fileID: 5713886717337210370}
-  flipBy180DegreeRotation: 0
-  skeletonRenderer: {fileID: 3366601588069756018}
-  skeletonGraphic: {fileID: 0}
---- !u!114 &8139830211720111746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3850745772213183265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b54683045da32f5498806b0c6f28d9a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyBaseScript: {fileID: 4860103512417971924}
 --- !u!1 &8139830211869097226
 GameObject:
   m_ObjectHideFlags: 0
@@ -4669,21 +4682,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5bbe10b1251fbf5459f05518fb9a000b, type: 3}
---- !u!4 &3850745772213183264 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 193930377, guid: 5bbe10b1251fbf5459f05518fb9a000b,
-    type: 3}
-  m_PrefabInstance: {fileID: 3850745772372232105}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3850745772213183265 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 193930376, guid: 5bbe10b1251fbf5459f05518fb9a000b,
     type: 3}
   m_PrefabInstance: {fileID: 3850745772372232105}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4233192219551249471 stripped
+--- !u!4 &3850745772213183264 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 1139350256389534614, guid: 5bbe10b1251fbf5459f05518fb9a000b,
+  m_CorrespondingSourceObject: {fileID: 193930377, guid: 5bbe10b1251fbf5459f05518fb9a000b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3850745772372232105}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7996967098382435508 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6596216358550618909, guid: 5bbe10b1251fbf5459f05518fb9a000b,
     type: 3}
   m_PrefabInstance: {fileID: 3850745772372232105}
   m_PrefabAsset: {fileID: 0}
@@ -4699,9 +4712,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9db98c60740638449864eb028fbe7ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!95 &7996967098382435508 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 6596216358550618909, guid: 5bbe10b1251fbf5459f05518fb9a000b,
+--- !u!4 &4233192219551249471 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1139350256389534614, guid: 5bbe10b1251fbf5459f05518fb9a000b,
     type: 3}
   m_PrefabInstance: {fileID: 3850745772372232105}
   m_PrefabAsset: {fileID: 0}

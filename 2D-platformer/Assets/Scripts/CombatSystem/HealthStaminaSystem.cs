@@ -188,6 +188,12 @@ public class HealthStaminaSystem : MonoBehaviour
         panelUIRenderer.alpha = 1.0f;
     }
 
+    public void hideHealthStaminaPanelOnDeath()
+    {
+        isPanelActive = false;
+        panelUIRenderer.alpha = 0.0f;
+    }
+
     void applyHealthUIBarEffect(float newHealth)
     {
         healthBar.fillAmount = newHealth / totalHealth;

@@ -92,7 +92,8 @@ public class PlayerAnimationEventHandler : MonoBehaviour
 
     public void MovementJumpRollMomentum()
     {
-        playerMovement.applyPlayerMomentum(9.0f);
+        MovementOnJumpEnd();
+        playerMovement.applyPlayerMomentum(10.0f);
     }
     #endregion
 
@@ -251,6 +252,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     {
         playerJump.jumpAnimInProgress = false;
         playerJump.wallJumpAnimInProgress = false;
+        playerMovement.isSlideJumping = false;
     }
 
     public void MovementOnJumpEnd()
@@ -262,6 +264,11 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public void MovementOnSlideJump()
     {
         playerMovement.AddSlideJumpForce();
+    }
+
+    public void MovementOnSlide()
+    {
+        playerJump.ResetJumpVariables();
     }
 
     public void MovementOnWallLadderJumpStart()
@@ -278,6 +285,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public void ResetOnJumpDropEnd()
     {
         playerJump.DisableCharging();
+        playerMovement.slideJumpQueued = false;
         playerJump.ResetJumpVariables();
         MovementLimiter.instance.playerCanParkour = true;
         MovementLimiter.instance.playerCanMove = true;
@@ -295,6 +303,8 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public void TriggerSystemsPlayerLanding()
     {
         PlayerInputManager.Instance.playerInputActions.Player.GrapplingGun.Disable();
+        playerMovement.slideJumpQueued = false;
+        playerJump.ResetJumpVariables();
         playerJump.jumpAnimInProgress = false;
         playerJump.wallJumpAnimInProgress = false;
     }
@@ -302,6 +312,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public void MovementEnableGrappleBoost()
     {
         PlayerInputManager.Instance.playerInputActions.Player.GrappleBoost.Enable();
+        playerJump.ResetJumpVariables();
     }
 
     public void DisableGrappleBoost()

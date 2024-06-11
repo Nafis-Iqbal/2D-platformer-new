@@ -144,8 +144,9 @@ public class EnemyForestSnail : EnemyBase
                         rb2d.velocity = Vector3.zero;
 
                         //testing
-                        //currentAttackID = 1;
+                        //currentAttackID = 2;
 
+                        faceTowardsPlayer();
                         lastAttackTime = Time.time;
                         enemyAttacks[currentAttackID].useAttack();
                         enemySpineAnimator.SetTrigger("Attack");
@@ -249,88 +250,15 @@ public class EnemyForestSnail : EnemyBase
 
     public void performAcidProjectileAttack()
     {
-        Debug.Log("Acciiiiddd");
         var acidObject = ObjectPooler.Instance.SpawnFromPool("SnailAcidProjectile", projectileSpawnPosition[0].position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
         acidObject.GetComponent<ArcProjectile>().initializeProjectile(projectileSpawnPosition[0].position, playerTransform.position, acidProjectileTopHeight, acidProjectileFlightTime, this.gameObject, characterFacingRight);
         acidObject.SetActive(true);
     }
 
-    #region Platform Switching
-    public override void ChangePlatforms(Vector2 targetPosition)
+    public void performPoisonGasAttack()
     {
-        if (targetPosition.y > transform.position.y)
-        {
-            Vector2 RepositionStartPoint = enemyClosestRepositionStartPoint();
-            if (Mathf.Abs(transform.position.x - RepositionStartPoint.x) > 0.05f)
-            {
-                if (!isReadyToClimb)
-                {
-                    towardsRepositionPoint(RepositionStartPoint);
-                }
-            }
-            else
-            {
-                isReadyToClimb = true;
-            }
-
-            if (isReadyToClimb)
-            {
-                // transform.position = tar;
-                rb2d.gravityScale = 0f;
-                towardsFinalTarget(targetPosition);
-            }
-            float dist = Mathf.Abs(transform.position.y - targetPosition.y);
-            if (dist < 0.05f)
-            {
-                isRepositioning = false;
-                rb2d.gravityScale = 1f;
-                isReadyToClimb = false;
-            }
-        }
-        else
-        {
-            startPos = transform.position;
-            rb2d.gravityScale = 0f;
-            targetPosition.y += 1f;
-            calculateVelocity(targetPosition);
-        }
+        var gasObject = ObjectPooler.Instance.SpawnFromPool("SnailAreaDenialGas", projectileSpawnPosition[1].position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+        gasObject.GetComponent<AreaDenialWeaponCollider>().isPlayerWeapon = false;
+        gasObject.SetActive(true);
     }
-
-    void towardsFinalTarget(Vector2 tar)
-    {
-        enemySpineAnimator.Play("repositionUp");
-        transform.position = Vector2.MoveTowards(transform.position, tar, 1f * Time.fixedDeltaTime);
-    }
-
-    void towardsRepositionPoint(Vector2 tar)
-    {
-        enemySpineAnimator.Play("Patrolling animation");
-        ParticleController.instance.moveEnemyParti(true);
-        transform.position = Vector2.MoveTowards(transform.position, tar, enemyCurrentMovementSpeed / 50f * Time.fixedDeltaTime);
-    }
-
-    void calculateVelocity(Vector2 tar)
-    {
-        dist = tar.x - startPos.x;
-        nextX = Mathf.MoveTowards(transform.position.x, tar.x, 5f * Time.fixedDeltaTime);
-        baseY = Mathf.Lerp(startPos.y, tar.y, (nextX - startPos.x) / dist);
-        height = 1f * (nextX - startPos.x) * (nextX - tar.x) / (-.25f * dist * dist);
-
-        Vector3 movePosition = new Vector3(nextX, baseY + height, transform.position.z);
-        transform.position = movePosition;
-
-        if (tar.x == transform.position.x && tar.y == transform.position.y)
-        {
-            if (!isGrounded)
-            {
-                rb2d.gravityScale = 20f;
-            }
-            else
-            {
-                isRepositioning = false;
-                rb2d.gravityScale = 1f;
-            }
-        }
-    }
-    #endregion
 }

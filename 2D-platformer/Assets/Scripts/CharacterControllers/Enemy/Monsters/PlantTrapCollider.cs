@@ -18,7 +18,7 @@ public class PlantTrapCollider : MonoBehaviour
         {
             plantTrapScript.isObjectOnTop = true;
             plantTrapScript.objectOnTop = other.gameObject;
-            plantTrapScript.objectInitialLocalPosition = other.transform.localPosition;
+            plantTrapScript.objectInitialLocalDistance = Vector2.Distance(other.transform.position, plantTrapScript.trapLengthRefPoint.position);
             plantTrapScript.plantTrapAnimator.SetTrigger("ObjectDrop");
             //other.transform.GetComponent<PlayerMovement>().setParent(transform);
         }
@@ -30,7 +30,7 @@ public class PlantTrapCollider : MonoBehaviour
         {
             plantTrapScript.isObjectOnTop = false;
             plantTrapScript.objectOnTop = null;
-            plantTrapScript.objectInitialLocalPosition = Vector3.zero;
+            plantTrapScript.objectInitialLocalDistance = 0.0f;
             plantTrapScript.plantTrapAnimator.SetTrigger("ObjectBounce");
             //other.transform.GetComponent<PlayerMovement>().resetParent();
         }

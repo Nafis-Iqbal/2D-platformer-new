@@ -233,6 +233,24 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""UseObjectFunction1"",
+                    ""type"": ""Button"",
+                    ""id"": ""6eb50d4e-6679-4e9b-9e16-833a78553da3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""UseObjectFunction2"",
+                    ""type"": ""Button"",
+                    ""id"": ""80736c63-d3cf-4454-8520-9ec0769ba580"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -507,6 +525,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""UseItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""06293734-461d-4e2f-a48b-4498bcf91dca"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""UseItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -915,6 +944,50 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""LookGamepad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9e7d7eb8-374b-4abc-84ac-72983c30659c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""UseObjectFunction1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""058290fe-d0cb-4bab-9d7b-997f55f21d83"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""UseObjectFunction1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""62e45496-8964-4533-8f04-0dffbbb50c81"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""UseObjectFunction2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1992ad48-7d14-431f-b547-798dd9c098ed"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""UseObjectFunction2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1398,6 +1471,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_LookDown = m_Player.FindAction("LookDown", throwIfNotFound: true);
         m_Player_LookMouse = m_Player.FindAction("LookMouse", throwIfNotFound: true);
         m_Player_LookGamepad = m_Player.FindAction("LookGamepad", throwIfNotFound: true);
+        m_Player_UseObjectFunction1 = m_Player.FindAction("UseObjectFunction1", throwIfNotFound: true);
+        m_Player_UseObjectFunction2 = m_Player.FindAction("UseObjectFunction2", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1492,6 +1567,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_LookDown;
     private readonly InputAction m_Player_LookMouse;
     private readonly InputAction m_Player_LookGamepad;
+    private readonly InputAction m_Player_UseObjectFunction1;
+    private readonly InputAction m_Player_UseObjectFunction2;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1519,6 +1596,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @LookDown => m_Wrapper.m_Player_LookDown;
         public InputAction @LookMouse => m_Wrapper.m_Player_LookMouse;
         public InputAction @LookGamepad => m_Wrapper.m_Player_LookGamepad;
+        public InputAction @UseObjectFunction1 => m_Wrapper.m_Player_UseObjectFunction1;
+        public InputAction @UseObjectFunction2 => m_Wrapper.m_Player_UseObjectFunction2;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1597,6 +1676,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @LookGamepad.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookGamepad;
                 @LookGamepad.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookGamepad;
                 @LookGamepad.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookGamepad;
+                @UseObjectFunction1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUseObjectFunction1;
+                @UseObjectFunction1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUseObjectFunction1;
+                @UseObjectFunction1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUseObjectFunction1;
+                @UseObjectFunction2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUseObjectFunction2;
+                @UseObjectFunction2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUseObjectFunction2;
+                @UseObjectFunction2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUseObjectFunction2;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1670,6 +1755,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @LookGamepad.started += instance.OnLookGamepad;
                 @LookGamepad.performed += instance.OnLookGamepad;
                 @LookGamepad.canceled += instance.OnLookGamepad;
+                @UseObjectFunction1.started += instance.OnUseObjectFunction1;
+                @UseObjectFunction1.performed += instance.OnUseObjectFunction1;
+                @UseObjectFunction1.canceled += instance.OnUseObjectFunction1;
+                @UseObjectFunction2.started += instance.OnUseObjectFunction2;
+                @UseObjectFunction2.performed += instance.OnUseObjectFunction2;
+                @UseObjectFunction2.canceled += instance.OnUseObjectFunction2;
             }
         }
     }
@@ -1822,6 +1913,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnLookDown(InputAction.CallbackContext context);
         void OnLookMouse(InputAction.CallbackContext context);
         void OnLookGamepad(InputAction.CallbackContext context);
+        void OnUseObjectFunction1(InputAction.CallbackContext context);
+        void OnUseObjectFunction2(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5928413603895376035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5928413603895376033}
+  - component: {fileID: 5928413603895376032}
+  m_Layer: 0
+  m_Name: Object PoolerV1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5928413603895376033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5928413603895376035}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -10.775644, y: 5.81275, z: -30.149397}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5928413603895376032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5928413603895376035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2bbefaeeff1324f8839e97fa0665cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - name: ThrowingKnife
+    prefab: {fileID: 3318870667500167459, guid: acf5a15e4b495004f8c0e853ca625f27,
+      type: 3}
+    size: 10
+  - name: PlayerProjectile
+    prefab: {fileID: 4293796941166353219, guid: 37220d623d9e51e4e913de7e0ee80aaa,
+      type: 3}
+    size: 10
+  - name: Arrow
+    prefab: {fileID: 1920131381889971676, guid: 1a5da4ce9d0d11c4183fa598d5584d49,
+      type: 3}
+    size: 10
+  - name: SnailAcidProjectile
+    prefab: {fileID: 8183562110981418253, guid: 86ef2e8eee37aeb46aa466d76a49bc39,
+      type: 3}
+    size: 7
+  - name: SnailAreaDenialGas
+    prefab: {fileID: 2420648631745529578, guid: e98eb3b175e41e645a97b692e6fc8e47,
+      type: 3}
+    size: 3
+  - name: BallistaSpear
+    prefab: {fileID: 5733944898689360096, guid: b92f82612f589cf49a321d45b284fca2,
+      type: 3}
+    size: 10

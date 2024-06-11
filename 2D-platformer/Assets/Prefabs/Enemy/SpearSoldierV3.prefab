@@ -82,6 +82,7 @@ Transform:
   m_LocalPosition: {x: 190, y: -59.28, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0.2}
   m_Children:
+  - {fileID: 1508648096093909453}
   - {fileID: 3147074823088034598}
   - {fileID: 3147074823192798168}
   - {fileID: 3483896042688062006}
@@ -124,7 +125,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.061702013, y: -0.36472368}
+  m_Offset: {x: 0.054130554, y: -0.33563876}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -135,7 +136,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.6240568, y: 7.78277}
+  m_Size: {x: 3.1260223, y: 7.84094}
   m_EdgeRadius: 0
 --- !u!114 &3147074822553797662
 MonoBehaviour:
@@ -178,7 +179,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyID: 4
+  AllStatesResetEnable: 0
   enemySpineAnimator: {fileID: 5704470061649299255}
+  colliderObject: {fileID: 7185630719717313437}
   characterHealthStaminaScript: {fileID: 0}
   projectileDetectorScript: {fileID: 0}
   playerTransform: {fileID: 0}
@@ -191,6 +194,9 @@ MonoBehaviour:
   repositionLayer:
     serializedVersion: 2
     m_Bits: 256
+  collidersToDisableCollisionWithPlayer:
+  - {fileID: 4855200440673783242}
+  - {fileID: 8518006018392587843}
   minLandHeight: 0.5
   projectedDistanceFromPlayer: 0
   playerContactAvoidRange: 0
@@ -202,6 +208,7 @@ MonoBehaviour:
   enemyAlreadyAlerted: 0
   canMove: 1
   canBlock: 0
+  initialCharacterFacingRight: 1
   characterFacingRight: 0
   isGrounded: 0
   isPatrolling: 0
@@ -226,6 +233,7 @@ MonoBehaviour:
   weaponInLethalState: 0
   playHitEffectOnScale: 0
   turnToPlayerTime: 0
+  isTurningTowardsPlayer: 0
   playerDistanceFromEnemy: 0
   groundBasedEnemy: 0
   canChangePlatform: 0
@@ -250,9 +258,11 @@ MonoBehaviour:
   followEnabled: 1
   jumpEnabled: 0
   lookAtPlayerEnabled: 1
-  hasBattleCry: 1
   hasComboAttack: 0
   hasAutoBlock: 1
+  hasBackWalkAnimationStates: 0
+  hasAlertStates: 0
+  canRestartPatrol: 0
   movesAwayAfterAttack: 0
   changesDirectionDuringAttack: 0
   pathUpdateSeconds: 0.5
@@ -277,6 +287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20b479fd65503b14483069d33502e6d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hideHealthStaminaPanel: 0
   panelFadeOutInterval: 3.5
   panelFadeOutSpeed: 0.8
   playerInCombatMode: 1
@@ -327,7 +338,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3147074822553797661}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3147074823192798175
 GameObject:
@@ -358,7 +369,7 @@ Transform:
   m_LocalScale: {x: -0.04, y: 0.08, z: 1}
   m_Children: []
   m_Father: {fileID: 3147074822553797661}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1971053207 &3147074823192798170
 SpriteShapeRenderer:
@@ -513,7 +524,7 @@ RectTransform:
   m_Children:
   - {fileID: 6529249154194587649}
   m_Father: {fileID: 3147074822553797661}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -589,7 +600,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 5}
   m_Children: []
   m_Father: {fileID: 3147074822553797661}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &5961846468681448793
 BoxCollider2D:
@@ -734,6 +745,63 @@ MonoBehaviour:
   weaponName: LongSpear
   isEnemyWeapon: 1
   enemyBaseScript: {fileID: 7889295729431814916}
+--- !u!1 &7185630719717313437
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1508648096093909453}
+  - component: {fileID: 8518006018392587843}
+  m_Layer: 11
+  m_Name: EnvironmentColliderObject
+  m_TagString: EnemyCollider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1508648096093909453
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7185630719717313437}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3147074822553797661}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &8518006018392587843
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7185630719717313437}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.07722473, y: -0.33185577}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.9692078, y: 7.827011}
+  m_EdgeRadius: 0
 --- !u!1 &8175583933298885685
 GameObject:
   m_ObjectHideFlags: 0
@@ -1097,7 +1165,7 @@ PrefabInstance:
     - target: {fileID: 1139350256389534614, guid: 262e0249db780864aa94f809762663f3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1139350256389534614, guid: 262e0249db780864aa94f809762663f3,
         type: 3}

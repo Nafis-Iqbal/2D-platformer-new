@@ -16,6 +16,7 @@ public class EnemyArcher : EnemyBase
     public float arcShotTopHeight, powerShotTopHeight, normalShotTopHeight;
     private EnemyClassInfo enemyData;
     float currentTime;
+    float maximumAttackRange, attackCooldownTime;
 
     public override void OnEnable()
     {
@@ -72,12 +73,22 @@ public class EnemyArcher : EnemyBase
             {
                 currentAttackID = Random.Range(1, enemyAttacks.Length);//randomly generate
                 Debug.Log("random attack id: " + currentAttackID);
-                if (currentTime - lastAttackTime > enemyAttacks[currentAttackID].attackMinCooldownTime) currentAttackID = 1;//Generate random number within range here;
+
+                attackCooldownTime = enemyAttacks[currentAttackID].attackMinCooldownTime;
+                if (stationaryCombatModeActive)
+                {
+                    attackCooldownTime = minTimeBetweenAttacks;
+                }
+
+                if (currentTime - lastAttackTime > attackCooldownTime || enemyAttacks[currentAttackID].cancelAttackRange > playerDistanceFromEnemy) currentAttackID = 1;//Generate random number within range here;
             }
 
             if (currentAttackID > 0)
             {
-                if (playerDistanceFromEnemy > enemyAttacks[currentAttackID].attackRange)//Reduce distance to player immediately and attack
+                maximumAttackRange = enemyAttacks[currentAttackID].attackRange;
+                if (stationaryCombatModeActive) maximumAttackRange = enemyAttackRange;
+
+                if (playerDistanceFromEnemy > maximumAttackRange)//Reduce distance to player immediately and attack
                 {
                     closeInForAttack = true;
                     enemySpineAnimator.SetInteger("MoveSpeed", 1);
@@ -107,10 +118,17 @@ public class EnemyArcher : EnemyBase
         {
             enemySpineAnimator.SetInteger("MoveSpeed", 0);
         }
+
+        if (stationaryCombatModeActive == true)
+        {
+            enemySpineAnimator.SetInteger("MoveSpeed", 0);
+        }
     }
 
     public override void HandleAttackPlayerMovement()//MODIFY METHODS TO INTEGRATE MECANIM ANIMATIONS
     {
+        if (stationaryCombatModeActive) return;
+
         if (doingAttackMove) return;
 
         enemyCurrentMovementSpeed = enemyClassSpeed * enemyCombatWalkSpeedMultiplier;

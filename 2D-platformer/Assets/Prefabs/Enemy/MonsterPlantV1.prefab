@@ -1091,9 +1091,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2904361733676519431}
+  - component: {fileID: 1873932185835681728}
+  - component: {fileID: 2904361733676519428}
   - component: {fileID: 2904361733676519424}
   - component: {fileID: 2904361733676519429}
-  - component: {fileID: 2904361733676519428}
   m_Layer: 0
   m_Name: MonsterPlantV1
   m_TagString: Objects
@@ -1118,40 +1119,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2904361733676519424
-MonoBehaviour:
+--- !u!50 &1873932185835681728
+Rigidbody2D:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2904361733676519425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c35856b80317e248a12fd8da3289362, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hitEffectScript: {fileID: 2904361733676519429}
-  enemyID: 0
-  monsterPlantAnimator: {fileID: 1713685455552477516}
-  plantTrapAnimators:
-  - {fileID: 0}
-  - {fileID: 0}
-  isDead: 0
-  health: 100
---- !u!114 &2904361733676519429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2904361733676519425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58f9d964304ad0545a14ba4eda5795fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  charScaleShrinkSpeed: 0.5
-  shrinkSizeMultiplier: 0.95
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!60 &2904361733676519428
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1191,6 +1179,46 @@ PolygonCollider2D:
       - {x: 0.77526855, y: 4.1166306}
       - {x: 0.7970581, y: 7.417198}
       - {x: 3.5515814, y: 10.412933}
+--- !u!114 &2904361733676519424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2904361733676519425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c35856b80317e248a12fd8da3289362, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalHealth: 0
+  currentHealth: 0
+  hasDamageStates: 0
+  currentStateInd: 0
+  damageStateMinimumHealthValues:
+  - 0
+  - 0
+  - 0
+  hitEffectScript: {fileID: 2904361733676519429}
+  enemyID: 0
+  monsterPlantAnimator: {fileID: 1713685455552477516}
+  isDead: 0
+  health: 100
+  vinedWallUnlockScript: {fileID: 0}
+--- !u!114 &2904361733676519429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2904361733676519425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f9d964304ad0545a14ba4eda5795fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  charScaleShrinkSpeed: 0.5
+  shrinkSizeMultiplier: 0.95
 --- !u!1 &2904361733820862706
 GameObject:
   m_ObjectHideFlags: 0
@@ -1315,13 +1343,6 @@ MonoBehaviour:
   movePointAlongX: 1
   movePointAlongY: 0
   splineAnchoredPointID: 4
-  initialAnchoringObjectPosition: {x: 0, y: 0}
-  initialSplineAnchoredPosition: {x: 0, y: 0}
-  initialSplineAnchoredLeftPosition: {x: 0, y: 0}
-  initialSplineAnchoredRightPosition: {x: 0, y: 0}
-  tempVectorCenter: {x: 0, y: 0}
-  tempVectorLeft: {x: 0, y: 0}
-  tempVectorRight: {x: 0, y: 0}
   offsetY: 0
   offsetX: 0
 --- !u!1 &2904361733956136574
@@ -1556,13 +1577,6 @@ MonoBehaviour:
   movePointAlongX: 1
   movePointAlongY: 0
   splineAnchoredPointID: 4
-  initialAnchoringObjectPosition: {x: 0, y: 0}
-  initialSplineAnchoredPosition: {x: 0, y: 0}
-  initialSplineAnchoredLeftPosition: {x: 0, y: 0}
-  initialSplineAnchoredRightPosition: {x: 0, y: 0}
-  tempVectorCenter: {x: 0, y: 0}
-  tempVectorLeft: {x: 0, y: 0}
-  tempVectorRight: {x: 0, y: 0}
   offsetY: 0
   offsetX: 0
 --- !u!1 &2904361734278096019
@@ -1713,6 +1727,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4b293f47a583914ba73df975070aabe, type: 3}
+--- !u!4 &2846719847884430391 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1139350256389534614, guid: f4b293f47a583914ba73df975070aabe,
+    type: 3}
+  m_PrefabInstance: {fileID: 2904361734144634785}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2904361734252956456 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 193930377, guid: f4b293f47a583914ba73df975070aabe,
+    type: 3}
+  m_PrefabInstance: {fileID: 2904361734144634785}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1713685455552477516 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4577458549283149549, guid: f4b293f47a583914ba73df975070aabe,
+    type: 3}
+  m_PrefabInstance: {fileID: 2904361734144634785}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5627250953590686865 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7374186402158603056, guid: f4b293f47a583914ba73df975070aabe,
@@ -1725,21 +1757,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f726fb798ad621458c431cb9966d91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!95 &1713685455552477516 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 4577458549283149549, guid: f4b293f47a583914ba73df975070aabe,
-    type: 3}
-  m_PrefabInstance: {fileID: 2904361734144634785}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2904361734252956456 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 193930377, guid: f4b293f47a583914ba73df975070aabe,
-    type: 3}
-  m_PrefabInstance: {fileID: 2904361734144634785}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2846719847884430391 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1139350256389534614, guid: f4b293f47a583914ba73df975070aabe,
-    type: 3}
-  m_PrefabInstance: {fileID: 2904361734144634785}
-  m_PrefabAsset: {fileID: 0}
