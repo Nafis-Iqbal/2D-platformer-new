@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af7181f404f1447c0a7a17b3070b952b, type: 3}
+  m_Name: GreyCliffsPath
+  m_EditorClassIdentifier: 
+  m_Angles:
+  - m_Start: -35
+    m_End: 35
+    m_Order: 0
+    m_Sprites:
+    - {fileID: -174551001270982756, guid: b773111b1bbfb17408e1176da4674f05, type: 3}
+    - {fileID: 736765092948135354, guid: b773111b1bbfb17408e1176da4674f05, type: 3}
+    - {fileID: 1855514496784454849, guid: b773111b1bbfb17408e1176da4674f05, type: 3}
+    - {fileID: 0}
+  - m_Start: -50
+    m_End: -35
+    m_Order: 0
+    m_Sprites:
+    - {fileID: -3319312685591292116, guid: b773111b1bbfb17408e1176da4674f05, type: 3}
+  - m_Start: 35
+    m_End: 50
+    m_Order: 0
+    m_Sprites:
+    - {fileID: -3319312685591292116, guid: b773111b1bbfb17408e1176da4674f05, type: 3}
+  m_FillTexture: {fileID: 0}
+  m_CornerSprites:
+  - m_CornerType: 0
+    m_Sprites:
+    - {fileID: 5705944386449103333, guid: 188582b1236c03d46a25511d56b00ced, type: 3}
+  - m_CornerType: 1
+    m_Sprites:
+    - {fileID: 878874539706904517, guid: 188582b1236c03d46a25511d56b00ced, type: 3}
+  - m_CornerType: 2
+    m_Sprites:
+    - {fileID: 2340823686573151713, guid: 39c14d54b74f0394c8204e7c4669cc4c, type: 3}
+  - m_CornerType: 3
+    m_Sprites:
+    - {fileID: 2340823686573151713, guid: 39c14d54b74f0394c8204e7c4669cc4c, type: 3}
+  - m_CornerType: 4
+    m_Sprites:
+    - {fileID: 0}
+  - m_CornerType: 5
+    m_Sprites:
+    - {fileID: 0}
+  - m_CornerType: 6
+    m_Sprites:
+    - {fileID: 5081180041621994201, guid: b773111b1bbfb17408e1176da4674f05, type: 3}
+  - m_CornerType: 7
+    m_Sprites:
+    - {fileID: 8610861773872079937, guid: b773111b1bbfb17408e1176da4674f05, type: 3}
+  m_FillOffset: 0
+  m_UseSpriteBorders: 1
